@@ -1,8 +1,9 @@
 {
-  "name": "test-repo-cra",
+  "name": "shopping-website",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:8080/",
+  "author": "Wei Wei",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
