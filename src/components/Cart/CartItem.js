@@ -116,7 +116,7 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler}) 
   return (  
     <>
       <div className={wrapper}>
-        <img src={item.imageUrl} width='104px' height='120px'/>
+        <img src={item.imageUrl} alt='' width='104px' height='120px'/>
         <div className={productInfo} >
         <Typography variant='body1'>
             <div  className={textarea}>

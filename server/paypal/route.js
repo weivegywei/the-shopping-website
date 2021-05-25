@@ -97,7 +97,6 @@ const saveNewPayment = ({userId, cartId, orderId, payerId, paymentId, amount, cu
 export const storePaymentRoute = (app) => app.post('/api/store-payment', async(req, res) => {
   const {userId, orderId, payerId, paymentId, amount, currency} = req.body;
   const cartPaid = await Cart.findOne({userId, status: 'active'});
-  console.log(cartPaid._id, 'cartID');
   const paymentObject = await saveNewPayment({userId, cartId: cartPaid._id, orderId, payerId, paymentId, amount, currency, status: 'paid'});
   const newEventObject = {'status': 'paid', 'time': paymentObject.createdAt};
   paymentObject.events.push(newEventObject);

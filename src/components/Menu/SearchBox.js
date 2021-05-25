@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
   },
   li: {
     display: 'flex',
-    margin: '3px 0 3px 0',
+    margin: '3px 5px 3px 0',
     alignItems: 'center',
     color: 'black',
     '&:hover': {
@@ -62,8 +62,11 @@ const useStyles = makeStyles(() => ({
     padding: '0 0 0 10px'
   },
   itemName:{
-    width: '380px',
+    //width: '380px',
     margin: '0 0 0 10px'
+  },
+  flexfiller: {
+    flex: '1'
   },
   priceDiv: {
     justifySelf: 'end'
@@ -71,13 +74,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const SearchBar = observer(() => {
-  const {input,dropdown,searchDiv,form, li, list,itemName,priceDiv} = useStyles();
-  const [query, setQuery] = useState(undefined);
+  const {input,dropdown,searchDiv,form, li, list, itemName, flexfiller, priceDiv} = useStyles();
+  //const [query, setQuery] = useState(undefined);
   const [open, setOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const changeValue = async(e) => {
     searchStore.changeValue('query', e.target.value);
-    setQuery(e.target.value);
+    //setQuery(e.target.value);
     const res = await postData('/api/homepage/search', {query: searchStore.query});
     const newArr = [];
     if(res.data) {
@@ -111,8 +114,9 @@ export const SearchBar = observer(() => {
           {suggestions.map((item) =>
             <div key={item._id.toString()} onMouseDown={(e) => handleClick(e, item)}>
               <li className={li}>
-                <img src={item.imageUrl} width='26px' height='30px'/>
+                <img src={item.imageUrl} alt='' width='26px' height='30px'/>
                 <div className={itemName}>{item.name}</div>
+                <div className={flexfiller}></div>
                 <div className={priceDiv}>€ {item.price}</div>
               </li>
             </div>

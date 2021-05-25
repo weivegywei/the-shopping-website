@@ -13,6 +13,9 @@ import { postData } from '../../../api/postData';
 import IconButton from '@material-ui/core/IconButton';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { InfoDialog } from '../../Utilities/InfoDialog';
+import { EditDialog } from '../../Utilities/EditDialog';
+import { orderStatusStore as store } from '../../../store/orderStatusStore';
+import { observer } from "mobx-react";
 
 const useStyles = makeStyles({
   container: {
@@ -22,6 +25,11 @@ const useStyles = makeStyles({
   table: {
     minWidth: 650,
     maxWidth: 1250
+  }, 
+  button: {
+      '&:hover': {
+          backgroundColor: '#fff'
+      }
   }
 });
 
@@ -34,17 +42,18 @@ const tableHeadItems = [
     {entry: 'Edit', align: "center"}
 ];
 
-export const OrderListPage = () => {
-    const {container, table} = useStyles();
+export const OrderListPage = observer(() => {
+    const {container, table, button} = useStyles();
     const [list, setList] = useState([]);
     const [openUserInfo, setOpenUserInfo] = useState(false);
     const [openStatusInfo, setOpenStatusInfo] = useState(false);
+    const [openStatusEdit, setOpenStatusEdit] = useState(false);
     const [selectedItem, setSelectedItem] = useState();
 
     const getOrderList = async() => {
         const res = await getData('/api/admin/order/list');
         setList(res.data.map(it => ({...it, userData: it.userInfo[0]})));
-      }
+      };
     
       useEffect(() => {
         getOrderList();
@@ -53,7 +62,7 @@ export const OrderListPage = () => {
     const returnedTime = (item) => {
         const event = item.events.find(({status}) => status === 'returned');
         return event ? event.time : null;
-    }
+    };
 
     const handleUserInfoClickOpen = (item) => {
         const a = [{fieldName: 'First Name', fieldValue: item.firstName}, {fieldName: 'Last Name', fieldValue: item.lastName}, 
@@ -70,9 +79,22 @@ export const OrderListPage = () => {
         setSelectedItem(a)
     };
     
+    const handleStatusEditOpen = (item) => {
+        setOpenStatusEdit(true);
+        setSelectedItem(item);
+    }
+
+    const handleSave = () => {
+        const editStatus = async() => await postData('/api/admin/order/edit', {id: selectedItem._id, status: store.status});
+        editStatus();
+        getOrderList();
+        setOpenStatusEdit(false);
+    };
+
     const handleClose = () => {
         setOpenUserInfo(false);
         setOpenStatusInfo(false);
+        setOpenStatusEdit(false);
     };
 
 return (
@@ -82,7 +104,7 @@ return (
             <TableHead>
                 <TableRow>
                 {tableHeadItems.map((item)=> 
-                    <TableCell align={item.align || 'inherit'}>{item.entry}</TableCell>
+                    <TableCell key={item.entry} align={item.align || 'inherit'}>{item.entry}</TableCell>
                 )}
                 </TableRow>
             </TableHead>
@@ -91,9 +113,9 @@ return (
                 <TableRow key={item._id}>
                     <TableCell component='th' scope='row' align='inherit'>
                         {`${item.userData.firstName} ${item.userData.lastName}`}
-                    <IconButton onClick={() => handleUserInfoClickOpen(item.userData)}>
-                        <InfoOutlinedIcon color="action" />
-                    </IconButton>
+                        <IconButton className={button} onClick={() => handleUserInfoClickOpen(item.userData)}>
+                            <InfoOutlinedIcon color="action" />
+                        </IconButton>
                     </TableCell>
                     <TableCell align='center'>
                         {item.createdAt}
@@ -106,11 +128,15 @@ return (
                     </TableCell>
                     <TableCell align='center'>
                         {item.status}
-                        <IconButton onClick={() => handleStatusInfoClickOpen(item.events)}>
+                        <IconButton className={button} onClick={() => handleStatusInfoClickOpen(item.events)}>
                             <InfoOutlinedIcon color="action" />
                         </IconButton>
                     </TableCell>
-                    <TableCell align='center'><EditIcon color="action" /></TableCell>
+                    <TableCell align='center'>
+                        <IconButton className={button} onClick={() => handleStatusEditOpen(item)}>
+                            <EditIcon color="action" />
+                        </IconButton>
+                    </TableCell>
                 </TableRow>
                 ))}
             </TableBody>
@@ -126,7 +152,12 @@ return (
             info={selectedItem} 
             handleClose={handleClose}
         />}
+        {openStatusEdit && <EditDialog
+            open={openStatusEdit} 
+            handleClose={handleClose}
+            handleSave={handleSave}
+        />}
     </>
     );
-}
+})
 //JSON.stringify(selectedItem.userData)

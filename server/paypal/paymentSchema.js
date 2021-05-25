@@ -9,7 +9,6 @@ const paymentSchema = new mongoose.Schema({
     amount: {type: Number},
     currency: {type: String, enum:['EUR', 'USD', 'CNY', 'GBP']},
     status: {type: String, enum: ['paid', 'shipped', 'delivered', 'returned', 'refunded']},
-    item: {type: String, enum: ['paid', 'shipped', 'delivered', 'returned', 'refunded']},
     events: [Object]
 },
 {timestamps: true});

@@ -9,6 +9,8 @@ import { observer } from "mobx-react";
 import { loginStore as store } from '../../store/loginStore';
 import { postData } from '../../api/postData';
 
+const inputBoxWidth = `${335 + 10 + 25}px`;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -18,9 +20,15 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     '& > *': {
       margin: theme.spacing(4),
-      width: theme.spacing(60),
-      height: theme.spacing(75),
+      width: theme.spacing(66),
+      height: theme.spacing(68),
     },
+  },
+  title: {
+    margin: '44px',
+    fontSize: '1.25rem',
+    fontWeight: 'bold',
+    letterSpacing: '0.018em'
   },
   buttonDiv: {
     display: 'flex',
@@ -28,11 +36,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   buttons: {
-      width: '286px', 
+      width: `${inputBoxWidth}`, 
       height: '46px',
       borderColor: 'black', 
       border: 'solid 1px',
-      fontWeight: '650'
+      fontWeight: '650',
+      letterSpacing: '0.018em'
   },
   signInButton: {
       background:'black',
@@ -60,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const LoginPage = observer(() => {
-  const {root, buttonDiv, buttons, signInButton, signUpButton} = useStyles();
+  const {root, title, buttonDiv, buttons, signInButton, signUpButton} = useStyles();
   const history = useHistory(); 
 
   const loginAction = async() => {
@@ -75,13 +84,11 @@ export const LoginPage = observer(() => {
   return (
     <div className={root}>
       <Paper elevation={0}>
-        <div style={{margin: '50px'}}>
-          <Typography variant='h4'>
-            Sign in
-          </Typography>
+        <div className={title}>
+            SIGN IN
         </div>
-        <InputBox labelName={'Email address: '} type={'email'} store={store} fieldName={'email'} />
-        <InputBox labelName={'Password: '} type={'text'} store={store} fieldName={'password'} />
+        <InputBox labelName={'Email address'} type={'email'} store={store} fieldName={'email'} />
+        <InputBox labelName={'Password'} type={'text'} store={store} fieldName={'password'} />
         <div className={buttonDiv} style={{marginTop: '65px'}}>
           <button type='submit' className={cn(buttons,signInButton)} onClick={loginAction}>SIGN IN</button>
         </div>

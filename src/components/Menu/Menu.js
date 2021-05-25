@@ -77,6 +77,8 @@ const useStyles = makeStyles((theme) => ({
     color:'#f5f5f5',
     textDecoration: 'none',
     margin: '0 30px 0 30px',
+    letterSpacing: '0.018em',
+    fontSize: '1.75rem'
   },
   filterDiv: {
     width: '100%',
@@ -163,7 +165,6 @@ const MenuComponent = observer(({store}) => {
     useEffect(()=>{
       getFilters();
     },[])
-    console.log(cartItemNumberStore, 'cartItemNumberStore');
   
     return (
       <>
@@ -180,9 +181,9 @@ const MenuComponent = observer(({store}) => {
               <MenuIcon />
             </IconButton>
             <Toolbar className={siteName}>
-              <Typography variant="h4" noWrap >
+              <Typography variant="h5" noWrap >
                   <Link to="/" className={cn(header, link)} style={{textDecoration:'none'}}>
-                    Site Name
+                    SITE NAME
                   </Link>
               </Typography>
             </Toolbar>

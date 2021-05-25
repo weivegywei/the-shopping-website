@@ -5,7 +5,8 @@ export const postData = async (route, postBody) => {
         const data = await axios.post(route, postBody);
         return data;
     } catch(error) {
-        return {error: {...error.response.data}};
+        console.log('catch within postdata')
+        return {error: error.response.data};
     }
 
 }

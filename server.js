@@ -15,7 +15,7 @@ const { createManufacturerRoute } = require('./server/manufacturer/route');
 const { homepageProductSearchRoute } = require('./server/homepage/searchRoute');
 const { listFilteredProductRoute, getFiltersRoute } = require('./server/product/filter/route');
 const { paypalRoute, storePaymentRoute } = require('./server/paypal/route');
-const { listOrderRoute } = require('./server/order/route');
+const { listOrderRoute, editOrderStatusRoute } = require('./server/order/route');
 
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -73,3 +73,5 @@ changeCartStatus(app);
 adjustProductInventory(app);
 
 listOrderRoute(app);
+
+editOrderStatusRoute(app);

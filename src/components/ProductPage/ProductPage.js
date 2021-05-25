@@ -76,7 +76,7 @@ const ProductPageComponent = ({userStore, cartItemStore}) => {
   return (
     <>
       <div className={root}>
-        <img src={location.state.item.imageUrl} />
+        <img src={location.state.item.imageUrl} alt='' />
         <Typography variant='h4'>
           <div className={text}>
             <div className={h2}>{location.state.item.name}</div>

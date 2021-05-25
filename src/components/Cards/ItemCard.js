@@ -65,7 +65,7 @@ export function ItemCard({item, userStore, setOpenNotification}) {
   return (
     <Card className={root} variant="outlined">
       <CardContent className={card}>
-        <img src={item.imageUrl} width="130" height="150" />
+        <img src={item.imageUrl} alt='' width="130" height="150" />
         <div className={p}>{item.name}</div>
       </CardContent>
       <CardActions className={action}>

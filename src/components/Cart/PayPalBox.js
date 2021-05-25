@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { postData } from '../../api/postData';
 

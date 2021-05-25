@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -34,7 +33,7 @@ const StyledMenu = withStyles({
   />
 ));
 
-const StyledMenuItem = withStyles((theme) => ({
+/* const StyledMenuItem = withStyles((theme) => ({
   root: {
     '&:focus': {
       backgroundColor: theme.palette.primary.main,
@@ -43,7 +42,7 @@ const StyledMenuItem = withStyles((theme) => ({
       },
     },
   },
-}))(MenuItem);
+}))(MenuItem); */
 
 const useStyles = makeStyles(() => ({
     filterButton: {
@@ -73,9 +72,6 @@ const useStyles = makeStyles(() => ({
       width: '50%',
       minWidth: '103px',
       height: '35px',
-      '&:focus': {
-        outline: 'none'
-      },
       '&:hover': {
           cursor: 'pointer',
           background: '#cad2a8',
@@ -96,9 +92,6 @@ const useStyles = makeStyles(() => ({
       width: '50%',
       minWidth: '103px',
       height: '35px',
-      '&:focus': {
-        outline: 'none'
-      },
       '&:hover': {
           cursor: 'pointer',
           background: '#cad2a8',

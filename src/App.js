@@ -20,11 +20,14 @@ import { AfterPaymentPage } from './components/Cart/AfterPaymentPage';
 import { OrderListPage } from './components/Admin/Order/OrderList';
 
 export const App = observer(({userStore}) => {
-  useEffect(async() => {
-    const res = await getUser();
-    if(res && res.data) {
-      userStore.setValues(res.data);
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const res = await getUser();
+      if(res && res.data) {
+        userStore.setValues(res.data);
+      }
     }
+    getUserInfo();
   }, []);
 
   useEffect(() => {

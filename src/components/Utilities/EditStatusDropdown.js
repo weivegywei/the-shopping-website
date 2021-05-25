@@ -1,4 +1,3 @@
-import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
@@ -12,42 +11,43 @@ const BootstrapInput = withStyles((theme) => ({
     },
   },
   input: {
-    borderRadius: 4,
     position: 'relative',
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid #ced4da',
-    fontSize: 16,
-    padding: '10px 26px 10px 12px',
+    width: '262px',
+    height: '22px',
+    backgroundColor: '#e8fdff',
+    border: '1px solid darkgrey',
+    fontSize: 14,
+    fontWeight: '500',
     transition: theme.transitions.create(['border-color', 'box-shadow']),
     '&:focus': {
-      borderRadius: 4,
-      borderColor: '#80bdff',
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+      outline: 'none',
     },
-  },
+  }
 }))(InputBase);
 
 const useStyles = makeStyles((theme) => ({
   margin: {
-    margin: '0 -2px 0 0',
-    width: '336px'
+    margin: theme.spacing(1),
   },
 }));
 
-export const InputDropdown = observer(({store, selectValue, fieldName, options}) => {
+export const EditStatusDropdown = observer(({store}) => {
   const {margin} = useStyles();
-  const changeValue = (e) => {store.changeValue(fieldName, e.target.value)};
+  const changeValue = (e) => {store.changeValue('status', e.target.value)};
 
   return (
     <div>
       <FormControl className={margin}>
         <NativeSelect
-          value={selectValue}
+          value={store.status}
           onChange={(e) => {changeValue(e)}}
           input={<BootstrapInput />}
         >
-          <option value=''> </option>
-          {options.map((item) => <option value={item}>{item}</option>)}
+          <option value='paid'>Paid</option>
+          <option value='shipped'>Shipped</option>
+          <option value='delivered'>Delivered</option>
+          <option value='returned'>Returned</option>
+          <option value='refunded'>Refunded</option>
         </NativeSelect>
       </FormControl>
     </div>

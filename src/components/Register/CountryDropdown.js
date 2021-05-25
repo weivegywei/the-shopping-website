@@ -5,6 +5,9 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
 import { observer } from 'mobx-react-lite';
 
+const inputBoxHeight = '22px';
+const inputBoxWidth = `335px`;
+
 const BootstrapInput = withStyles((theme) => ({
   root: {
     'label + &': {
@@ -13,27 +16,17 @@ const BootstrapInput = withStyles((theme) => ({
   },
   input: {
     position: 'relative',
-    width: '262px',
-    height: '22px',
-    backgroundColor: '#e8fdff',
-    border: '1px solid darkgrey',
+    width: `${inputBoxWidth}`,
+    height: `${inputBoxHeight}`,
+    padding: '14px 22px 14px 10px',
+    backgroundColor: '#fff',
+    border: '1px solid lightgrey',
     fontSize: 14,
     fontWeight: '500',
     transition: theme.transitions.create(['border-color', 'box-shadow']),
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
     '&:focus': {
       outline: 'none',
+      border: 'solid 1px black'
     },
   }
 }))(InputBase);

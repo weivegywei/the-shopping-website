@@ -43,9 +43,6 @@ const useStyles = makeStyles({
       width: '50%',
       minWidth: '103px',
       height: '35px',
-      '&:focus': {
-        outline: 'none'
-      },
       '&:hover': {
           cursor: 'pointer',
           background: '#cad2a8',
@@ -67,9 +64,6 @@ const useStyles = makeStyles({
       width: '50%',
       minWidth: '103px',
       height: '35px',
-      '&:focus': {
-        outline: 'none'
-      },
       '&:hover': {
           cursor: 'pointer',
           background: '#cad2a8',
@@ -117,10 +111,10 @@ const useStyles = makeStyles({
     return (
       <div className={root}>
         <div className={inputDiv}>
-            <label for='min' className={label}>€</label>
+            <label className={label}>€</label>
             <input className={input} type='number' id='min' onChange={handleMinChange} value={minPrice}></input>
             <div className={flexFiller}></div>
-            <label for='max' className={label}>€</label>
+            <label className={label}>€</label>
             <input className={input} type='number' id='max' onChange={handleMaxChange} value={maxPrice}></input>
         </div>
         <Slider
