@@ -1,0 +1,71 @@
+@import '../../variables.scss';
+
+.filterButton {
+    background-color: $secondaryBeige!important;
+    color: #494f4d!important;
+    text-transform: none!important;
+    margin: 0 10px 0 10px!important;
+}
+
+.expandIcon {
+  color: #494f4d!important;
+}
+
+.formGroup {
+  font-size: 13px!important;
+  color: #494f4d;
+}
+
+.formControlLabel {
+    margin: 0!important;
+    font-size: 13px!important;
+    text-transform: capitalize;
+    &:hover {
+      cursor: pointer;
+      background: $secondaryBeige!important;
+    }
+}
+
+.buttonClear {
+  background: $mainBeige;
+  color: #7a8e82;
+  border: 1px solid #7a8e82;
+  border-left: none;
+  font-weight: bold;
+  width: 50%;
+  min-width: 103px;
+  height: 35px;
+  &:hover {
+      cursor: pointer;
+      background: #cad2a8;
+      border: 1px solid #cad2a8;
+      color: $mainBeige;
+    }
+  &:focus {
+  outline: none;
+  background: #506e69;
+  color: $mainBeige;
+  }
+}
+
+.buttonConfirm {
+    background: #7a8e82;
+    color: #f5f5f5;
+    border: 1px solid #7a8e82;
+    font-weight: bold;
+    width: 50%;
+    min-width: 103px;
+    height: 35px;
+    &:hover {
+        cursor: pointer;
+        background: #cad2a8;
+        border: 1px solid #cad2a8;
+        color: #f5f5f5;
+      }
+    &:focus {
+    outline: none;
+    background: #506e69;
+    color: #f5f5f5;
+    }
+  }
+  

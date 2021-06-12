@@ -1,0 +1,18 @@
+@import '../../variables.scss';
+
+.root {
+    & > * {
+      margin: 0;
+    }
+}
+
+.button {
+    color: $mainBeige!important;
+    font-weight: bold!important;
+    height: 40px!important;
+    padding: 0!important;
+    width: 75px!important;
+    &:hover {
+      background-color: $mainGreen!important;
+  }
+}

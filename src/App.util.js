@@ -1,5 +1,5 @@
 import { postData } from './api/postData';
-import { cartItemNumberStore } from './store/cartStore';
+import { cartItemNumberStore } from './store/cartStore.tsx';
 
 export const getUser = () => {
     const userToken = localStorage.getItem('accessToken');

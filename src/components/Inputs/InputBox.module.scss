@@ -1,0 +1,50 @@
+@import '../../variables.scss';
+
+.input {
+    background: #fff;
+    margin: 4px;
+    padding: 14px 22px 14px 10px;
+    width: $inputBoxWidthSmall;
+    height: $inputBoxHeight;
+    border: solid 1px lightgrey;
+    font-weight: 500;
+    font-size: 14px;
+    &:focus {
+        outline: none;
+        border: solid 1px black; 
+    }
+}
+
+.errorinput {
+  background: #fff;
+  margin: 4px;
+  padding: 14px 22px 14px 10px;
+  width: $inputBoxWidthSmall;
+  height: $inputBoxHeight;
+  border: solid 1px lightgrey;
+  font-weight: 500;
+  font-size: 14px;
+  &:focus {
+    outline: none;
+    border: solid 1px red;   
+  }
+}
+
+
+.label {
+  width: 300px; 
+  display: flex; 
+  justify-content: flex-start; 
+  margin-left: $labelMargin;
+  letter-spacing: 0.012em;
+}
+
+.inputDiv {
+  display: block; 
+  margin: 13px 0 13px 0;
+}
+
+.helperText {
+  margin-left: $labelMargin;
+  color: red;
+}

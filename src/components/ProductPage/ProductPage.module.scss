@@ -1,0 +1,54 @@
+.root {
+    display: flex;
+    flex-wrap: nowrap;
+    /* '& > *': {
+      margin: theme.spacing(1),
+      width: theme.spacing(65),
+      height: theme.spacing(75),
+    }, */
+  }
+
+.paper {
+      margin: 8px;
+      width: 520px;
+      height: 600px;
+}
+
+.text {
+    display: block;
+    justify-content: center;
+    width: 800px;
+}
+
+.h2 {
+    height: 30px;
+    margin: 50px;
+}
+
+.h3 {
+    height: 60px;
+    margin: 30px;
+}
+
+.inputDiv {
+    display: flex; 
+    justify-content:center;
+}
+
+.input {
+    width: 80px;
+     height: 34px; 
+     font-size: 20px;
+     &:focus {
+      outline: none;
+    }
+}
+
+.button {
+    width: 140px; 
+    height: 40px; 
+    font-size: 17px; 
+    &:focus {
+      outline: none;
+    }
+}

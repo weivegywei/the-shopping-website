@@ -1,0 +1,31 @@
+@import '../../variables.scss';
+
+.drawer {
+    width: 300;
+    flex-shrink: 0;
+    background-color: $backgroundGreen;
+}
+
+.drawerPaper {
+    width: 300;
+    background-color: $backgroundGreen!important;
+}
+
+.color {
+    color: $mainBeige;
+}
+
+.icons {
+    color: $mainBeige;
+    border-radius: 5px;
+    font-size: small;
+    width: 40;
+    height: 40;
+    margin: 5;
+    &:hover {
+        background-color: $backgroundGreen!important;
+    }
+    &:focus {
+        background-color: $highlightGreen!important;
+    }
+}

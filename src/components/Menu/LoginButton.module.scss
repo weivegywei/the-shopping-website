@@ -1,0 +1,11 @@
+.root {
+    & > * {
+      margin: 8px;
+    }
+}
+
+.button {
+    color: #f5f5f5;
+    font-size: 15px;
+    font-weight: bold;
+}

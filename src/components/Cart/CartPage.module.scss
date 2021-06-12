@@ -1,0 +1,92 @@
+.rootDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.root {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    background: #ecebeb;
+    width: 85%;
+}
+
+.order {
+    display: flex;
+    flex-direction: column;
+    width: 720px;
+    margin: 24px;
+}
+
+.title {
+    margin: 25px;
+    margin-bottom: 5;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-weight: bold;
+}
+
+.itemcard {
+    margin: 25px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.lineDiv {
+    width: 240px;
+    height: 10px;
+    border-bottom: solid 1px black;
+}
+
+.amountDiv {
+    margin: 25px;
+}
+
+.checkout {
+    display: flex;
+    flex-direction: column;
+    width: 480px;
+    height: 320px;
+    margin: 24px;
+    margin-left: 0;
+}
+
+.amountLabelDiv {
+    margin: 5;
+    margin-bottom: 20;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.amountNum {
+    margin: 0 15px;
+    font-size: 14;
+    display: flex;
+    align-items: center;
+}
+
+.divider {
+    margin-bottom: 15;
+}
+
+.button {
+    margin: 15px 0;
+    width: 100%;
+    color: white;
+    background: red;
+    font-weight: bold;
+    &:hover {
+      background: #d18888;
+    }
+}
+
+.flexFiller {
+    flex: 1;
+}
+
+.fontWeight {
+    font-weight: bold;
+}

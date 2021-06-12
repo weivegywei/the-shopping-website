@@ -1,0 +1,82 @@
+@import '../../variables.scss';
+
+.root {
+    width: 300px;
+    margin: 0;
+    padding: 0;
+}
+
+.inputDiv {
+    display: flex;
+    margin: 12px;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    color: #494f4d;
+}
+.input {
+    height: 40px;
+    width: 70px;
+    margin: 5px;
+    font-size: 15px;
+    border: 1px solid #494f4d;
+    color: #494f4d;
+    &:focus {
+        outline: none;
+    }
+}
+
+.flexFiller {
+      flex: 1
+}
+
+.slider {
+    width: 250px!important;
+    color: #7a8e82!important;
+    margin: 20px;
+}
+
+.buttonConfirm {
+    background: #7a8e82;
+    color: $mainBeige;
+    border: 1px solid #7a8e82;
+    font-weight: bold;
+    width: 50%;
+    min-width: 03px;
+    height: 35px;
+    &:hover {
+        cursor: pointer;
+        background: #cad2a8;
+        border: 1px solid #cad2a8;
+        color: $mainBeige;
+    }
+    &:focus {
+    outline: none;
+    background: #506e69;
+    color: $mainBeige;
+    }
+}
+
+.buttonClear {
+    background: $mainBeige;
+    color: #7a8e82;
+    border: 1px solid #7a8e82;
+    border-left: none;
+    font-weight: bold;
+    width: 50%;
+    min-width: 103px;
+    height: 35px;
+    &:hover {
+        cursor: pointer;
+        background: #cad2a8;
+        border: 1px solid #cad2a8;
+        color: $mainBeige;
+    }
+    &:focus {
+    outline: none;
+    background: #506e69;
+    color: $mainBeige;
+    }
+}

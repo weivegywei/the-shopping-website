@@ -1,0 +1,17 @@
+@import '../../variables.scss';
+
+.icon {
+    min-width: 40px!important;
+    color: $mainBeige!important;
+}
+
+.text {
+    font-size: 15px!important;
+    color: $mainBeige;
+}
+
+.button {
+    &:focus {
+      background: $highlightGreen!important;
+    }
+}

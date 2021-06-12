@@ -1,0 +1,13 @@
+.root {
+    width: 100%;
+    & > * + * {
+      margin-top: 16px;
+    }
+}
+.sucessStyle {
+    background: #8ba48a;
+}
+
+.errorStyle {
+    background: red;
+}

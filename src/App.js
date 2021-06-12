@@ -1,23 +1,23 @@
-import './App.css';
+import './App.scss';
 import { useEffect } from 'react';
-import { Menu } from './components/Menu/Menu';
-import { MainGrid } from './components/GridLists/MainGrid';
+import { Menu } from './components/Menu/Menu.tsx';
+import { MainGrid } from './components/GridLists/MainGrid.tsx';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
 } from "react-router-dom";
-import { ProductPage } from './components/ProductPage/ProductPage';
-import { LoginPage } from './components/Login/LoginPage';
-import { CartPage } from './components/Cart/CartPage';
-import { ProductCreatePage } from './components/Admin/Product/ProductCreate';
-import { ProductListPage } from './components/Admin/Product/ProductList';
-import { RegisterPage } from './components/Register/RegisterPage';
+import { ProductPage } from './components/ProductPage/ProductPage.tsx';
+import { LoginPage } from './components/Login/LoginPage.tsx';
+import { CartPage } from './components/Cart/CartPage.tsx';
+import { ProductCreatePage } from './components/Admin/Product/ProductCreate.tsx';
+import { ProductListPage } from './components/Admin/Product/ProductList.tsx';
+import { RegisterPage } from './components/Register/RegisterPage.tsx';
 import { observer } from 'mobx-react';
 import { getUser, getCartItemsNumber } from './App.util';
-import { ManufacturerCreatePage } from './components/Admin/Manufacturer/ManufacturerCreate';
+import { ManufacturerCreatePage } from './components/Admin/Manufacturer/ManufacturerCreate.tsx';
 import { AfterPaymentPage } from './components/Cart/AfterPaymentPage';
-import { OrderListPage } from './components/Admin/Order/OrderList';
+import { OrderListPage } from './components/Admin/Order/OrderList.tsx';
 
 export const App = observer(({userStore}) => {
   useEffect(() => {

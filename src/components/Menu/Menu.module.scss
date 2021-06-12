@@ -1,0 +1,105 @@
+@import '../../variables.scss';
+
+.root {
+    display: flex;
+    height: 92px;
+}
+
+.menuButton {
+    margin-right: 24px;
+    color: $mainBeige;
+    border-radius: 5px;
+    font-size: small;
+    width: 40;
+    height: 40;
+    &:hover {
+        background-color: $mainGreen!important;
+    }
+    &:focus {
+        background-color: $highlightGreen!important;
+    }
+}
+
+.drawerHeader {
+    color: $mainGreen;
+}
+
+.hide {
+    display: none;
+}
+
+.header {
+    color: $mainBeige;
+    text-decoration: none;
+    margin-left: 30px;
+    letter-spacing: 0.018em;
+    font-size: 1.75rem;
+}
+
+.filterDiv {
+    width: 100%;
+    height: 56px;
+}
+
+.link {
+    text-decoration: none
+}
+
+.text {
+    color: $mainBeige;
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.filterBar {
+    justify-content: start;
+    align-items: start!important;
+    margin: 0 60px;
+}
+
+.margin {
+    margin: 0 30px
+}
+
+.padding {
+    padding: 0
+}
+
+.siteName {
+    width: 250px;
+    padding: 0;
+    margin: 0 30px
+}
+
+.loginDiv {
+    width: 300px;
+}
+
+.welcome {
+    display: flex;
+}
+
+.span {
+    display: flex;
+    min-width: 120px;
+    width: 60%;
+    align-items: center;
+}
+
+.logout {
+    width: 40%
+}
+
+.icons {
+    color: $mainBeige!important;
+    border-radius: 3px!important;
+    font-size: small;
+    width: 40;
+    height: 40;
+    margin: 5;
+    &:hover {
+        background-color: $mainGreen!important;
+    }
+}

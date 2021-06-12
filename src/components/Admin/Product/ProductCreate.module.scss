@@ -1,0 +1,46 @@
+.root {
+    display: flex;
+    background-color: #fcfcf0;
+    height: 120vh;
+    justify-content: center;
+    & > * {
+        width: 496px
+      }
+}
+
+.box {
+      display: flex;
+      background-color: #fcfcf0;
+      height: 120vh;
+      justify-content: center;
+      flex-direction: column   
+}
+
+.title {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formField {
+    height: 60px;
+}
+
+.button {
+    background-color: black;
+    color: white;
+    &:hover {
+        background-color: darkgray;
+    }
+}
+
+.specInput {
+    height: 35px;
+    width: 225px;
+    border: none;
+    font-size: 15px;
+    &:focus {
+        outline: none
+    }
+}

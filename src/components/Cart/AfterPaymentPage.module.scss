@@ -1,0 +1,28 @@
+.root {
+    display: flex;
+    background: #ecebeb;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    & > * {
+        width: 496px;
+      }
+}
+
+.box {
+    display: flex;
+    background: #cad2a8;
+    height: 350;
+    justify-content: center; 
+    flex-direction: column;
+    font-Family: 'Great Vibes, cursive';
+    font-size: 40;
+    color: white;
+}
+
+.text {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

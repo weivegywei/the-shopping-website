@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { App } from './App';
 import reportWebVitals from './reportWebVitals';
-import { userStore } from './store/userStore';
+import { userStore } from './store/userStore.tsx';
 
 ReactDOM.render(
   <App userStore={userStore} />,

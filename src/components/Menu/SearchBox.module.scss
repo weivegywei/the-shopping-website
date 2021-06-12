@@ -1,0 +1,70 @@
+@import '../../variables.scss';
+
+.input {
+    width: $searchBoxWidth;
+    max-width: 500px;
+    min-width: 150px;
+    height: 35px;
+    border: none;
+    border-radius: 5px;
+    padding: 0 0 0 5px;
+    &:focus {
+      outline: none;
+    }
+}
+
+.dropdown {
+    position: absolute;
+    top: 32px;
+    max-width: 500px;
+    min-width: 150px;
+    width: $searchBoxWidth;
+    height: 173px;
+    border: solid 1px gray;
+    background: white;
+    color: black;
+    text-align: start;
+    font-size: 13px;
+}
+
+.li {
+    display: flex;
+    margin: 3px 5px 3px 0;
+    align-items: center;
+    color: black;
+    &:hover {
+      cursor: pointer;
+      background: #fcfcf0;
+    }
+}
+
+.searchDiv {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form {
+    max-width: 500px;
+    min-width: 150px;
+    width: 100%;
+}
+
+.list {
+    list-style: none;
+    margin: 4px 0 4px 0;
+    padding: 0 0 0 10px
+}
+
+.itemName {
+    margin: 0 0 0 10px;
+}
+
+.flexfiller {
+    flex: 1
+}
+
+.priceDiv {
+    justify-self: end;
+}

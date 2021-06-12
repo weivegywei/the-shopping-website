@@ -1,0 +1,72 @@
+@import '../../variables.scss';
+
+.root {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    background: #fcfcf0;
+    height: 100vh;
+    /* '& > *': {
+      margin: theme.spacing(4),
+      width: theme.spacing(66),
+      height: theme.spacing(68),
+    } */
+}
+
+.paper {
+    margin: 32px;
+    width: 528px;
+    height: 544px
+}
+
+.title {
+    margin: 44px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    letter-spacing: 0.018em
+  }
+
+.buttonDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.buttons {
+    width: $inputBoxWidthBig; 
+    height: 46px;
+    border-color: black; 
+    border-style: solid;
+    border-width: 1px;
+    font-weight: 650;
+    letter-spacing: 0.018em
+}
+
+.signInButton {
+    background: black;
+    color: white;
+}
+.signInButton:hover {
+    background-color: #757575;
+    cursor: pointer;
+    border-color: #757575;
+}
+
+.signInButton:focus {
+    outline: none
+}
+
+.signUpButton {
+    background: white;
+    color: black
+}
+
+.signUpButton:hover {
+    background-color: #757575;
+    cursor: pointer;
+    border-color: #757575;
+}
+
+.signUpButton:focus {
+    outline: none
+}

@@ -1,6 +1,5 @@
 import { ObjectId } from 'bson';
-import { productCategory } from '../../../src/constants';
-
+import { productCategory } from '../../../src/const/constants';
 
 const mongoose = require('mongoose');
 
