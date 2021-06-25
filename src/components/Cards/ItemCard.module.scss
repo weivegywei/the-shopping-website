@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .root {
     min-width: 100px;
     height: 260px;
@@ -10,14 +12,14 @@
 }
 
 .action {
-    padding: 8px 12px 4px 12px
+    padding: 4px 12px 10px 12px!important;
 }
 
 .p {
     margin: 0;
     max-height: 20px;
     text-overflow: ellipsis;
-    color: #494f4d;
+    color: $mainDark;
     font-size: 15
 }
 
@@ -26,14 +28,17 @@
 }
 
 .icon {
-    background: #8ba48a;
-    color: #f5f5f5;
+    background: $mainGreen!important;
+    color: $mainBeige!important;
     font-size: small;
-    border-radius: 5px;
+    border-radius: 2px!important;
     width: 35px;
     height: 35px;
+    &:hover {
+        background: $highlightGreen!important;
+    }
+    &:focus {
+        background: $confirmGreen!important;
+    }
 }
-
-.icon:hover {
-    background: #506e69
-}
+//#506e69

@@ -27,6 +27,7 @@ export const InfoEntryFramework = observer(
                 <input 
                     type={item.type} 
                     className={item.error ? errorinput : input} 
+                    //@ts-ignore
                     onChange={(e) => store.changeValue(item.key, e.target.value)
                 }></input>
                 <div className={errorMsg}>

@@ -21,7 +21,7 @@
   padding: 14px 22px 14px 10px;
   width: $inputBoxWidthSmall;
   height: $inputBoxHeight;
-  border: solid 1px lightgrey;
+  border: solid 1px red;
   font-weight: 500;
   font-size: 14px;
   &:focus {
@@ -45,6 +45,6 @@
 }
 
 .helperText {
-  margin-left: $labelMargin;
-  color: red;
+  margin-left: $labelMargin!important;
+  color: red!important;
 }

@@ -7,38 +7,18 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
 import { DeleteButton } from './DeleteButton';
 import { getData } from '../../../api/getData';
 import { postData } from '../../../api/postData';
 import { AlertDialog } from '../../Utilities/AlertDialog';
+import { EditProductDialogWrapper, ProductListItem } from './EditProduct/EditProductDialog';
 import styles from './ProductList.module.scss';
-import { CategoryType } from '../../../store/productStore';
 
 const transformBoolean = (a: boolean) => a ? 'Yes' : 'No'
 
 enum AlignType {
   align = 'right'
-}
-
-enum SpecificationType {
-  none = '',
-  type = 'type',
-  volume = 'volume',
-  size = 'size',
-  color = 'color',
-  flavor = 'flavor',
-  aroma = 'aroma'
-}
-
-enum TableBodyItemsKeys {
-  name = 'name',
-  manufacturerName = 'manufacturerName',
-  inventory = 'inventory',
-  price = 'price',
-  availability = 'availability',
-  specification = 'specification',
-  specificationDescr = 'specificationDescr',
-  packageSize = 'packageSize',
 }
 
 enum ProductListItemKeys {
@@ -56,35 +36,14 @@ enum ProductListItemKeys {
   category = 'category'
 }
 
-type ProductListItem = {
-  _id: string;
-  specificationDescr: string[];
-  name: string;
-  manufacturerId: string;
-  price: number;
-  imageUrl: string;
-  inventory: number;
-  description: string;
-  packageSize: string;
-  availability: boolean;
-  specification: SpecificationType;
-  category: CategoryType
-}
-
 type TableHeadItems = {
   entry: string;
   align?: AlignType
 }
 
-type TableBodyItems = {
-  scope?: string;
-  key: string;
-  align?: AlignType
-}
-
 const tableHeadItems = [
     {entry: 'Product name'},    
-    {entry:'ManufacturerName', align: AlignType.align},
+    {entry:'Manufacturer name', align: AlignType.align},
     {entry:'Inventory', align: AlignType.align},
     {entry:'Price', align: AlignType.align},
     {entry:'Availability', align: AlignType.align},
@@ -94,31 +53,28 @@ const tableHeadItems = [
     {entry:'Edit', align: AlignType.align},
     {entry:'Delete', align: AlignType.align},
 ];
-const tableBodyItems: {scope?: string | undefined, key: TableBodyItemsKeys, align?: AlignType}[] = [
-    {scope: 'row', key: TableBodyItemsKeys.name},
-    {align: AlignType.align, key: TableBodyItemsKeys.manufacturerName},
-    {align: AlignType.align, key: TableBodyItemsKeys.inventory},
-    {align: AlignType.align, key: TableBodyItemsKeys.price},
-    {align: AlignType.align, key: TableBodyItemsKeys.availability},
-    {align: AlignType.align, key: TableBodyItemsKeys.specification},
-    {align: AlignType.align, key: TableBodyItemsKeys.specificationDescr},
-    {align: AlignType.align, key: TableBodyItemsKeys.packageSize},
-]
-
 
 export const ProductListPage = () => {
   const {container, table} = styles;
   const [list, setList] = useState<ProductListItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<ProductListItem>();
+  const [selectedEditItem, setSelectedEditItem] = useState<ProductListItem>();
   const handleDelete = async(item: ProductListItem) => {
     await postData('/api/admin/product/delete', {productId: item._id});
     getProductList();
   }
-  const [open, setOpen] = useState(false);
+  const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  
+  const editItem = (item: ProductListItem) => {
+    setOpenEdit(true);
+    setSelectedEditItem(item);
+  };
+
   const handleClickOpen = (item: ProductListItem) => {
-      setOpen(true);
-      setSelectedItem(item);
-    };
+    setOpenDeleteAlert(true);
+    setSelectedItem(item);
+  };
 
   const getProductList = async() => {
     const res = await getData('/api/admin/product/list');
@@ -128,11 +84,15 @@ export const ProductListPage = () => {
   const handleConfirm = () => {
     if(selectedItem) {
       handleDelete(selectedItem);
-      setOpen(false)
+      setOpenDeleteAlert(false)
     }
   }
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpenDeleteAlert(false);
+    setOpenEdit(false);
+    getProductList();
+  }
 
   useEffect(() => {
     getProductList();
@@ -152,15 +112,19 @@ export const ProductListPage = () => {
         <TableBody>
           {list.map((item: ProductListItem) => (
             <TableRow key={item.name}>
-                {tableBodyItems.map((it: TableBodyItems)=>
-                    <TableCell  
-                    scope={it.scope || 'default'} 
-                    align={it.align || 'inherit'}
-                    >
-                    {typeof(item[it.key])==='boolean' ? transformBoolean(item[it.key]) : item[it.key]}
-                    </TableCell>
-                )}
-                <TableCell align='right'><EditIcon color="action" /></TableCell>
+                <TableCell scope='row'>{item.name}</TableCell>
+                <TableCell scope='default' align='right'>{item.manufacturerInfo[0].name}</TableCell>
+                <TableCell scope='default' align='right'>{item.inventory}</TableCell>
+                <TableCell scope='default' align='right'>{item.price}</TableCell>
+                <TableCell scope='default' align='right'>{transformBoolean(item.availability)}</TableCell>
+                <TableCell scope='default' align='right'>{item.specification}</TableCell>
+                <TableCell scope='default' align='right'>{item.specificationDescr}</TableCell>
+                <TableCell scope='default' align='right'>{item.packageSize}</TableCell>
+                <TableCell align='right'>
+                  <IconButton onClick={() => editItem(item)}>
+                      <EditIcon color="action" />
+                  </IconButton>
+                </TableCell>
                 <TableCell align='right'><DeleteButton onClick={() => handleClickOpen(item)} /></TableCell>
             </TableRow>
             )
@@ -168,13 +132,19 @@ export const ProductListPage = () => {
         </TableBody>
       </Table>
     </TableContainer>
-    {open && 
+    {openDeleteAlert && 
     <AlertDialog 
-      open={open} 
+      open={openDeleteAlert} 
       handleClose={handleClose} 
       handleConfirm={handleConfirm}
       alertMsg = 'Are you sure you want to delete this product?'
       confirmMsg = 'Delete'
+    />}
+    {openEdit &&
+    <EditProductDialogWrapper
+      open={openEdit}
+      item={selectedEditItem}
+      handleClose={handleClose}
     />}
     </>
   );

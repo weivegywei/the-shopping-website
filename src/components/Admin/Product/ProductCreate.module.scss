@@ -1,6 +1,8 @@
+@import '../../../variables.scss';
+
 .root {
     display: flex;
-    background-color: #fcfcf0;
+    background-color: $secondaryBeige;
     height: 120vh;
     justify-content: center;
     & > * {
@@ -10,8 +12,8 @@
 
 .box {
       display: flex;
-      background-color: #fcfcf0;
-      height: 120vh;
+      background-color: $secondaryBeige;
+      height: 110vh;
       justify-content: center;
       flex-direction: column   
 }
@@ -28,10 +30,10 @@
 }
 
 .button {
-    background-color: black;
-    color: white;
+    background-color: $secondaryGreen!important;
+    color: $mainBeige!important;
     &:hover {
-        background-color: darkgray;
+        background-color: $highlightGreen!important;
     }
 }
 

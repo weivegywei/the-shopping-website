@@ -31,6 +31,7 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
 
   const setCartItemsHandler = async() => {
     const res = await postData('/api/cart/get', {userId: userStore.id});
+    console.log(res.data, 'resdata')
     setcartItems([...res.data]);
   }
 
@@ -43,7 +44,7 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
   const [initiatePayPal, setInitiatePayPal] = useState(false);
   const cartItemsAmount = cartItems.reduce((a,b) => b.quantity * b.price + a, 0);
   const cartOrderValue = Number(cartItemsAmount.toFixed(2));
-  const cartDeliveryAmount = 7.99;
+  const cartDeliveryAmount = 4.99;
   const totalAmount = Number((cartOrderValue + cartDeliveryAmount).toFixed(2));
   
   return (
@@ -58,7 +59,8 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
                 <div key={item._id.toString() + item.specificationValue}>
                 <Paper elevation={0} className={itemcard}>
                     <CartItem item={item} userStore={userStore} 
-                      setCartItemsAndNotificationHandler={setCartItemsAndNotificationHandler} />
+                      setCartItemsAndNotificationHandler={setCartItemsAndNotificationHandler}
+                      setCartItemsHandler={setCartItemsHandler} />
                 </Paper>
                 {idx + 1 < cartItems.length && <Divider variant="middle" />}
                 </div>

@@ -15,13 +15,13 @@ import styles from './ProductCreate.module.scss';
 import { ChangeEvent } from 'react';
 
 const defaultFormFields = [
-    {primary: 'Product name: ', type: 'text', key: ProductStoreKeys.productName, error: false, errorMessage: ''},
-    {primary: 'Manufacturer name: ', type: 'text', key: ProductStoreKeys.manufacturerName, error: false, errorMessage: ''},
-    {primary: "Inventory: ", type: 'number', key: ProductStoreKeys.inventory, error: false, errorMessage: ''},
-    {primary: "Image URL: ", type: 'text', key: ProductStoreKeys.imageUrl, error: false, errorMessage: ''},
-    {primary: "Price: ", type: 'number', key: ProductStoreKeys.price, error: false, errorMessage: ''},
-    {primary: 'Description: ', type: 'text', key: ProductStoreKeys.description, error: false, errorMessage: ''},
-    {primary: 'Package size: ', type:'text', key: ProductStoreKeys.packageSize, error: false, errorMessage: ''}
+    {primary: 'Product name', type: 'text', key: ProductStoreKeys.productName, error: false, errorMessage: ''},
+    {primary: 'Manufacturer name', type: 'text', key: ProductStoreKeys.manufacturerName, error: false, errorMessage: ''},
+    {primary: "Inventory", type: 'number', key: ProductStoreKeys.inventory, error: false, errorMessage: ''},
+    {primary: "Image URL", type: 'text', key: ProductStoreKeys.imageUrl, error: false, errorMessage: ''},
+    {primary: "Price", type: 'number', key: ProductStoreKeys.price, error: false, errorMessage: ''},
+    {primary: 'Description', type: 'text', key: ProductStoreKeys.description, error: false, errorMessage: ''},
+    {primary: 'Package size', type:'text', key: ProductStoreKeys.packageSize, error: false, errorMessage: ''}
 ];
 
 export const ProductCreatePage = observer(() => {
@@ -66,16 +66,16 @@ const createNewProduct = async() => {
                 <InfoEntryFramework store={store} item={item} key={`${item.key}${item.error}${item.errorMessage}`} />
             )}
             <ListItem divider className={formField}>
-                <ListItemText primary='Availability: ' />
+                <ListItemText primary='Availability' />
                 <AvailabilitySwitch store={store} />
             </ListItem>
             <ListItem divider className={formField}>
-                <ListItemText primary='Specification: ' />
+                <ListItemText primary='Specification' />
                 <SpecificationDropdown store={store} />
                 <input type='text' className={specInput} onChange={changeValue}></input>
             </ListItem>
             <ListItem divider className={formField}>
-                <ListItemText primary='Category: ' />
+                <ListItemText primary='Category' />
                 <InputDropdown store={store} selectValue={store.category}  
                 options={Object.values(CategoryType)} />
             </ListItem>

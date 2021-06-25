@@ -4,7 +4,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 export type InfoItemProps = {
     fieldName: string;
-    fieldValue: string;
+    fieldValue: string | number;
 }
 
 type InfoDialogProps = {

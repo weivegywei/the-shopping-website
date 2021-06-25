@@ -1,19 +1,19 @@
 @import '../../variables.scss';
 
 .filterButton {
-    background: #ecebeb!important;
-    color: #494f4d!important;
+    background: $secondaryBeige!important;
+    color: $mainDark!important;
     text-transform: none!important;
     margin: 0 10px 0 10px!important;
 }
 
 .expandIcon {
-  color: #494f4d!important;
+  color: $mainDark!important;
 }
 
 .formGroup {
   font-size: 13px!important;
-  color: #494f4d;
+  color: $mainDark;
   padding: 0;
 }
 
@@ -29,43 +29,45 @@
 
 .buttonClear {
   background: $mainBeige;
-  color: #7a8e82;
-  border: 1px solid #7a8e82;
+  color: $backgroundGreen;
+  border: 1px solid $backgroundGreen;
   border-left: none;
   font-weight: bold;
   width: 50%;
   min-width: 103px;
   height: 35px;
   &:hover {
-      cursor: pointer;
-      background: #cad2a8;
-      border: 1px solid #cad2a8;
-      color: $mainBeige;
+    cursor: pointer;
+    background: $highlightGreen;
+    border: 1px solid $highlightGreen;
+    color: $mainBeige;
     }
   &:focus {
-  outline: none;
-  background: #506e69;
-  color: $mainBeige;
+    outline: none;
+    background: $confirmGreen;
+    border: 1px solid $confirmGreen;
+    color: $mainBeige;
   }
 }
 
 .buttonConfirm {
-  background: #7a8e82;
+  background: $backgroundGreen;
   color: $mainBeige;
-  border: 1px solid #7a8e82;
+  border: 1px solid $backgroundGreen;
   font-weight: bold;
   width: 50%;
   min-width: 103px;
   height: 35px;
   &:hover {
       cursor: pointer;
-      background: #cad2a8;
-      border: 1px solid #cad2a8;
+      background: $highlightGreen;
+      border: 1px solid $highlightGreen;
       color: $mainBeige;
     }
   &:focus {
-  outline: none;
-  background: #506e69;
-  color: $mainBeige;
+      outline: none;
+      background: $confirmGreen;
+      border: 1px solid $confirmGreen;
+      color: $mainBeige;
   }
 }

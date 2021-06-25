@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .root {
     width: 100%;
     & > * + * {
@@ -5,7 +7,7 @@
     }
 }
 .sucessStyle {
-    background: #8ba48a;
+    background: $mainGreen;
 }
 
 .errorStyle {

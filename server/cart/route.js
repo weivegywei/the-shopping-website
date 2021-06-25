@@ -13,7 +13,8 @@ const saveNewCart = async (userId) => {
 
 export const getCartRoute = (app) => app.post('/api/cart/get', async(req, res) => {
     //const data = await getOrCreateCart(req.body.userId);
-    const a = await Cart.aggregate([{
+    const a = await Cart.aggregate([
+    {
         $addFields: {
             "cartItems.prodId": {
                 $map: {
@@ -34,6 +35,7 @@ export const getCartRoute = (app) => app.post('/api/cart/get', async(req, res) =
         }
     }
 ]).exec();
+console.log('a', a);
     const cartItemsUserSpecArr = a[0].cartItems;
     const cartItemsFullInfoArr = a[0].items;
     const cartItemsArr = cartItemsUserSpecArr.map(item => ({...cartItemsFullInfoArr.find(it => it._id.toString() === item.productId.toString()), ...item}));
@@ -60,7 +62,6 @@ export const deleteCartItem = (app) => app.post('/api/cart/delete', async(req, r
         { userId: req.body.userId, status: 'active' },
         { $pull: { cartItems: { _id: req.body.cartItemId } } }
       );
-    console.log(userCart, 'userCart');
     return res.send('Item deleted')
 });
 
@@ -75,7 +76,6 @@ export const changeItemNumber = (app) => app.post('/api/cart/change', async(req,
     const userCart = await Cart.updateOne(
         { userId, status: 'active', 'cartItems._id': cartItemId },
         { $set: { 'cartItems.$.quantity': quantity } });
-    console.log(userCart, 'userCart');
     return res.send('Qty changed')
 });
 

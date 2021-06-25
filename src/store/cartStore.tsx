@@ -16,14 +16,6 @@ type CartStoreValues = {
     specificationDescr: string
 }
 
-export enum CartItemStoreKey {
-    specificationValue = 'specificationValue'
-}
-
-export enum CartItemNumberStoreKey {
-    cartItemNumber = 'cartItemNumber'
-}
-
 class CartStore {
     productId = ''
     quantity = 0 
@@ -43,6 +35,16 @@ class CartStore {
   
 export const cartStore = new CartStore();
 
+
+export enum CartItemStoreKey {
+    specificationValue = 'specificationValue'
+}
+
+export type CartItemStoreType  = { 
+    specificationValue: string;
+    changeValue: (a: CartItemStoreKey, b: string) => void;
+}
+
 class CartItemStore {
     specificationValue = ''
   
@@ -56,6 +58,16 @@ class CartItemStore {
 }
 
 export const cartItemStore = new CartItemStore();
+
+
+export enum CartItemNumberStoreKey {
+    cartItemNumber = 'cartItemNumber'
+}
+
+export type CartItemNumberStoreType = {
+    cartItemNumber: number;
+    changeValue: (a: CartItemNumberStoreKey, b: number) => void;
+}
 
 class CartItemNumberStore {
     cartItemNumber = 0
@@ -71,12 +83,6 @@ class CartItemNumberStore {
 
 export const cartItemNumberStore = new CartItemNumberStore();
 
-export type CartItemStoreType  = { 
-    specificationValue: string;
-    changeValue: (a: CartItemStoreKey, b: string) => void;
-}
 
-export type CartItemNumberStoreType = {
-    cartItemNumber: number;
-    changeValue: (a: CartItemNumberStoreKey, b: number) => void;
-}
+
+

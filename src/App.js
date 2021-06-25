@@ -1,5 +1,5 @@
 import './App.scss';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { Menu } from './components/Menu/Menu.tsx';
 import { MainGrid } from './components/GridLists/MainGrid.tsx';
 import {
@@ -18,8 +18,15 @@ import { getUser, getCartItemsNumber } from './App.util';
 import { ManufacturerCreatePage } from './components/Admin/Manufacturer/ManufacturerCreate.tsx';
 import { AfterPaymentPage } from './components/Cart/AfterPaymentPage';
 import { OrderListPage } from './components/Admin/Order/OrderList.tsx';
+import { NotificationSnackbar } from './components/Utilities/Snackbar';
+import { SnackbarContext, useSnackbarContext } from './SnackbarContext';
 
-export const App = observer(({userStore}) => {
+export const AppWrapper = (props) => 
+  <SnackbarContext.Provider value={useSnackbarContext()}>
+    <App {...props} />
+  </SnackbarContext.Provider>
+
+const App = observer(({userStore}) => {
   useEffect(() => {
     const getUserInfo = async () => {
       const res = await getUser();
@@ -35,6 +42,8 @@ export const App = observer(({userStore}) => {
       getCartItemsNumber(userStore.id);
     }
   },[userStore.id])
+
+  const { state, openNotification, setOpenNotification, errorMsg, successMsg } = useContext(SnackbarContext);
 
   return (
     <>
@@ -93,6 +102,8 @@ export const App = observer(({userStore}) => {
           </Route>
         </Switch>
       </Router>
+      {openNotification && <NotificationSnackbar state={state} openNotification={openNotification} 
+      setOpenNotification={setOpenNotification} errorMsg={errorMsg} successMsg={successMsg} />}
     </>
   );
 } )

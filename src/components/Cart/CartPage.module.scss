@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .rootDiv {
     display: flex;
     justify-content: center;
@@ -7,7 +9,7 @@
     display: flex;
     flex-direction: row;
     justify-content: start;
-    background: #ecebeb;
+    background: $secondaryBeige;
     width: 85%;
 }
 
@@ -19,8 +21,8 @@
 }
 
 .title {
-    margin: 25px;
-    margin-bottom: 5;
+    margin: 25px!important;
+    margin-bottom: 5px;
     display: flex;
     justify-content: start;
     align-items: center;
@@ -41,7 +43,7 @@
 }
 
 .amountDiv {
-    margin: 25px;
+    margin: 25px!important;
 }
 
 .checkout {
@@ -54,8 +56,8 @@
 }
 
 .amountLabelDiv {
-    margin: 5;
-    margin-bottom: 20;
+    margin: 5px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -63,20 +65,20 @@
 
 .amountNum {
     margin: 0 15px;
-    font-size: 14;
+    font-size: 14px;
     display: flex;
     align-items: center;
 }
 
 .divider {
-    margin-bottom: 15;
+    margin-bottom: 15px;
 }
 
 .button {
     margin: 15px 0;
     width: 100%;
-    color: white;
-    background: red;
+    color: white!important;
+    background: red!important;
     font-weight: bold;
     &:hover {
       background: #d18888;

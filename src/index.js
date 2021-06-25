@@ -1,11 +1,11 @@
 import ReactDOM from 'react-dom';
 import './index.css';
-import { App } from './App';
+import { AppWrapper } from './App';
 import reportWebVitals from './reportWebVitals';
 import { userStore } from './store/userStore.tsx';
 
 ReactDOM.render(
-  <App userStore={userStore} />,
+  <AppWrapper userStore={userStore} />,
   document.getElementById('root')
 );
 

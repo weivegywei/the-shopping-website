@@ -12,6 +12,7 @@ import { postData } from '../../../api/postData';
 import IconButton from '@material-ui/core/IconButton';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { InfoDialog, InfoItemProps } from '../../Utilities/InfoDialog';
+import { InfoTableDialog, InfoItemType } from '../../Utilities/InfoTableDialog';
 import { EditDialog } from '../../Utilities/EditDialog';
 import { orderStatusStore as store } from '../../../store/orderStatusStore';
 import { observer } from "mobx-react";
@@ -27,9 +28,21 @@ type Events = {
     time: string
 }
 
+type OrderInfoType = {
+    productId: string;
+    quantity: number;
+    specificationValue: string;
+    _id: string;
+}
+
+type CartInfoType = {
+    cartItems: OrderInfoType;
+}
+
 type ResDataMapProps = {
     _id: string;
     userInfo: UserName[];
+    cartInfo: CartInfoType;
     createdAt: string;
     status: string
 }
@@ -48,6 +61,7 @@ type UserDataType = {
 
 type ListItemProps = {
     _id: string;
+    cartId: string;
     userData: UserDataType;
     createdAt: string;
     amount: number;
@@ -65,12 +79,13 @@ type tableHeadItemsProps = {
 }
 
 const tableHeadItems = [
-    {entry: 'User name & info'},    
+    {entry: 'User name & info'},
+    {entry: 'Order info', align: AlignTypes.align},
     {entry: 'Paid time', align: AlignTypes.align},
     {entry: 'Order amount', align: AlignTypes.align},
     {entry: 'Returned status', align: AlignTypes.align},
     {entry: 'Current status', align: AlignTypes.align},
-    {entry: 'Edit', align: AlignTypes.align}
+    {entry: 'Edit status', align: AlignTypes.align}
 ];
 
 export const OrderListPage = observer(() => {
@@ -79,12 +94,14 @@ export const OrderListPage = observer(() => {
     const [openUserInfo, setOpenUserInfo] = useState(false);
     const [openStatusInfo, setOpenStatusInfo] = useState(false);
     const [openStatusEdit, setOpenStatusEdit] = useState(false);
-    const [selectedItem, setSelectedItem] = useState<InfoItemProps[] | UserDataType | ListItemProps | null>(null);
+    const [openOrderInfo, setOpenOrderInfo] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<InfoItemProps[] | UserDataType | ListItemProps | InfoItemType | null>(null);
 
     const getOrderList = async() => {
         const res = await getData('/api/admin/order/list');
         setList(res.data.map((it: ResDataMapProps) => ({...it, userData: it.userInfo[0]})));
       };
+      console.log('list', list);
     
       useEffect(() => {
         getOrderList();
@@ -101,7 +118,20 @@ export const OrderListPage = observer(() => {
         {fieldName: 'Country', fieldValue: item.country}];
         setOpenUserInfo(true);
         setSelectedItem(a);
-      };
+    };
+    
+    const handleOrderInfoClickOpen = async(cartId) => {
+        const res = await postData('/api/admin/order/info', {cartId});
+        const a = res.data.map(it => {
+            const { name, _id, inventory, price, packageSize, _doc: { quantity, specificationValue }} = it;
+            return [{fieldName: 'Product Name', fieldValue: name}, {fieldName: 'Product Id', fieldValue: _id}, 
+            {fieldName: 'Inventory', fieldValue: inventory}, {fieldName: 'Price', fieldValue: price }, 
+            {fieldName: 'Package Size', fieldValue: packageSize}, {fieldName: 'Quantity', fieldValue: quantity}, 
+            {fieldName: 'Specification Value', fieldValue: specificationValue}]});
+        console.log(a , 'a');
+        setSelectedItem(a);
+        setOpenOrderInfo(true);
+    }
 
     const handleStatusInfoClickOpen = (items: Events[]) => {
         const a = items.map(item => {return {fieldName: item.status, fieldValue: item.time}});
@@ -126,6 +156,7 @@ export const OrderListPage = observer(() => {
         setOpenUserInfo(false);
         setOpenStatusInfo(false);
         setOpenStatusEdit(false);
+        setOpenOrderInfo(false);
     };
 
 return (
@@ -145,6 +176,11 @@ return (
                     <TableCell component='th' scope='row' align='inherit'>
                         {`${item.userData.firstName} ${item.userData.lastName}`}
                         <IconButton className={button} onClick={() => handleUserInfoClickOpen(item.userData)}>
+                            <InfoOutlinedIcon color="action" />
+                        </IconButton>
+                    </TableCell>
+                    <TableCell align='center'>
+                        <IconButton className={button} onClick={() => handleOrderInfoClickOpen(item.cartId)}>
                             <InfoOutlinedIcon color="action" />
                         </IconButton>
                     </TableCell>
@@ -189,6 +225,12 @@ return (
             open={openStatusEdit} 
             handleClose={handleClose}
             handleSave={handleSave}
+        />}
+        {openOrderInfo && <InfoTableDialog 
+            open={openOrderInfo} 
+            //@ts-ignore
+            info={selectedItem} 
+            handleClose={handleClose}
         />}
     </>
     );

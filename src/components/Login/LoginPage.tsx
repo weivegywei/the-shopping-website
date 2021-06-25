@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import cn from 'classnames';
 import Paper from '@material-ui/core/Paper';
 import {Link, useHistory} from "react-router-dom";
@@ -11,14 +12,19 @@ import { ChangeEvent } from 'react';
 export const LoginPage = observer(() => {
   const {root, paper, title, buttons, signInButton, signUpButton, buttonDiv} = styles;
   const history = useHistory(); 
+  const [loginErrorState, setLoginErrorState] = useState(false);
 
   const loginAction = async() => {
     const res = await postData('/api/login',{
-    email: store.email,
-    password: store.password,
+      email: store.email,
+      password: store.password,
     });
-    localStorage.setItem('accessToken',res.data.accessToken);
-    history.push('/');
+    if (res.data) {
+      localStorage.setItem('accessToken',res.data.accessToken);
+      history.push('/');
+    } else {
+      setLoginErrorState(true);
+    }
   }
 
   const changeValue = (e: ChangeEvent<HTMLInputElement>, fieldName: LoginStoreKeys) => 
@@ -30,8 +36,10 @@ export const LoginPage = observer(() => {
         <div className={title}>
             SIGN IN
         </div>
-        <InputBox labelName='Email address' type='email' changeValue={(e) => changeValue(e, LoginStoreKeys.email)} />
-        <InputBox labelName='Password' type='text' changeValue={(e) => changeValue(e, LoginStoreKeys.password)} />
+        <InputBox labelName='Email address' type='email' changeValue={(e) => changeValue(e, LoginStoreKeys.email)} 
+          error={loginErrorState} errorMsg='Email or password incorrect'/>
+        <InputBox labelName='Password' type='text' changeValue={(e) => changeValue(e, LoginStoreKeys.password)} 
+          error={loginErrorState} errorMsg='Email or password incorrect'/>
         <div className={buttonDiv} style={{marginTop: '65px'}}>
           <button type='submit' className={cn(buttons,signInButton)} onClick={loginAction}>SIGN IN</button>
         </div>

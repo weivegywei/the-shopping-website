@@ -4,13 +4,8 @@
     display: flex;
     justify-content: center;
     align-content: center;
-    background: #fcfcf0;
+    background: $lightBeige;
     height: 100vh;
-    /* '& > *': {
-      margin: theme.spacing(4),
-      width: theme.spacing(66),
-      height: theme.spacing(68),
-    } */
 }
 
 .paper {

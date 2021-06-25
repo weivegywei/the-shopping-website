@@ -26,30 +26,37 @@ type CartItemProps = {
   item: CartItemProductType;
   userStore: UserStoreType;
   setCartItemsAndNotificationHandler: () => void;
+  setCartItemsHandler: () => void;
 }
 
-export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler}: CartItemProps) => {
+export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, setCartItemsHandler}: CartItemProps) => {
   const {wrapper,productInfo,textarea,itemInfoDiv,textColor, iconDiv, iconButton, icon, 
     divider, panel,input,flexFiller,panelItem,subtotal} = styles;
-  const [itemQuantity, setItemQuantity] = useState(item.quantity);
-  const handleDelete = async(item: CartItemProductType) => await postData('/api/cart/delete', {userId: userStore.id, cartItemId: item._id});
+  const [itemQuantity, setItemQuantity] = useState<number>(item.quantity);
   const [openAlert, setOpenAlert] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CartItemProductType>();
   const handleClickOpen = (item: CartItemProductType) => {
     setOpenAlert(true);
     setSelectedItem(item);
   };
+
   const handleChange = async(e: ChangeEvent<HTMLInputElement>) => {
       await postData('/api/cart/change', {userId: userStore.id, cartItemId: item._id,
     quantity: e.target.value})};
+  
+  const handleDelete = async(item: CartItemProductType) => {
+    await postData('/api/cart/delete', {userId: userStore.id, cartItemId: item._id})};
+
   const itemQuantityChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+      console.log(e.target.value, 'e value');
       setItemQuantity(Number(e.target.value));
       handleChange(e);
+      setCartItemsHandler();
   };
-  const handleConfirm = (selectedItem: CartItemProductType) => {
-    handleDelete(selectedItem);
-    setCartItemsAndNotificationHandler();
-    setOpenAlert(false);
+  const handleConfirm = (item: CartItemProductType) => {
+      handleDelete(item);
+      setCartItemsAndNotificationHandler();
+      setOpenAlert(false);
   }
 
   return (  
@@ -70,7 +77,7 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler}: 
                     Delete
                 </IconButton>
                 <Divider orientation="vertical" className={divider} />
-                <IconButton className={iconButton} >
+                <IconButton className={iconButton} disableFocusRipple >
                     <FavoriteBorderOutlinedIcon className={icon} />
                     Add to wishlist
                 </IconButton>
@@ -90,7 +97,7 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler}: 
       <AlertDialog
         open={openAlert} 
         handleClose={() => setOpenAlert(false)} 
-        handleConfirm={handleConfirm}
+        handleConfirm={() => handleConfirm(selectedItem)}
         alertMsg = 'Are you sure you want to delete this item?'
         confirmMsg = 'Delete'
       />}

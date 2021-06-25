@@ -11,8 +11,8 @@ import styles from './ManufacturerCreate.module.scss';
 import { urlValidityPattern } from '../../../const/constants';
 
 const defaultFormFields = [
-    {primary: 'Manufacturer name: ', type: 'text', key: ManufacturerStoreKeys.manufacturerName, error: false, errorMessage: ''},
-    {primary: "Logo URL: ", type: 'text', key: ManufacturerStoreKeys.logoUrl, error: false, errorMessage: ''}
+    {primary: 'Manufacturer name', type: 'text', key: ManufacturerStoreKeys.manufacturerName, error: false, errorMessage: ''},
+    {primary: "Logo URL", type: 'text', key: ManufacturerStoreKeys.logoUrl, error: false, errorMessage: ''}
 ];
 
 type ManufacturerCreatePageComponentProps = {

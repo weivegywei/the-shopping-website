@@ -1,11 +1,11 @@
 .root {
     display: flex;
     flex-wrap: nowrap;
-    /* '& > *': {
-      margin: theme.spacing(1),
-      width: theme.spacing(65),
-      height: theme.spacing(75),
-    }, */
+    & > * {
+      margin: 8px;
+      width: 520px;
+      height: 600px;
+    }
   }
 
 .paper {

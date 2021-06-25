@@ -5,7 +5,7 @@ const app = express();
 const mongoose = require('mongoose');
 const mongodbUrl = 'mongodb://127.0.0.1:27017';
 const { registerRoute } = require('./server/Register/route');
-const { createProductRoute, adjustProductInventory } = require('./server/product/create/route');
+const { createProductRoute, adjustProductInventory} = require('./server/product/create/route');
 const { listProductRoute, deleteProductRoute } = require('./server/product/list/route');
 const { homepageProductRoute } = require('./server/homepage/route');
 const { loginAuthenticationRoute } = require('./server/login/auth');
@@ -15,7 +15,8 @@ const { createManufacturerRoute } = require('./server/manufacturer/route');
 const { homepageProductSearchRoute } = require('./server/homepage/searchRoute');
 const { listFilteredProductRoute, getFiltersRoute } = require('./server/product/filter/route');
 const { paypalRoute, storePaymentRoute } = require('./server/paypal/route');
-const { listOrderRoute, editOrderStatusRoute } = require('./server/order/route');
+const { listOrderRoute, editOrderStatusRoute, getOrderInfoRoute } = require('./server/order/route');
+const { editProductRoute } = require('./server/product/edit/route');
 
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -75,3 +76,7 @@ adjustProductInventory(app);
 listOrderRoute(app);
 
 editOrderStatusRoute(app);
+
+getOrderInfoRoute(app);
+
+editProductRoute(app);

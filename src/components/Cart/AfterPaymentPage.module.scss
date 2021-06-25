@@ -1,6 +1,8 @@
+@import '../../variables.scss';
+
 .root {
     display: flex;
-    background: #ecebeb;
+    background: $secondaryBeige;
     height: 100vh;
     justify-content: center;
     align-items: center;
@@ -11,12 +13,12 @@
 
 .box {
     display: flex;
-    background: #cad2a8;
-    height: 350;
+    background: $highlightGreen;
+    height: 350px;
     justify-content: center; 
     flex-direction: column;
-    font-Family: 'Great Vibes, cursive';
-    font-size: 40;
+    font-Family: Great Vibes, cursive;
+    font-size: 40px;
     color: white;
 }
 

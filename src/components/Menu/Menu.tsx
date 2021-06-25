@@ -25,6 +25,7 @@ import Badge from '@material-ui/core/Badge';
 import { cartItemNumberStore, CartItemNumberStoreType } from '../../store/cartStore';
 import styles from './Menu.module.scss';
 import { UserStoreType } from '../../store/userStore';
+import { getCartItemsNumber } from '../../App.util';
 
 const drawerWidth = 300;
 
@@ -102,6 +103,10 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
 
     useEffect(()=>{
       getFilters();
+    },[])
+
+    useEffect(()=> {
+      getCartItemsNumber(store.id)
     },[])
   
     return (
