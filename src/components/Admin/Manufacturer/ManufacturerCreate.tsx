@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import Button from '@material-ui/core/Button';
@@ -6,9 +6,9 @@ import { InfoEntryFramework } from '../../Utilities/InfoEntryFramework';
 import { observer } from "mobx-react";
 import { manufacturerStore as store, manufacturerStoreType, ManufacturerStoreKeys } from '../../../store/manufacturerStore';
 import { postData } from '../../../api/postData';
-import { NotificationSnackbar } from '../../Utilities/Snackbar';
 import styles from './ManufacturerCreate.module.scss';
 import { urlValidityPattern } from '../../../const/constants';
+import { SnackbarContext } from '../../../SnackbarContext';
 
 const defaultFormFields = [
     {primary: 'Manufacturer name', type: 'text', key: ManufacturerStoreKeys.manufacturerName, error: false, errorMessage: ''},
@@ -26,10 +26,7 @@ const ManufacturerCreatePageComponent = observer(
   const {root, box, title, button} = styles;
   const [formFields, setFormFields] = useState(defaultFormFields);
   const [disabled, setDisabled] = useState(false);
-  const [openNotification, setOpenNotification] = useState(false);
-  const [errorState, setErrorState] = useState(false);
-  const errorMsg = 'Error! Manufacturer adding failed';
-  const successMsg = 'Manufacturer added successfully!';
+  const { setState, setOpenNotification, setErrorMsg, setSuccessMsg } = useContext(SnackbarContext);
 
   const createNewManufacturer = async() => {const res = await postData('/api/admin/manufacturer/create',{
     manufacturerName: store.manufacturerName,
@@ -37,7 +34,10 @@ const ManufacturerCreatePageComponent = observer(
     });
     setOpenNotification(true);
     if(res.hasOwnProperty('error')) {
-      setErrorState(true);
+      setState('error');
+      setErrorMsg('Error! Manufacturer adding failed');
+    } else {
+      setSuccessMsg('Manufacturer added successfully')
     }
     return res;
   };
@@ -77,8 +77,6 @@ const ManufacturerCreatePageComponent = observer(
           </Button>
         </div>
       </div>
-      {openNotification && <NotificationSnackbar state={errorState ? 'error' : 'success'} openNotification={openNotification} 
-        setOpenNotification={setOpenNotification} errorMsg={errorMsg} successMsg={successMsg}/>}
     </>
   );
 })

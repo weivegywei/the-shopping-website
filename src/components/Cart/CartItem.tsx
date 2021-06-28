@@ -32,7 +32,8 @@ type CartItemProps = {
 export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, setCartItemsHandler}: CartItemProps) => {
   const {wrapper,productInfo,textarea,itemInfoDiv,textColor, iconDiv, iconButton, icon, 
     divider, panel,input,flexFiller,panelItem,subtotal} = styles;
-  const [itemQuantity, setItemQuantity] = useState<number>(item.quantity);
+  const { _id, quantity, imageUrl, name, specification, specificationValue, inventory, price } = item;
+  const [itemQuantity, setItemQuantity] = useState<number>(quantity);
   const [openAlert, setOpenAlert] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CartItemProductType>();
   const handleClickOpen = (item: CartItemProductType) => {
@@ -41,11 +42,11 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, s
   };
 
   const handleChange = async(e: ChangeEvent<HTMLInputElement>) => {
-      await postData('/api/cart/change', {userId: userStore.id, cartItemId: item._id,
+      await postData('/api/cart/change', {userId: userStore.id, cartItemId: _id,
     quantity: e.target.value})};
   
   const handleDelete = async(item: CartItemProductType) => {
-    await postData('/api/cart/delete', {userId: userStore.id, cartItemId: item._id})};
+    await postData('/api/cart/delete', {userId: userStore.id, cartItemId: _id})};
 
   const itemQuantityChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
       console.log(e.target.value, 'e value');
@@ -62,12 +63,16 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, s
   return (  
     <>
       <div className={wrapper}>
-        <img src={item.imageUrl} alt='' width='104px' height='120px'/>
+        <img src={imageUrl} alt='' width='104px' height='120px'/>
         <div className={productInfo} >
         <Typography variant='body1'>
             <div  className={textarea}>
-                <div className={itemInfoDiv}>{item.name}</div>
-                <div className={cn(itemInfoDiv, textColor)}>{item.specification}: {item.specificationValue}</div>
+                <div className={itemInfoDiv}>{name}</div>
+                <div className={cn(itemInfoDiv, textColor)}>
+                  {specification && specificationValue ? 
+                  specification + ': ' + specificationValue :
+                  null}
+                </div>
             </div>
             </Typography>
             <div className={flexFiller} />
@@ -85,11 +90,11 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, s
         </div>
         <div className={flexFiller} />
         <div className={panel}>
-            <input type='number' className={cn(panelItem,input)} min='1' max={`${item.inventory}`} 
+            <input type='number' className={cn(panelItem,input)} min='1' max={`${inventory}`} 
                 value={itemQuantity} onChange={(e)=> itemQuantityChangeHandler(e)}></input>
             <div className={flexFiller}/>
             <Typography variant='body2' className={cn(panelItem, subtotal)}>
-                € {(itemQuantity * Number(item.price)).toFixed(2)}
+                € {(itemQuantity * Number(price)).toFixed(2)}
             </Typography>
         </div>
       </div>

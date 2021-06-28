@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { CartItem } from './CartItem';
@@ -8,10 +8,10 @@ import { postData } from '../../api/postData';
 import { observer } from 'mobx-react';
 import cn from 'classnames';
 import { PayPalBox } from './PayPalBox';
-import { NotificationSnackbar } from '../Utilities/Snackbar';
 import styles from './CartPage.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { CartItemProductType } from './CartItem';
+import { SnackbarContext } from '../../SnackbarContext';
 
 type CartPageProps = {
   userStore: UserStoreType
@@ -20,19 +20,18 @@ type CartPageProps = {
 export const CartPage = observer(({userStore}: CartPageProps) => {
   const {rootDiv, root, order, title,itemcard,flexFiller,checkout, amountDiv,
     amountLabelDiv,amountNum,button, divider, fontWeight} = styles;
-  const [cartItems, setcartItems] = useState<CartItemProductType[]>([]);
-  const [openNotification, setOpenNotification] = useState(false);
-  const successMsg = 'You have deleted this item from your cart.'
+  const [cartItems, setCartItems] = useState<CartItemProductType[]>([]);
+  const { setOpenNotification, setSuccessMsg } = useContext(SnackbarContext);
   
   const setCartItemsAndNotificationHandler = () => {
-    setCartItemsHandler();
     setOpenNotification(true);
+    setSuccessMsg('You have deleted this item from your cart.');
+    setCartItemsHandler();
   }
 
   const setCartItemsHandler = async() => {
     const res = await postData('/api/cart/get', {userId: userStore.id});
-    console.log(res.data, 'resdata')
-    setcartItems([...res.data]);
+    setCartItems(res.data);
   }
 
   useEffect(() => {
@@ -97,8 +96,6 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
           {initiatePayPal && <PayPalBox totalAmount={totalAmount} userId={userStore.id} />}
         </div>
       </div>
-      {openNotification && <NotificationSnackbar state={'success'} openNotification={openNotification} 
-        setOpenNotification={setOpenNotification} errorMsg={''} successMsg={successMsg}/>}
     </>
   )
 });

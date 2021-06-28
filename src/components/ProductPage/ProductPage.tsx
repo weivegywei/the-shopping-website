@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import { postData } from '../../api/postData';
 import { SpecificationValueDropdown } from './SpecificationValueDropdown';
 import { observer } from 'mobx-react';
 import { cartItemStore, CartItemStoreType } from '../../store/cartStore';
-import { NotificationSnackbar } from '../Utilities/Snackbar';
 import { getCartItemsNumber } from '../../App.util';
 import styles from './ProductPage.module.scss';
 import { ChangeEvent } from 'react';
+import { SnackbarContext } from '../../SnackbarContext';
 
 type ProductPageProps = {
   userStore: {id: string} 
@@ -36,12 +36,12 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
   const userId = userStore.id;
   const productId = location.state.item._id;
   const [quantity, setQuantity] = useState(1);
-  const [openNotification, setOpenNotification] = useState(false);
-  const successMsg = 'Item added to cart.'
+  const { setOpenNotification, setSuccessMsg } = useContext(SnackbarContext);
   const addToCart = async() => {
     const updatedCart = await postData('/api/cart', {
       userId, productId, quantity, specificationValue: cartItemStore.specificationValue});
       setOpenNotification(true);
+      setSuccessMsg('Item added to cart.');
       getCartItemsNumber(userStore.id);
     return updatedCart;
   }
@@ -73,8 +73,6 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
           </div>
         </Typography>
       </div>
-      {openNotification && <NotificationSnackbar state={'success'} openNotification={openNotification} 
-        setOpenNotification={setOpenNotification} errorMsg={''} successMsg={successMsg}/>}
     </>
   );
 }

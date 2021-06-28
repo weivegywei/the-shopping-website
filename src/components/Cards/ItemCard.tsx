@@ -7,7 +7,8 @@ import { postData } from '../../api/postData';
 import { getCartItemsNumber } from '../../App.util';
 import styles from './ItemCard.module.scss';
 import { UserStoreType } from '../../store/userStore';
-import { MouseEvent } from 'react';
+import { MouseEvent, useContext } from 'react';
+import { SnackbarContext } from '../../SnackbarContext';
 
 type ItemCardItemType = {
   _id: string;
@@ -20,19 +21,21 @@ type ItemCardItemType = {
 type ItemCardProps = {
   item: ItemCardItemType;
   userStore: UserStoreType;
-  setOpenNotification: (a: boolean) => void;
 }
 
-export const ItemCard = ({item, userStore, setOpenNotification}: ItemCardProps) => {
+export const ItemCard = ({item, userStore}: ItemCardProps) => {
   const {root, p, card, action, flexfiller, icon} = styles;
   const userId = userStore.id;
   const productId = item._id;
   const specificationValue = item.specificationDescr[0].split(',')[0];
+  const { setOpenNotification, setSuccessMsg } = useContext(SnackbarContext);
+  
   const handleClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
     addToCart();
     setOpenNotification(true);
+    setSuccessMsg('Item added to cart.')
   }
   const addToCart = async() => {
     const updatedCart = await postData('/api/cart', {

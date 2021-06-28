@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,6 +13,7 @@ import { postData } from '../../../api/postData';
 import { InputDropdown } from '../../Utilities/InputDropdown';
 import styles from './ProductCreate.module.scss';
 import { ChangeEvent } from 'react';
+import { SnackbarContext } from '../../../SnackbarContext';
 
 const defaultFormFields = [
     {primary: 'Product name', type: 'text', key: ProductStoreKeys.productName, error: false, errorMessage: ''},
@@ -28,6 +29,7 @@ export const ProductCreatePage = observer(() => {
   const {root, box, title, formField, button, specInput} = styles;
   const changeValue = (e: ChangeEvent<HTMLInputElement>) => {store.changeValue(ProductStoreKeys.specificationDescr, e.target.value)};
   const [formFields, setFormFields] = useState(defaultFormFields);
+  const { setOpenNotification, setSuccessMsg } = useContext(SnackbarContext);
 
 const createNewProduct = async() => {
     const {manufacturerName, price} = store;
@@ -44,6 +46,7 @@ const createNewProduct = async() => {
       packageSize: store.packageSize,
       category: store.category
     });
+    console.log(res, 'res');
     if(res.error) {
       const newFormFields = [...formFields];
       const errorField = newFormFields.find((it) => it.key === res.error.field);
@@ -52,6 +55,9 @@ const createNewProduct = async() => {
         errorField.errorMessage = res.error.message;
         setFormFields(newFormFields);
       }
+    } else if (res.status === 200) {
+      setOpenNotification(true);
+      setSuccessMsg('Product successfully created')
     }
 };
 

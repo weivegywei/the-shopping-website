@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useEffect } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -49,6 +49,9 @@ export const EditProductDialogWrapper = (props) =>
 
 const EditProductDialog = ({open, item, handleClose}: EditProductDialogProps) => {
     const {content, form, textField, flexField, inventoryField, priceField} = styles;
+    const [editError, setEditError] = useState(false);
+    const [editErrorMsg, setEditErrorMsg] = useState('');
+
 
     const {productName, setProductName, manufacturer, setManufacturer, itemInventory, setItemInventory, itemPrice, 
       setItemPrice, itemSpecificationDescr, setItemSpecificationDescr, itemPackageSize, setItemPackageSize, 
@@ -70,11 +73,15 @@ const EditProductDialog = ({open, item, handleClose}: EditProductDialogProps) =>
         itemInventory, price: itemPrice, specification: itemSpecification, specificationDescr: itemSpecificationDescr, 
         availability: itemAvailability, imageUrl: itemImageUrl, description: itemDescription, packageSize: 
         itemPackageSize, category: itemCategory});
+        console.log(res, 'res');
       if (!res.error) {
         setSuccessMsg(res.data);
         setOpenNotification(true);
+        handleClose();
+      } else if (res.error) {
+        setEditError(true);
+        setEditErrorMsg(res.error.message);
       }
-      handleClose();
     };
     
     useEffect(() => {
@@ -98,9 +105,12 @@ return (
             <TextField className={textField}
               margin="dense" label='Product name' value={productName} onChange={(e) => changeValue(e, setProductName)}
             />
-            <TextField className={textField}
-              margin="dense" label='Manufacturer name' value={manufacturer} 
-              onChange={(e) => changeValue(e, setManufacturer)}/>
+            <TextField className={textField} error={editError}
+              margin="dense" label='Manufacturer name' value={manufacturer} helperText={editErrorMsg}
+              onChange={(e) => {
+                setEditError(false);
+                setEditErrorMsg('');
+                changeValue(e, setManufacturer)}}/>
             <div className={flexField}>
               <TextField className={inventoryField}
                 margin="dense" label='Inventory' type='number' value={itemInventory} 
