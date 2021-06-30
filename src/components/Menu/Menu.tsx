@@ -22,7 +22,7 @@ import { PriceFilter } from '../Filter/Price';
 import { getData } from '../../api/getData';
 import { filterQueryStore, FilterQueryStoreKeys } from '../../store/filterStore';
 import Badge from '@material-ui/core/Badge';
-import { cartItemNumberStore, CartItemNumberStoreType } from '../../store/cartStore';
+import { cartItemNumberStore, CartItemNumberStoreType, CartItemNumberStoreKey } from '../../store/cartStore';
 import styles from './Menu.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { getCartItemsNumber } from '../../App.util';
@@ -73,11 +73,18 @@ type MenuComponentProps = {
 }
 
 export const Menu = ({store}: MenuProps) => <MenuComponent store={store} cartItemNumberStore={cartItemNumberStore} />
+
 const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps) => {
     const {content, appBar, appBarShift, contentShift} = useStyles();
-    const {root, hide, menuButton,drawerHeader, header, filterDiv, link, text, 
-      filterBar, margin, padding, siteName, loginDiv, welcome, span, logout, icons} = styles;
+    const {root, hide, menuButton,drawerHeader, header, filterDiv, link, text, login, filterBar, margin, padding, siteName, 
+      loginDiv, welcome, span, logout, icons} = styles;
     const [open, setOpen] = useState(false);
+
+    const logoutAction = () => {
+      localStorage.setItem('accessToken', undefined);
+      store.setValues({firstName: undefined, lastName: undefined, email: undefined, _id: undefined});
+      cartItemNumberStore.changeValue(CartItemNumberStoreKey.cartItemNumber, 0);
+    };
 
     const StyledBadge = withStyles(() => ({
       badge: {
@@ -109,6 +116,8 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
       getCartItemsNumber(store.id)
     },[])
   
+    console.log(store, 'store');
+
     return (
       <>
       <div className={root}>
@@ -131,14 +140,14 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
               </Typography>
             </Toolbar>
             <SearchBar />
-            <Toolbar className={cn(margin, padding, loginDiv)}>
+            <Toolbar className={cn(margin, padding, loginDiv)} >
               <div className={text}>
                 {store.email ? 
                   <div className={welcome}>
                     <div className={span}>{`Welcome, ${store.firstName}`}</div>
-                    <Link to='/login' className={cn(link, text, logout)}><LogOutButton /></Link>
+                    <Link to='/' className={cn(link, text, logout)}><LogOutButton logoutAction={logoutAction} /></Link>
                   </div> : 
-                  <Link to="/login" className={cn(link, text)}><LoginButton /></Link>}
+                  <Link to="/login" className={login}><LoginButton /></Link>}
               </div>
               <Link to="/cart" className={link}>
                 <IconButton className={icons}>

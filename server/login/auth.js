@@ -11,7 +11,7 @@ export const loginAuthenticationRoute = (app) => app.post('/api/login', async (r
     const hashedPassword = crypto.createHash('md5').update(password).digest('hex');
 
     // Filter user from the users collection by email and hashed password
-    const user = await User.findOne({email,password: hashedPassword }).exec();
+    const user = await User.findOne({ email, password: hashedPassword }).exec();
 
     if (user) {
         // Generate an access token

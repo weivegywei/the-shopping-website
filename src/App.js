@@ -14,7 +14,7 @@ import { ProductCreatePage } from './components/Admin/Product/ProductCreate.tsx'
 import { ProductListPage } from './components/Admin/Product/ProductList.tsx';
 import { RegisterPage } from './components/Register/RegisterPage.tsx';
 import { observer } from 'mobx-react';
-import { getUser, getCartItemsNumber } from './App.util';
+import { getUserInfo, getCartItemsNumber } from './App.util';
 import { ManufacturerCreatePage } from './components/Admin/Manufacturer/ManufacturerCreate.tsx';
 import { AfterPaymentPage } from './components/Cart/AfterPaymentPage';
 import { OrderListPage } from './components/Admin/Order/OrderList.tsx';
@@ -28,12 +28,6 @@ export const AppWrapper = (props) =>
 
 const App = observer(({userStore}) => {
   useEffect(() => {
-    const getUserInfo = async () => {
-      const res = await getUser();
-      if(res && res.data) {
-        userStore.setValues(res.data);
-      }
-    }
     getUserInfo();
   }, []);
 

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import cn from 'classnames';
 import Paper from '@material-ui/core/Paper';
-import {Link, useHistory} from "react-router-dom";
-import {InputBox} from '../Inputs/InputBox';
+import { Link, useHistory } from "react-router-dom";
+import { InputBox } from '../Inputs/InputBox';
 import { observer } from "mobx-react";
 import { loginStore as store, LoginStoreKeys } from '../../store/loginStore';
 import { postData } from '../../api/postData';
 import styles from './LoginPage.module.scss';
 import { ChangeEvent } from 'react';
+import { getUserInfo } from '../../App.util';
 
 export const LoginPage = observer(() => {
   const {root, paper, title, buttons, signInButton, signUpButton, buttonDiv} = styles;
@@ -20,7 +21,10 @@ export const LoginPage = observer(() => {
       password: store.password,
     });
     if (res.data) {
+      console.log(res.data, 'resdata');
       localStorage.setItem('accessToken',res.data.accessToken);
+      console.log(localStorage.accessToken, 'token');
+      getUserInfo();
       history.push('/');
     } else {
       setLoginErrorState(true);

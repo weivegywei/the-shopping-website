@@ -47,10 +47,15 @@
 
 .text {
     color: $mainBeige;
-    font-size: 15px;
+    //font-size: 15px;
     font-weight: bold;
     margin-left: 10px;
     margin-right: 5px;
+}
+
+.login {
+    text-decoration: none;
+    margin-top: 10px
 }
 
 .filterBar {

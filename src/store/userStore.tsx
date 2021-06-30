@@ -43,4 +43,5 @@ export type UserStoreType = {
     lastName: string | undefined;
     email: string | undefined;
     id: string | undefined;
+    setValues: (values: ValuesProps) => void;
 }
