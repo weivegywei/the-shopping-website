@@ -88,7 +88,7 @@ const tableHeadItems = [
     {entry: 'Edit status', align: AlignTypes.align}
 ];
 
-export const OrderListPage = observer(() => {
+export const OrderList = observer(() => {
     const {container, table, button} = styles;
     const [list, setList] = useState([]);
     const [openUserInfo, setOpenUserInfo] = useState(false);
@@ -98,7 +98,9 @@ export const OrderListPage = observer(() => {
     const [selectedItem, setSelectedItem] = useState<InfoItemProps[] | UserDataType | ListItemProps | InfoItemType | null>(null);
 
     const getOrderList = async() => {
+        console.log('pre res')
         const res = await getData('/api/admin/order/list');
+        console.log('post res', res);
         setList(res.data.map((it: ResDataMapProps) => ({...it, userData: it.userInfo[0]})));
       };
       console.log('list', list);
@@ -108,35 +110,35 @@ export const OrderListPage = observer(() => {
         },[]);
 
     const returnedTime = (item: ReturnedTimeProps) => {
-        const event = item.events.find(({status}) => status === 'returned');
+        const event = item.events?.find(({status}) => status === 'returned');
         return event ? event.time : null;
     };
 
     const handleUserInfoClickOpen = (item: UserDataType) => {
-        const a = [{fieldName: 'First Name', fieldValue: item.firstName}, {fieldName: 'Last Name', fieldValue: item.lastName}, 
+        const info = [{fieldName: 'First Name', fieldValue: item.firstName}, {fieldName: 'Last Name', fieldValue: item.lastName}, 
         {fieldName: 'Email', fieldValue: item.email}, {fieldName: 'Address', fieldValue: item.address}, 
         {fieldName: 'Country', fieldValue: item.country}];
         setOpenUserInfo(true);
-        setSelectedItem(a);
+        setSelectedItem(info);
     };
     
     const handleOrderInfoClickOpen = async(cartId) => {
         const res = await postData('/api/admin/order/info', {cartId});
-        const a = res.data.map(it => {
+        const info = res.data.map(it => {
             const { name, _id, inventory, price, packageSize, _doc: { quantity, specificationValue }} = it;
             return [{fieldName: 'Product Name', fieldValue: name}, {fieldName: 'Product Id', fieldValue: _id}, 
             {fieldName: 'Inventory', fieldValue: inventory}, {fieldName: 'Price', fieldValue: price }, 
             {fieldName: 'Package Size', fieldValue: packageSize}, {fieldName: 'Quantity', fieldValue: quantity}, 
             {fieldName: 'Specification Value', fieldValue: specificationValue}]});
-        console.log(a , 'a');
-        setSelectedItem(a);
+        console.log(info , 'info');
+        setSelectedItem(info);
         setOpenOrderInfo(true);
     }
 
     const handleStatusInfoClickOpen = (items: Events[]) => {
-        const a = items.map(item => {return {fieldName: item.status, fieldValue: item.time}});
+        const info = items.map(item => {return {fieldName: item.status, fieldValue: item.time}});
         setOpenStatusInfo(true);
-        setSelectedItem(a)
+        setSelectedItem(info)
     };
     
     const handleStatusEditOpen = (item: ListItemProps) => {
@@ -159,19 +161,22 @@ export const OrderListPage = observer(() => {
         setOpenOrderInfo(false);
     };
 
+    console.log('list', list);
+
 return (
     <>
         <TableContainer component={Paper} className={container}>
             <Table className={table}>
             <TableHead>
                 <TableRow>
-                {tableHeadItems.map((item: tableHeadItemsProps)=> 
+                {tableHeadItems.map((item: tableHeadItemsProps) => 
                     <TableCell key={item.entry} align={item.align || 'inherit'}>{item.entry}</TableCell>
                 )}
                 </TableRow>
             </TableHead>
             <TableBody>
-                {list.map((item: ListItemProps) => (
+                {list.map((item: ListItemProps) => {
+                    return(
                 <TableRow key={item._id}>
                     <TableCell component='th' scope='row' align='inherit'>
                         {`${item.userData.firstName} ${item.userData.lastName}`}
@@ -205,7 +210,7 @@ return (
                         </IconButton>
                     </TableCell>
                 </TableRow>
-                ))}
+                )})}
             </TableBody>
             </Table>
         </TableContainer>

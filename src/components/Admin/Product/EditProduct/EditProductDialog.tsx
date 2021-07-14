@@ -47,11 +47,10 @@ export const EditProductDialogWrapper = (props) =>
       <EditProductDialog {...props} />
     </EditProductContext.Provider>
 
-const EditProductDialog = ({open, item, handleClose}: EditProductDialogProps) => {
+export const EditProductDialog = ({open, item, handleClose}: EditProductDialogProps) => {
     const {content, form, textField, flexField, inventoryField, priceField} = styles;
     const [editError, setEditError] = useState(false);
     const [editErrorMsg, setEditErrorMsg] = useState('');
-
 
     const {productName, setProductName, manufacturer, setManufacturer, itemInventory, setItemInventory, itemPrice, 
       setItemPrice, itemSpecificationDescr, setItemSpecificationDescr, itemPackageSize, setItemPackageSize, 
@@ -59,7 +58,7 @@ const EditProductDialog = ({open, item, handleClose}: EditProductDialogProps) =>
       itemSpecification, setItemSpecification, itemAvailability, setItemAvailability
     } = useContext(EditProductContext);
 
-    const { state, openNotification, setOpenNotification, successMsg, setSuccessMsg } = useContext(SnackbarContext);
+    const { setOpenNotification, setSuccessMsg } = useContext(SnackbarContext);
 
     const {_id, name, manufacturerInfo, price, imageUrl, inventory, description, packageSize, availability, 
       specification, specificationDescr, category} = item;
@@ -69,11 +68,12 @@ const EditProductDialog = ({open, item, handleClose}: EditProductDialogProps) =>
     };
 
     const handleSave = async() => {
+      console.log('res post');
       const res = await postData('/api/admin/product/edit', {_id, name: productName, manufacturerName: manufacturer, inventory:
         itemInventory, price: itemPrice, specification: itemSpecification, specificationDescr: itemSpecificationDescr, 
         availability: itemAvailability, imageUrl: itemImageUrl, description: itemDescription, packageSize: 
         itemPackageSize, category: itemCategory});
-        console.log(res, 'res');
+      console.log(res, 'res');
       if (!res.error) {
         setSuccessMsg(res.data);
         setOpenNotification(true);

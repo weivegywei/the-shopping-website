@@ -92,7 +92,7 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
                 </Button>
             </Typography>
           </Paper>
-          <div id="paypal11-button"></div>
+          <div id="payPalButton"></div>
           {initiatePayPal && <PayPalBox totalAmount={totalAmount} userId={userStore.id} />}
         </div>
       </div>

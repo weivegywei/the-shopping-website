@@ -10,14 +10,14 @@ import {
 import { ProductPage } from './components/ProductPage/ProductPage.tsx';
 import { LoginPage } from './components/Login/LoginPage.tsx';
 import { CartPage } from './components/Cart/CartPage.tsx';
-import { ProductCreatePage } from './components/Admin/Product/ProductCreate.tsx';
-import { ProductListPage } from './components/Admin/Product/ProductList.tsx';
+import { ProductCreate } from './components/Admin/Product/ProductCreate.tsx';
+import { ProductList } from './components/Admin/Product/ProductList.tsx';
 import { RegisterPage } from './components/Register/RegisterPage.tsx';
 import { observer } from 'mobx-react';
 import { getUserInfo, getCartItemsNumber } from './App.util';
-import { ManufacturerCreatePage } from './components/Admin/Manufacturer/ManufacturerCreate.tsx';
+import { ManufacturerCreate } from './components/Admin/Manufacturer/ManufacturerCreate.tsx';
 import { AfterPaymentPage } from './components/Cart/AfterPaymentPage';
-import { OrderListPage } from './components/Admin/Order/OrderList.tsx';
+import { OrderList } from './components/Admin/Order/OrderList.tsx';
 import { NotificationSnackbar } from './components/Utilities/Snackbar';
 import { SnackbarContext, useSnackbarContext } from './SnackbarContext';
 
@@ -66,12 +66,12 @@ const App = observer(({userStore}) => {
           </Route>
           <Route exact path="/admin/product/create">
             <div className="App">
-              <ProductCreatePage />
+              <ProductCreate />
             </div>
           </Route>
           <Route exact path="/admin/product/list">
             <div className="App">
-              <ProductListPage />
+              <ProductList />
             </div>
           </Route>
           <Route exact path="/register">
@@ -81,7 +81,7 @@ const App = observer(({userStore}) => {
           </Route>
           <Route exact path="/admin/manufacturer/create">
             <div className="App">
-              <ManufacturerCreatePage />
+              <ManufacturerCreate />
             </div>
           </Route>
           <Route exact path="/afterPayment">
@@ -91,7 +91,7 @@ const App = observer(({userStore}) => {
           </Route>
           <Route exact path="/admin/order/list">
             <div className="App">
-              <OrderListPage />
+              <OrderList />
             </div>
           </Route>
         </Switch>

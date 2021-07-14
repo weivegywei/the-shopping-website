@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import Button from '@material-ui/core/Button';
-import { InfoEntryFramework } from '../../Utilities/InfoEntryFramework';
+import { TextInput } from '../../Utilities/TextInput';
 import { observer } from "mobx-react";
 import { manufacturerStore as store, manufacturerStoreType, ManufacturerStoreKeys } from '../../../store/manufacturerStore';
 import { postData } from '../../../api/postData';
@@ -15,14 +15,14 @@ const defaultFormFields = [
     {primary: "Logo URL", type: 'text', key: ManufacturerStoreKeys.logoUrl, error: false, errorMessage: ''}
 ];
 
-type ManufacturerCreatePageComponentProps = {
+type ManufacturerCreateComponentProps = {
   store: manufacturerStoreType;
 }
 
-export const ManufacturerCreatePage = () => <ManufacturerCreatePageComponent store={store}/>
+export const ManufacturerCreate = () => <ManufacturerCreateComponent store={store}/>
 
-const ManufacturerCreatePageComponent = observer(
-  ( {store}: ManufacturerCreatePageComponentProps ) => {
+export const ManufacturerCreateComponent = observer(
+  ( {store}: ManufacturerCreateComponentProps ) => {
   const {root, box, title, button} = styles;
   const [formFields, setFormFields] = useState(defaultFormFields);
   const [disabled, setDisabled] = useState(false);
@@ -69,7 +69,7 @@ const ManufacturerCreatePageComponent = observer(
               New Manufacturer
           </Typography>
           <List component="nav">
-              {formFields.map((item) => <InfoEntryFramework store={store} item={item} 
+              {formFields.map((item) => <TextInput store={store} item={item} 
                   key={`${item.key}${item.error}${item.errorMessage}`} />)}
           </List>
           <Button variant="contained" className={button} disableElevation disabled={disabled} onClick={createNewManufacturer}>

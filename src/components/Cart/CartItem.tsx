@@ -49,7 +49,6 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, s
     await postData('/api/cart/delete', {userId: userStore.id, cartItemId: _id})};
 
   const itemQuantityChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-      console.log(e.target.value, 'e value');
       setItemQuantity(Number(e.target.value));
       handleChange(e);
       setCartItemsHandler();

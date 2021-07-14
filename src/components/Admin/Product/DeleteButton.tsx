@@ -9,8 +9,8 @@ type DeleteButtonProps = {
 export const DeleteButton = ({onClick}: DeleteButtonProps) => {
     const {button} = styles;
     return (
-        <IconButton className={button}>
-            <DeleteIcon onClick={onClick} />
+        <IconButton className={button} onClick={onClick} >
+            <DeleteIcon />
         </IconButton>
     )
 }

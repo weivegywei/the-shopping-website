@@ -31,6 +31,5 @@ export const EditAvailabilitySwitch = () => {
         name="availability"
         />}
       label='Availability' />
-      
     )
 }

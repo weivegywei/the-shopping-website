@@ -3,9 +3,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { observer } from 'mobx-react-lite';
 import { manufacturerStoreType, ManufacturerStoreKeys } from '../../store/manufacturerStore';
 import { ProductStoreKeys, ProductStoreType } from '../../store/productStore';
-import styles from './InfoEntryFramework.module.scss';
+import styles from './TextInput.module.scss';
 
-type InfoEntryFrameworkProps = {
+type TextInputProps = {
     item: {
         primary: string;
         type: string;
@@ -16,14 +16,14 @@ type InfoEntryFrameworkProps = {
     store: manufacturerStoreType | ProductStoreType;
 }
 
-export const InfoEntryFramework = observer(
-    ({item, store}: InfoEntryFrameworkProps) => {
+export const TextInput = observer(
+    ({item, store, ...rest}: TextInputProps) => {
     const {formField, input, errorinput, errorDiv,errorMsg} = styles;
 
     return (
         <ListItem divider className={formField}>
             <ListItemText primary={item.primary} />
-            <div className={errorDiv}>
+            <div className={errorDiv} {...rest}>
                 <input 
                     type={item.type} 
                     className={item.error ? errorinput : input} 

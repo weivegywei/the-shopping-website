@@ -24,14 +24,14 @@ class ProductStore {
     packageSize = ''
     availability = true
     specification = ''
-    specificationDescr = ''
+    specificationDescr = ['']
     category = null
   
     constructor() {
         makeAutoObservable(this)
     }
   
-    changeValue(fieldName: ProductStoreKeys, value: string | number | boolean) {
+    changeValue(fieldName: ProductStoreKeys, value: string | number | boolean | string[]) {
         //@ts-ignore
         this[fieldName] = value;
     }
@@ -61,7 +61,7 @@ export type ProductStoreType = {
     packageSize: string;
     availability: boolean;
     specification: string;
-    specificationDescr: string;
+    specificationDescr: string[];
     category: CategoryType | null;
     changeValue: (a: ProductStoreKeys, b: string | number | boolean) => void
 }

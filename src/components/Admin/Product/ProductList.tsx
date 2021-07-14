@@ -15,7 +15,7 @@ import { AlertDialog } from '../../Utilities/AlertDialog';
 import { EditProductDialogWrapper, ProductListItem } from './EditProduct/EditProductDialog';
 import styles from './ProductList.module.scss';
 
-const transformBoolean = (a: boolean) => a ? 'Yes' : 'No'
+const transformBoolean = (val: boolean) => val ? 'Yes' : 'No'
 
 enum AlignType {
   align = 'right'
@@ -54,7 +54,7 @@ const tableHeadItems = [
     {entry:'Delete', align: AlignType.align},
 ];
 
-export const ProductListPage = () => {
+export const ProductList = () => {
   const {container, table} = styles;
   const [list, setList] = useState<ProductListItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<ProductListItem>();
@@ -77,7 +77,9 @@ export const ProductListPage = () => {
   };
 
   const getProductList = async() => {
+    console.log('pre res');
     const res = await getData('/api/admin/product/list');
+    console.log('post res', res);
     setList(res.data);
   }
 
@@ -102,8 +104,8 @@ export const ProductListPage = () => {
     <>
     <TableContainer component={Paper} className={container}>
       <Table className={table}>
-        <TableHead>
-          <TableRow>
+        <TableHead >
+          <TableRow key='productListTableHeadRow' >
             {tableHeadItems.map((item: TableHeadItems)=> 
                 <TableCell align={item.align || 'inherit'}>{item.entry}</TableCell>
             )}

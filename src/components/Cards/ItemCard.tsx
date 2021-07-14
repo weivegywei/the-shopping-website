@@ -15,13 +15,13 @@ type ItemCardItemType = {
   specificationDescr: string[];
   imageUrl: string;
   name: string;
-  price: number;
-}
+  price: number
+};
 
 type ItemCardProps = {
   item: ItemCardItemType;
   userStore: UserStoreType;
-}
+};
 
 export const ItemCard = ({item, userStore}: ItemCardProps) => {
   const {root, p, card, action, flexfiller, icon} = styles;
