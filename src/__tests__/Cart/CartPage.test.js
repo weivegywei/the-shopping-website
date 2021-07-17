@@ -29,3 +29,5 @@ describe('CartPage', () => {
         expect(component.find(PayPalBox)).toHaveLength(1);
     })
 });
+//await flushPromises();
+//export const flushPromises = () => new Promise( resolve => setImmediate(resolve));

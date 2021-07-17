@@ -35,7 +35,6 @@ export const ProductCreate = observer(() => {
     packageSize, category, productName} = store;
 
   const createNewProduct = async() => {
-    //console.log('ever called')
     const res = await postData('/api/admin/product/create',{
       name: productName, 
       manufacturerName,
@@ -49,7 +48,6 @@ export const ProductCreate = observer(() => {
       packageSize,
       category
     });
-    //console.log(res, 'res');
     if(res.error) {
       const newFormFields = [...formFields];
       const errorField = newFormFields.find((it) => it.key === res.error.field);
