@@ -8,7 +8,7 @@ import { cartItemStore, CartItemStoreType } from '../../store/cartStore';
 import { getCartItemsNumber } from '../../App.util';
 import styles from './ProductPage.module.scss';
 import { ChangeEvent } from 'react';
-import { SnackbarContext } from '../../SnackbarContext';
+import { AppContext } from '../../AppContext';
 
 type ProductPageProps = {
   userStore: {id: string} 
@@ -36,7 +36,7 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
   const userId = userStore.id;
   const productId = location.state.item._id;
   const [quantity, setQuantity] = useState(1);
-  const { setOpenNotification, setSuccessMsg } = useContext(SnackbarContext);
+  const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
   const addToCart = async() => {
     const updatedCart = await postData('/api/cart', {
       userId, productId, quantity, specificationValue: cartItemStore.specificationValue});

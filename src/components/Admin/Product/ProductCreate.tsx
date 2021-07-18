@@ -13,7 +13,7 @@ import { postData } from '../../../api/postData';
 import { InputDropdown } from '../../Utilities/InputDropdown';
 import styles from './ProductCreate.module.scss';
 import { ChangeEvent } from 'react';
-import { SnackbarContext } from '../../../SnackbarContext';
+import { AppContext } from '../../../AppContext';
 
 const defaultFormFields = [
     {primary: 'Product name', type: 'text', key: ProductStoreKeys.productName, error: false, errorMessage: ''},
@@ -30,7 +30,7 @@ export const ProductCreate = observer(() => {
   const changeValue = (e: ChangeEvent<HTMLInputElement>) => {store.changeValue(ProductStoreKeys.specificationDescr, 
     e.target.value)};
   const [formFields, setFormFields] = useState(defaultFormFields);
-  const { setOpenNotification, setSuccessMsg } = useContext(SnackbarContext);
+  const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
   const {manufacturerName, price, imageUrl, availability, inventory, specification, specificationDescr, description,
     packageSize, category, productName} = store;
 

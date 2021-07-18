@@ -77,9 +77,7 @@ export const ProductList = () => {
   };
 
   const getProductList = async() => {
-    console.log('pre res');
     const res = await getData('/api/admin/product/list');
-    console.log('post res', res);
     setList(res.data);
   }
 

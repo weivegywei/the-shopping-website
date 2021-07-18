@@ -21,9 +21,7 @@ export const LoginPage = observer(() => {
       password: store.password,
     });
     if (res.data) {
-      console.log(res.data, 'resdata');
       localStorage.setItem('accessToken',res.data.accessToken);
-      console.log(localStorage.accessToken, 'token');
       getUserInfo();
       history.push('/');
     } else {

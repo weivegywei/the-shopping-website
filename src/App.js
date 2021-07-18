@@ -19,12 +19,12 @@ import { ManufacturerCreate } from './components/Admin/Manufacturer/Manufacturer
 import { AfterPaymentPage } from './components/Cart/AfterPaymentPage';
 import { OrderList } from './components/Admin/Order/OrderList.tsx';
 import { NotificationSnackbar } from './components/Utilities/Snackbar';
-import { SnackbarContext, useSnackbarContext } from './SnackbarContext';
+import { AppContext, useAppContext } from './AppContext';
 
 export const AppWrapper = (props) => 
-  <SnackbarContext.Provider value={useSnackbarContext()}>
+  <AppContext.Provider value={useAppContext()}>
     <App {...props} />
-  </SnackbarContext.Provider>
+  </AppContext.Provider>
 
 const App = observer(({userStore}) => {
   useEffect(() => {
@@ -37,7 +37,8 @@ const App = observer(({userStore}) => {
     }
   },[userStore.id])
 
-  const { state, openNotification, setOpenNotification, errorMsg, successMsg } = useContext(SnackbarContext);
+  const { state, openNotification, setOpenNotification, errorMsg, successMsg, 
+  } = useContext(AppContext);
 
   return (
     <>

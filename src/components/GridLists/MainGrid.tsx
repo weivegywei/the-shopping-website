@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { ItemCard } from '../Cards/ItemCard';
 import { Link } from "react-router-dom";
@@ -9,6 +9,7 @@ import { observer } from "mobx-react";
 import { toJS } from 'mobx';
 import { userStore, UserStoreType } from '../../store/userStore';
 import styles from './MainGrid.module.scss';
+import { AppContext } from '../../AppContext';
 
 type MainGridComponentProps = {
   store: FilterQueryStoreType;
@@ -36,11 +37,13 @@ type MainGridItemType = {
 }
 
 
-export const MainGrid = () => <MainGridComponent store={store} userStore={userStore} />
+export const MainGrid = () => 
+    <MainGridComponent store={store} userStore={userStore} />
 
 const MainGridComponent = observer(({store, userStore}: MainGridComponentProps) => {
   const {root, card, row} = styles;
   const [list, setList] = useState<MainGridItemType[]>([]);
+  const { menuCategory } = useContext(AppContext);
 
   useEffect(() => {try{
     const res = getData('/api/homepage/maingrid');
@@ -66,6 +69,18 @@ const MainGridComponent = observer(({store, userStore}: MainGridComponentProps) 
     };
     getFilterResults();
   },[store.filter])
+
+  useEffect(() => {
+    const getMenuFilteredResults = async() => {
+      const res = await postData('/api/product/menu/result', {
+        menuCategory
+      });
+      if(res.data) {
+        setList(res.data)
+      }
+    };
+    getMenuFilteredResults();
+  }, [menuCategory])
 
   const FormRow = ({items}: FormRowProps) => {
     return items ? ( 

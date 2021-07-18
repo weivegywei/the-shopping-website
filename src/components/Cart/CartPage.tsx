@@ -11,7 +11,7 @@ import { PayPalBox } from './PayPalBox';
 import styles from './CartPage.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { CartItemProductType } from './CartItem';
-import { SnackbarContext } from '../../SnackbarContext';
+import { AppContext } from '../../AppContext';
 
 type CartPageProps = {
   userStore: UserStoreType
@@ -21,7 +21,7 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
   const {rootDiv, root, order, title,itemcard,flexFiller,checkout, amountDiv,
     amountLabelDiv,amountNum,button, divider, fontWeight} = styles;
   const [cartItems, setCartItems] = useState<CartItemProductType[]>([]);
-  const { setOpenNotification, setSuccessMsg } = useContext(SnackbarContext);
+  const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
   
   const setCartItemsAndNotificationHandler = () => {
     setOpenNotification(true);

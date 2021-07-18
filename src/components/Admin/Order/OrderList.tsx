@@ -98,12 +98,9 @@ export const OrderList = observer(() => {
     const [selectedItem, setSelectedItem] = useState<InfoItemProps[] | UserDataType | ListItemProps | InfoItemType | null>(null);
 
     const getOrderList = async() => {
-        console.log('pre res')
         const res = await getData('/api/admin/order/list');
-        console.log('post res', res);
         setList(res.data.map((it: ResDataMapProps) => ({...it, userData: it.userInfo[0]})));
       };
-      console.log('list', list);
     
       useEffect(() => {
         getOrderList();
@@ -130,7 +127,6 @@ export const OrderList = observer(() => {
             {fieldName: 'Inventory', fieldValue: inventory}, {fieldName: 'Price', fieldValue: price }, 
             {fieldName: 'Package Size', fieldValue: packageSize}, {fieldName: 'Quantity', fieldValue: quantity}, 
             {fieldName: 'Specification Value', fieldValue: specificationValue}]});
-        console.log(info , 'info');
         setSelectedItem(info);
         setOpenOrderInfo(true);
     }
@@ -160,8 +156,6 @@ export const OrderList = observer(() => {
         setOpenStatusEdit(false);
         setOpenOrderInfo(false);
     };
-
-    console.log('list', list);
 
 return (
     <>

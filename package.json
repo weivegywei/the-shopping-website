@@ -2,7 +2,7 @@
   "name": "my-wei-shopping-website",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://my-wei-shopping-website-server.herokuapp.com/",
+
   "author": "Wei Wei",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
@@ -41,11 +41,11 @@
     "web-vitals": "^1.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "REACT_APP_SERVER_ENDPOINT=https://my-wei-shopping-website-server.herokuapp.com react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev:start": "nodemon --exec babel-node server.js",
+    "start:dev": "REACT_APP_SERVER_ENDPOINT=http://localhost:8080 react-scripts start",
     "migrate:up": "migrate-mongo up",
     "migrate:down": "migrate-mongo down"
   },

@@ -12,7 +12,7 @@ import { EditAvailabilitySwitch } from './EditAvailabilitySwitch';
 import { EditCategoryDropdown } from './EditCategoryDropdown';
 import styles from './EditProductDialog.module.scss';
 import { postData } from '../../../../api/postData';
-import { SnackbarContext } from '../../../../SnackbarContext';
+import { AppContext } from '../../../../AppContext';
 
 type ManufacturerInfoType = {
     logoUrl: string;
@@ -58,7 +58,7 @@ export const EditProductDialog = ({open, item, handleClose}: EditProductDialogPr
       itemSpecification, setItemSpecification, itemAvailability, setItemAvailability
     } = useContext(EditProductContext);
 
-    const { setOpenNotification, setSuccessMsg } = useContext(SnackbarContext);
+    const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
 
     const {_id, name, manufacturerInfo, price, imageUrl, inventory, description, packageSize, availability, 
       specification, specificationDescr, category} = item;
@@ -68,12 +68,10 @@ export const EditProductDialog = ({open, item, handleClose}: EditProductDialogPr
     };
 
     const handleSave = async() => {
-      console.log('res post');
       const res = await postData('/api/admin/product/edit', {_id, name: productName, manufacturerName: manufacturer, inventory:
         itemInventory, price: itemPrice, specification: itemSpecification, specificationDescr: itemSpecificationDescr, 
         availability: itemAvailability, imageUrl: itemImageUrl, description: itemDescription, packageSize: 
         itemPackageSize, category: itemCategory});
-      console.log(res, 'res');
       if (!res.error) {
         setSuccessMsg(res.data);
         setOpenNotification(true);

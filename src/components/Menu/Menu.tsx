@@ -116,8 +116,6 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
       getCartItemsNumber(store.id)
     },[])
   
-    console.log(store, 'store');
-
     return (
       <>
       <div className={root}>

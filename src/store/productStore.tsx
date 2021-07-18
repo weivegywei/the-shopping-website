@@ -41,6 +41,7 @@ export const productStore = new ProductStore();
 
 export enum CategoryType {
     skinCare = 'skin care',
+    garments = 'garments',
     electricAppliances = 'electric appliances',
     fitness = 'fitness',
     footwears = 'footwears',

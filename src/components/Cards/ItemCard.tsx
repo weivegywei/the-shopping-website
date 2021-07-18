@@ -8,7 +8,7 @@ import { getCartItemsNumber } from '../../App.util';
 import styles from './ItemCard.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { MouseEvent, useContext } from 'react';
-import { SnackbarContext } from '../../SnackbarContext';
+import { AppContext } from '../../AppContext';
 
 type ItemCardItemType = {
   _id: string;
@@ -28,7 +28,7 @@ export const ItemCard = ({item, userStore}: ItemCardProps) => {
   const userId = userStore.id;
   const productId = item._id;
   const specificationValue = item.specificationDescr[0].split(',')[0];
-  const { setOpenNotification, setSuccessMsg } = useContext(SnackbarContext);
+  const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
   
   const handleClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
