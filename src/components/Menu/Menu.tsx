@@ -133,7 +133,7 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
             <Toolbar className={siteName}>
               <Typography variant="h5" noWrap >
                   <Link to="/" className={cn(header, link)} >
-                    SITE NAME
+                    My Wei Shop
                   </Link>
               </Typography>
             </Toolbar>
