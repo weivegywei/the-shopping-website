@@ -41,13 +41,9 @@
     "web-vitals": "^1.1.0"
   },
   "scripts": {
-    "start": "REACT_APP_SERVER_ENDPOINT=https://my-wei-shopping-website-server.herokuapp.com react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "start:dev": "REACT_APP_SERVER_ENDPOINT=http://localhost:8080 react-scripts start",
-    "migrate:up": "migrate-mongo up",
-    "migrate:down": "migrate-mongo down"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
