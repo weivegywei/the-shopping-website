@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import cn from 'classnames';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from "react-router-dom";
 import Paper from '@material-ui/core/Paper';
 import {InputBox} from '../Inputs/InputBox';
 import { observer } from "mobx-react";
@@ -9,11 +10,15 @@ import { registerStore as store, RegisterStoreKeys } from '../../store/registerS
 import { postData } from '../../api/postData';
 import styles from './RegisterPage.module.scss';
 import { ChangeEvent } from 'react';
+import { AppContext } from '../../AppContext';
 
 export const RegisterPage = observer(() => {
   const {root, title, buttonDiv, buttons, signInButton, label} = styles;
   const [passwordMatchingState, setPasswordMatchingState] = useState(true);
   const [userExistsState, setUserExistsState] = useState(false);
+  const history = useHistory(); 
+  const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
+
   useEffect(() => {
     if (store.password !== store.confirmPassword) {
         setPasswordMatchingState(false);
@@ -22,23 +27,27 @@ export const RegisterPage = observer(() => {
     }
   },[store.password, store.confirmPassword]);
 
-const createNewUser = async() => {
-  const res = await postData('/api/register', {
-    firstName: store.firstName,
-    lastName: store.lastName,
-    email: store.email,
-    password: store.password,
-    address: store.address,
-    country: store.country,
-    role: store.role
-  })
-  if(res.error === 'USER_EXISTS') {
-    setUserExistsState(true);
-  }
-};
+  const createNewUser = async() => {
+    const res = await postData('/api/register', {
+      firstName: store.firstName,
+      lastName: store.lastName,
+      email: store.email,
+      password: store.password,
+      address: store.address,
+      country: store.country,
+      role: store.role
+    })
+    if(res.error === 'USER_EXISTS') {
+      setUserExistsState(true);
+    } else {
+      setOpenNotification(true);
+      setSuccessMsg('Sign up succeed! Welcome! 😄 Now please log in to continue');
+      history.push('/login');
+    }
+  };
 
-const changeValue = (e: ChangeEvent<HTMLInputElement>, fieldName: RegisterStoreKeys) => 
-  store.changeValue(fieldName, e.target.value)
+  const changeValue = (e: ChangeEvent<HTMLInputElement>, fieldName: RegisterStoreKeys) => 
+    store.changeValue(fieldName, e.target.value)
 
   return (
     <div className={root}>
@@ -50,8 +59,8 @@ const changeValue = (e: ChangeEvent<HTMLInputElement>, fieldName: RegisterStoreK
         <InputBox labelName={'Last name'} type={'text'} changeValue={(e) => changeValue(e, RegisterStoreKeys.lastName)} />
         <InputBox labelName={'Email address'} type={'email'}changeValue={(e) => changeValue(e, RegisterStoreKeys.email)} 
           error={userExistsState} errorMsg='This email had been registered' />
-        <InputBox labelName={'Password'} type={'text'} changeValue={(e) => changeValue(e, RegisterStoreKeys.password)} />
-        <InputBox labelName={'Confirm password'} type={'text'} error={!passwordMatchingState} 
+        <InputBox labelName={'Password'} type={'password'} changeValue={(e) => changeValue(e, RegisterStoreKeys.password)} />
+        <InputBox labelName={'Confirm password'} type={'password'} error={!passwordMatchingState} 
           errorMsg='Password does not match' changeValue={(e) => changeValue(e, RegisterStoreKeys.confirmPassword)} />
         <InputBox labelName={'Address'} type={'text'} changeValue={(e) => changeValue(e, RegisterStoreKeys.address)} />
         <div className={label}>

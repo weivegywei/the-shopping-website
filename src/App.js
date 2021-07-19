@@ -37,8 +37,7 @@ const App = observer(({userStore}) => {
     }
   },[userStore.id])
 
-  const { state, openNotification, setOpenNotification, errorMsg, successMsg, 
-  } = useContext(AppContext);
+  const { state, openNotification, setOpenNotification, errorMsg, successMsg } = useContext(AppContext);
 
   return (
     <>

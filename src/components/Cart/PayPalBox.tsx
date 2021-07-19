@@ -23,7 +23,7 @@ export const PayPalBox = ({totalAmount, userId}: PayPalBoxProps) => {
             // 1. Add a payment callback
             payment: (data: any, actions: any) => {
               // 2. Make a request to your server
-              return actions.request.post('/api/create-payment',{
+              return actions.request.post(process.env.REACT_APP_SERVER_ENDPOINT + '/api/create-payment',{
                   totalAmount
               })
                 .then((res: {id: string}) => {
@@ -35,7 +35,7 @@ export const PayPalBox = ({totalAmount, userId}: PayPalBoxProps) => {
             // 1. Add an onAuthorize callback
             onAuthorize: (data: {paymentID: string; payerID: string; orderID: string}, actions: any) => {
               // 2. Make a request to your server
-              return actions.request.post('/api/execute-payment', {
+              return actions.request.post(process.env.REACT_APP_SERVER_ENDPOINT + '/api/execute-payment', {
                 paymentID: data.paymentID,
                 payerID: data.payerID,
                 totalAmount, 

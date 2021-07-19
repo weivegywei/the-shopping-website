@@ -8,10 +8,12 @@ export const getUser = () => {
 };
 
 export  const getCartItemsNumber = async(userId) => {
+  if (userId) {
     const res = await postData('/api/cart/number', {userId});
     const cartItemsNumber = res.data;
     cartItemNumberStore.changeValue('cartItemNumber', cartItemsNumber);
     return cartItemsNumber;
+  }
 }
 
 export const getUserInfo = async () => {

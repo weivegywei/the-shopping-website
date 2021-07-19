@@ -10,6 +10,11 @@ import { toJS } from 'mobx';
 import { userStore, UserStoreType } from '../../store/userStore';
 import styles from './MainGrid.module.scss';
 import { AppContext } from '../../AppContext';
+//import { makeStyles } from '@material-ui/core/styles';
+
+/* const useStyles = makeStyles((theme) => ({
+
+})) */
 
 type MainGridComponentProps = {
   store: FilterQueryStoreType;

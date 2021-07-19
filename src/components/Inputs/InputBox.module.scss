@@ -30,6 +30,11 @@
   }
 }
 
+.button {
+  position: absolute!important;
+  right: 80px;
+  top: 25px;
+}
 
 .label {
   width: 300px; 
@@ -42,6 +47,7 @@
 .inputDiv {
   display: block; 
   margin: 13px 0 13px 0;
+  position: relative
 }
 
 .helperText {

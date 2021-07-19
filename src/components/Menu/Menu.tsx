@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import clsx from 'clsx';
 import cn from 'classnames';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -26,6 +26,7 @@ import { cartItemNumberStore, CartItemNumberStoreType, CartItemNumberStoreKey } 
 import styles from './Menu.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { getCartItemsNumber } from '../../App.util';
+import { AppContext } from '../../AppContext';
 
 const drawerWidth = 300;
 
@@ -79,6 +80,7 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
     const {root, hide, menuButton,drawerHeader, header, filterDiv, link, text, login, filterBar, margin, padding, siteName, 
       loginDiv, welcome, span, logout, icons} = styles;
     const [open, setOpen] = useState(false);
+    const { setMenuCategory } = useContext(AppContext);
 
     const logoutAction = () => {
       localStorage.setItem('accessToken', undefined);
@@ -100,6 +102,10 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
     const handleDrawerClose = () => {
       setOpen(false);
     };
+
+    const handleGetAllProduct = () => {
+      setMenuCategory('')
+    }
 
     const getFilters = async() => {
       const res = await getData('/api/product/filter');
@@ -132,7 +138,7 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
             </IconButton>
             <Toolbar className={siteName}>
               <Typography variant="h5" noWrap >
-                  <Link to="/" className={cn(header, link)} >
+                  <Link to="/" className={cn(header, link)} onMouseDown={handleGetAllProduct}>
                     My Wei Shop
                   </Link>
               </Typography>

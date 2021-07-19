@@ -3,7 +3,7 @@ import { CategoryType } from './store/productStore';
 
 export const AppContext = createContext({state: 'success', setState: (a:string) => ({}), openNotification: false, 
 setOpenNotification: (a:boolean) => ({}), errorMsg: 'Error', setErrorMsg: (a:string) => ({}), successMsg: 'Success',
-setSuccessMsg: (a:string) => ({}), menuCategory: '', setMenuCategory: (a:CategoryType) => ({})});
+setSuccessMsg: (a:string) => ({}), menuCategory: '', setMenuCategory: (a:CategoryType | '') => ({})});
 
 export const useAppContext = () => {
     const [openNotification, setOpenNotification] = useState<Boolean>(false);

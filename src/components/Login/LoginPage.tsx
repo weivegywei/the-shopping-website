@@ -40,7 +40,7 @@ export const LoginPage = observer(() => {
         </div>
         <InputBox labelName='Email address' type='email' changeValue={(e) => changeValue(e, LoginStoreKeys.email)} 
           error={loginErrorState} errorMsg='Email or password incorrect'/>
-        <InputBox labelName='Password' type='text' changeValue={(e) => changeValue(e, LoginStoreKeys.password)} 
+        <InputBox labelName='Password' type="password" changeValue={(e) => changeValue(e, LoginStoreKeys.password)}
           error={loginErrorState} errorMsg='Email or password incorrect'/>
         <div className={buttonDiv} style={{marginTop: '65px'}}>
           <button type='submit' className={cn(buttons,signInButton)} onClick={loginAction}>SIGN IN</button>
