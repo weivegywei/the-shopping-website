@@ -18,6 +18,8 @@ import { ChangeEvent } from 'react';
 const StyledMenu = withStyles({
   paper: {
     border: '1px solid #d3d4d5',
+    width: 280,
+    fontSize: 13
   },
 })((props: {open: boolean; anchorEl: EventTarget | null; keepMounted: boolean; onClose: () => void}) => (
   <Menu

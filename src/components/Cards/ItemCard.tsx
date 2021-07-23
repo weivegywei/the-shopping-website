@@ -51,7 +51,7 @@ export const ItemCard = ({item, userStore}: ItemCardProps) => {
         <div className={p}>{item.name}</div>
       </CardContent>
       <CardActions className={action}>
-      <div className={p}>€ {item.price}</div>
+      <div className={p}>€ {Number(item.price).toFixed(2)}</div>
       <div className={flexfiller}></div>
         <IconButton className={icon} onClick={handleClick}>
           <AddShoppingCartIcon />

@@ -1,6 +1,7 @@
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router';
 import styles from './AfterPaymentPage.module.scss';
+import { BackToHomeButton } from './BackToHomeButton';
 
 export const AfterPaymentPage = () => {
     const {root, box, text} = styles;
@@ -9,9 +10,11 @@ export const AfterPaymentPage = () => {
         paidAmount: number;
         currencyUnit: string;
     }>();
+    const history = useHistory();
     const orderID = location.state.orderID;
     const paidAmount = location.state.paidAmount;
     const currencyUnit = location.state.currencyUnit;
+    const handleClick = () => history.push('/');
 
     return (
         <div className={root}>
@@ -24,6 +27,7 @@ export const AfterPaymentPage = () => {
                     Payment Succeed!<br />
                     Order ID: {orderID}
                 </Typography>
+                <BackToHomeButton onClick={handleClick} />
             </>
             : 
             <Typography variant='h6' className={text}>

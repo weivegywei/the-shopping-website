@@ -17,6 +17,8 @@ import { ChangeEvent } from 'react';
 const StyledMenu = withStyles({
   paper: {
     border: '1px solid #d3d4d5',
+    height: 500,
+    width: 223
   },
 })((props: {open: boolean; anchorEl: any; keepMounted: boolean; onClose: () => void}) => (
   <Menu

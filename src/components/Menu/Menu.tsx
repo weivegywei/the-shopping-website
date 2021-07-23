@@ -73,39 +73,36 @@ type MenuComponentProps = {
   cartItemNumberStore: CartItemNumberStoreType;
 }
 
-export const Menu = ({store}: MenuProps) => <MenuComponent store={store} cartItemNumberStore={cartItemNumberStore} />
+export const StyledBadge = withStyles(() => ({
+  badge: {
+    border: `1px solid white`,
+    background:'#8ba48a'
+  },
+}))(Badge);
+
+export const Menu = ({store}: MenuProps) => 
+  <MenuComponent store={store} cartItemNumberStore={cartItemNumberStore} />
 
 const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps) => {
     const {content, appBar, appBarShift, contentShift} = useStyles();
-    const {root, hide, menuButton,drawerHeader, header, filterDiv, link, text, login, filterBar, margin, padding, siteName, 
-      loginDiv, welcome, span, logout, icons} = styles;
+    const {root, hide, menuButton,drawerHeader, header, filterDiv, link, text, login, filterBar, 
+      margin, padding, siteName, loginDiv, welcome, span, logout, icons} = styles;
     const [open, setOpen] = useState(false);
-    const { setMenuCategory } = useContext(AppContext);
+    const { setMenuCategory, setOpenNotification,setSuccessMsg } = useContext(AppContext);
 
     const logoutAction = () => {
       localStorage.setItem('accessToken', undefined);
       store.setValues({firstName: undefined, lastName: undefined, email: undefined, _id: undefined});
       cartItemNumberStore.changeValue(CartItemNumberStoreKey.cartItemNumber, 0);
+      setOpenNotification(true);
+      setSuccessMsg('You have successfully logged out.')
     };
-
-    const StyledBadge = withStyles(() => ({
-      badge: {
-        border: `1px solid white`,
-        background:'#8ba48a'
-      },
-    }))(Badge);
   
-    const handleDrawerOpen = () => {
-      setOpen(true);
-    };
+    const handleDrawerOpen = () => { setOpen(true) };
 
-    const handleDrawerClose = () => {
-      setOpen(false);
-    };
+    const handleDrawerClose = () => { setOpen(false) };
 
-    const handleGetAllProduct = () => {
-      setMenuCategory('')
-    }
+    const handleGetAllProduct = () => { setMenuCategory('') };
 
     const getFilters = async() => {
       const res = await getData('/api/product/filter');
@@ -149,9 +146,14 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
                 {store.email ? 
                   <div className={welcome}>
                     <div className={span}>{`Welcome, ${store.firstName}`}</div>
-                    <Link to='/' className={cn(link, text, logout)}><LogOutButton logoutAction={logoutAction} /></Link>
+                    <Link to='/' className={cn(link, text, logout)}>
+                      <LogOutButton logoutAction={logoutAction} />
+                    </Link>
                   </div> : 
-                  <Link to="/login" className={login}><LoginButton /></Link>}
+                  <Link to="/login" className={login}>
+                    <LoginButton />
+                  </Link>
+                }
               </div>
               <Link to="/cart" className={link}>
                 <IconButton className={icons}>
