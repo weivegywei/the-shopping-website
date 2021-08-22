@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback } from 'react';
+import { useState, useContext, useCallback, ChangeEvent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -12,7 +12,6 @@ import { productStore as store, ProductStoreKeys, CategoryType} from '../../../s
 import { postData } from '../../../api/postData';
 import { InputDropdown } from '../../Utilities/InputDropdown';
 import styles from './ProductCreate.module.scss';
-import { ChangeEvent } from 'react';
 import { AppContext } from '../../../AppContext';
 
 const defaultFormFields = [
@@ -27,8 +26,6 @@ const defaultFormFields = [
 
 export const ProductCreate = observer(() => {
   const {root, box, title, formField, button, specInput} = styles;
-  const changeValue = (e: ChangeEvent<HTMLInputElement>) => {store.changeValue(ProductStoreKeys.specificationDescr, 
-    e.target.value)};
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
   const {manufacturerName, price, imageUrl, availability, inventory, specification, specificationDescr, description,
@@ -48,28 +45,30 @@ export const ProductCreate = observer(() => {
       packageSize,
       category
     });
-    if(res.error) {
-      const newFormFields = [...formFields];
+    if (res.status === 200) {
+      setOpenNotification(true);
+      setSuccessMsg('Product successfully created')
+    } else if(res.error) {
+      const newFormFields = [...formFields]; //TODO: stop using 'defaultFormFields'
       const errorField = newFormFields.find((it) => it.key === res.error.field);
       if(errorField) {
         errorField.error = true;
         errorField.errorMessage = res.error.message;
-        setFormFields(newFormFields);
+        setFormFields(newFormFields); 
       }
-    } else if (res.status === 200) {
-      setOpenNotification(true);
-      setSuccessMsg('Product successfully created')
     }
   };
 
-  const isEnabled = useCallback(() => Boolean(productName.length && manufacturerName.length && price > 0 && 
-    imageUrl.length && inventory > 0 && description.length && category),[productName, manufacturerName, price, 
-      imageUrl, inventory, description, category])
+  const isEnabled = useCallback(() => Boolean(
+    productName.length && 
+    manufacturerName.length && 
+    price > 0 && 
+    imageUrl.length && 
+    inventory > 0 && 
+    description.length && category ),
+    [ productName, manufacturerName, price, imageUrl, inventory, description, category ])
   
-  //for test
-  /* console.log(productName, manufacturerName, price, imageUrl, inventory, description, packageSize, specification,
-    specificationDescr, availability, category); */
-
+  //data-test: data attributes for testing purposes
 return (
     <div className={root}>
       <div className={box}>
@@ -78,24 +77,30 @@ return (
         </Typography>
         <List component="nav">
             {formFields.map((item) => {
-                return <TextInput store={store} item={item} data-test={`textInput-${item.key}`}
-                key={`${item.key}${item.error}${item.errorMessage}`} />
+                return <TextInput inputLabel={item.primary} type={item.type} 
+                errorMessage={item.errorMessage ? item.errorMessage : ''}
+                changeValue={(e) => store.changeValue(ProductStoreKeys[item.key], e.target.value)} 
+                data-test={`textInput-${item.key}`}
+                key={`${item.key}${item.type}`} />
                 }
             )}
             <ListItem divider className={formField}>
                 <ListItemText primary='Availability' />
-                <AvailabilitySwitch store={store} />
+                <AvailabilitySwitch checked={store.availability} onChange={(e: ChangeEvent<HTMLInputElement>) => 
+                store.changeValue(ProductStoreKeys.availability, e.target.checked)} />
             </ListItem>
             <ListItem divider className={formField}>
                 <ListItemText primary='Specification' />
-                <SpecificationDropdown store={store} />
+                <SpecificationDropdown onChange={(e) => store.changeValue(ProductStoreKeys.specification, 
+                  e.target.value)} value={store.specification}/>
                 <input type='text' className={specInput} data-test={'textInput-specificationDescr'}
-                onChange={changeValue}></input>
+                onChange={(e) => store.changeValue(ProductStoreKeys.specificationDescr, 
+                  e.target.value)}></input>
             </ListItem>
             <ListItem divider className={formField}>
                 <ListItemText primary='Category' />
-                <InputDropdown store={store} selectValue={store.category}  
-                options={Object.values(CategoryType)} />
+                <InputDropdown onChange={(e) => store.changeValue(ProductStoreKeys.category, 
+                  e.target.value)} selectValue={store.category} options={Object.values(CategoryType)} />
             </ListItem>
         </List>
         <Button variant="contained" className={button} disableElevation disabled={!isEnabled()} 

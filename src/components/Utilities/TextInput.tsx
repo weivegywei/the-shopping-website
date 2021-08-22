@@ -1,39 +1,35 @@
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { observer } from 'mobx-react-lite';
-import { manufacturerStoreType, ManufacturerStoreKeys } from '../../store/manufacturerStore';
-import { ProductStoreKeys, ProductStoreType } from '../../store/productStore';
+import { ChangeEvent } from 'react';
 import styles from './TextInput.module.scss';
 
 type TextInputProps = {
-    item: {
-        primary: string;
-        type: string;
-        key: ManufacturerStoreKeys | ProductStoreKeys;
-        error: boolean;
-        errorMessage: string;
-    };
-    store: manufacturerStoreType | ProductStoreType;
+    inputLabel: string;
+    type: string;
+    errorMessage?: string;
+    changeValue: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const TextInput = observer(
-    ({item, store, ...rest}: TextInputProps) => {
+    ({inputLabel, type, changeValue, errorMessage, ...rest}: TextInputProps) => {
     const {formField, input, errorinput, errorDiv,errorMsg} = styles;
 
     return (
         <ListItem divider className={formField}>
-            <ListItemText primary={item.primary} />
+            <ListItemText primary={inputLabel} />
             <div className={errorDiv} {...rest}>
                 <input 
-                    type={item.type} 
-                    className={item.error ? errorinput : input} 
+                    type={type} 
+                    className={errorMessage ? errorinput : input} 
                     //@ts-ignore
-                    onChange={(e) => store.changeValue(item.key, e.target.value)
-                }></input>
+                    onChange={changeValue}
+                ></input>
                 <div className={errorMsg}>
-                {item.errorMessage ? item.errorMessage : ''}
+                {errorMessage ? errorMessage : ''}
                 </div>
             </div>
         </ListItem>
     )
 })
+

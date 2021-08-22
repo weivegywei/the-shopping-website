@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router';
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,13 +9,12 @@ import { Link } from "react-router-dom";
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { StyledBadge } from '../Menu/Menu';
+import { StyledBadge } from '../../util/StyledBadge';
 import Typography from '@material-ui/core/Typography';
 import { postData } from '../../api/postData';
 import { SpecificationValueDropdown } from './SpecificationValueDropdown';
 import { observer } from 'mobx-react';
 import { cartItemStore, CartItemStoreType } from '../../store/cartStore';
-import { getCartItemsNumber } from '../../App.util';
 import styles from './ProductPage.module.scss';
 import { ChangeEvent } from 'react';
 import { AppContext } from '../../AppContext';
@@ -22,18 +22,8 @@ import { SearchBar } from '../Menu/SearchBox';
 import { LogOutButton } from '../Menu/LogOutButton';
 import { LoginButton } from '../Menu/LoginButton';
 import { UserStoreType } from '../../store/userStore';
-import { cartItemNumberStore, CartItemNumberStoreKey } from '../../store/cartStore';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    background: '#8ba48a'
-  }
-}));
+import { loremIpsum } from '../../const/constants';
+import { logoutAction, addToCart } from '../../util/helper';
 
 type ProductPageProps = {
   userStore: UserStoreType 
@@ -43,6 +33,16 @@ type ProductPageComponentProps = {
   cartItemStore: CartItemStoreType
 }
 
+const useStylesForProductPage = makeStyles((theme) => ({
+  appBar: {
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    background: '#8ba48a'
+  }
+}));
+
 export const ProductPage = observer(
   ( {userStore}: ProductPageProps ) => 
   <ProductPageComponent userStore={userStore} cartItemStore={cartItemStore} />)
@@ -50,7 +50,7 @@ export const ProductPage = observer(
 const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentProps) => {
   const {appBarRoot, root, img, textDiv, text, h1, h2, h3, inputDiv, dropDownDiv, numDiv, input, button, siteName, header, link, margin, 
     padding, loginDiv, welcome, span, logout, login, icons, flexfiller, description} = styles;
-  const { appBar } = useStyles();
+  const { appBar } = useStylesForProductPage();
   const {location} = useHistory<{item: {
     _id: string;
     manufacturerId: string;
@@ -61,42 +61,40 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
     inventory: number;
     description: string;
   }}>();
-  const userId = userStore.id;
   const productId = location.state.item._id;
-  const manuId = location.state.item.manufacturerId;
-  const [quantity, setQuantity] = useState(1);
-  const [manuName, setManuName] = useState<string>('');
-  const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
-  const addToCart = async() => {
-    const updatedCart = await postData('/api/cart', {
-      userId, productId, quantity, specificationValue: cartItemStore.specificationValue});
-      setOpenNotification(true);
-      setSuccessMsg('Item added to cart.');
-      getCartItemsNumber(userStore.id);
-    return updatedCart;
-  }
+  const manufacturerId = location.state.item.manufacturerId;
+  const [ quantity, setQuantity ] = useState(1);
+  const [ manufacturerName, setManufactureruName ] = useState<string>('');
+  const [ ready, setReady ] = useState<boolean>(false);
+  const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber } = useContext(AppContext);
 
-  const setQty = (e: ChangeEvent<HTMLInputElement>) => setQuantity(Number(e.target.value));
-  const logoutAction = () => {
-    localStorage.setItem('accessToken', undefined);
-    userStore.setValues({firstName: undefined, lastName: undefined, email: undefined, _id: undefined});
-    cartItemNumberStore.changeValue(CartItemNumberStoreKey.cartItemNumber, 0);
+  const handleLogout = () => {
+    logoutAction(userStore)
+    setCartItemNumber(0)
     setOpenNotification(true);
     setSuccessMsg('You have successfully logged out.')
   };
+  const handleAddToCart = () => {
+    addToCart( userStore.id, productId, quantity, cartItemStore.specificationValue)
+    setCartItemNumber(cartItemNumber + quantity)
+    setOpenNotification(true);
+    setSuccessMsg('Item added to cart.')
+  }
+  const setQty = (e: ChangeEvent<HTMLInputElement>) => setQuantity(Number(e.target.value));
 
   useEffect(() => {
-    const fetchManuName = async() => {
+    const fetchAndSetManuName = async() => {
       const res = await postData('/api/product/manufacturer/name', {
-        manuId
+        manufacturerId
       })
       const fetchedName = res.data[0].name;
-      return setManuName(fetchedName);
-    };
-    fetchManuName();
+      setManufactureruName(fetchedName);
+      setReady(true)
+    }
+    fetchAndSetManuName();
   }, []);
 
-  return (
+  return ready ? (
     <>
       <div className={appBarRoot}>
         <CssBaseline />
@@ -117,7 +115,7 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
                   <div className={welcome}>
                     <div className={span}>{`Welcome, ${userStore.firstName}`}</div>
                     <Link to='/' className={cn(link, text, logout)}>
-                      <LogOutButton logoutAction={logoutAction} />
+                      <LogOutButton logoutAction={handleLogout} />
                     </Link>
                   </div> : 
                   <Link to="/login" className={login}>
@@ -127,7 +125,7 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
               </div>
               <Link to="/cart" className={link}>
                 <IconButton className={icons}>
-                  <StyledBadge badgeContent={cartItemNumberStore.cartItemNumber}>
+                  <StyledBadge badgeContent={cartItemNumber}>
                     <ShoppingCartIcon />
                   </StyledBadge>
                 </IconButton>
@@ -144,7 +142,7 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
         <div className={textDiv}>
         <Typography variant='h4'>
           <div className={text}>
-            <div className={h1}>{manuName}</div>
+            <div className={h1}>{manufacturerName}</div>
             <div className={h2}>{location.state.item.name}</div>
             <div className={h3}>€ {location.state.item.price}</div>
             <div className={inputDiv}>
@@ -157,20 +155,16 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
                   onChange={setQty}></input>
               </div>
             </div>
-            <button className={button} onClick={addToCart}>Add to cart</button>
+            <button className={button} 
+              onClick={handleAddToCart}>Add to cart
+            </button>
             <Typography variant='body1' className={description}>
-              {location.state.item.description}<br /><br />
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-            unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam
-            dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.<br /><br />
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
-            unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam
-            dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.
+              {location.state.item.description}<br /><br />{loremIpsum}<br /><br />{loremIpsum}
             </Typography>
           </div>
         </Typography>
         </div>
       </div>
     </>
-  );
+  ) : null;
 }

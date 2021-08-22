@@ -26,9 +26,13 @@
 }
 
 .button {
-    background-color: $secondaryGreen!important;
-    color: $mainBeige!important;
+    background-color: $secondaryGreen !important;
+    color: $mainBeige !important;
     &:hover {
-        background-color: $highlightGreen!important;
+        background-color: $highlightGreen !important;
+    }
+    &:disabled {
+        background-color: $secondaryGreenDisabled !important;
+        color: $mainBeigeDisabled !important
     }
 }

@@ -59,30 +59,3 @@ class CartItemStore {
 
 export const cartItemStore = new CartItemStore();
 
-
-export enum CartItemNumberStoreKey {
-    cartItemNumber = 'cartItemNumber'
-}
-
-export type CartItemNumberStoreType = {
-    cartItemNumber: number;
-    changeValue: (a: CartItemNumberStoreKey, b: number) => void;
-}
-
-class CartItemNumberStore {
-    cartItemNumber = 0
-  
-    constructor() {
-        makeAutoObservable(this)
-    }
-  
-    changeValue(fieldName: CartItemNumberStoreKey, value: number) {
-        this[fieldName] = value;
-    }
-}
-
-export const cartItemNumberStore = new CartItemNumberStore();
-
-
-
-

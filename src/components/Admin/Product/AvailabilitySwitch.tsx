@@ -1,36 +1,20 @@
-import Switch from '@material-ui/core/Switch';
-import { withStyles } from '@material-ui/core/styles';
+import { SwitchWithStyles } from '.././../../util/SwitchWithStyles';
 import { observer } from 'mobx-react-lite';
-import { ProductStoreKeys, ProductStoreType } from '../../../store/productStore';
 import { ChangeEvent } from 'react';
 
 type AvailabilitySwitchProps = {
-  store: ProductStoreType;
+  checked: boolean;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const AvailabilitySwitch = observer(
-  ({store}: AvailabilitySwitchProps) => {
-  const changeValue = (e: ChangeEvent<HTMLInputElement>) => {
-    store.changeValue(ProductStoreKeys.availability, e.target.checked)};
-  const ASwitch = withStyles({
-    switchBase: {
-      color: '#a6b3a4',
-      '&$checked': {
-        color: '#506e69',
-      },
-      '&$checked + $track': {
-        backgroundColor: '#506e69',
-      },
-    },
-    checked: {},
-    track: {},
-  })(Switch);
+export const AvailabilitySwitch = observer(({checked, onChange}: AvailabilitySwitchProps) => {
 
     return (
-      <ASwitch
-        checked={store.availability}
-        onChange={changeValue}
+      <SwitchWithStyles
+        checked={checked}
+        onChange={onChange}
         name="availability"
       />
     )
 })
+

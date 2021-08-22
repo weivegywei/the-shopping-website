@@ -1,12 +1,14 @@
 import { useState, useEffect, useContext } from 'react';
 import clsx from 'clsx';
 import cn from 'classnames';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { makeStyles } from '@material-ui/core/styles';
+import { drawerWidth } from '../../const/constants';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import { StyledBadge } from '../../util/StyledBadge';
 import MenuIcon from '@material-ui/icons/Menu';
 import { LoginButton } from './LoginButton';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -19,18 +21,21 @@ import { SearchBar } from './SearchBox';
 import { ManufacturerFilter } from '../Filter/Manufacturer';
 import { CategoryFilter } from '../Filter/Category';
 import { PriceFilter } from '../Filter/Price';
-import { getData } from '../../api/getData';
-import { filterQueryStore, FilterQueryStoreKeys } from '../../store/filterStore';
-import Badge from '@material-ui/core/Badge';
-import { cartItemNumberStore, CartItemNumberStoreType, CartItemNumberStoreKey } from '../../store/cartStore';
 import styles from './Menu.module.scss';
 import { UserStoreType } from '../../store/userStore';
-import { getCartItemsNumber } from '../../App.util';
+import { getFilters } from '../../App.util';
 import { AppContext } from '../../AppContext';
+import { logoutAction } from '../../util/helper'
 
-const drawerWidth = 300;
+type MenuProps = {
+  store: UserStoreType;
+}
 
-const useStyles = makeStyles((theme) => ({
+type MenuComponentProps = {
+  store: UserStoreType;
+}
+
+const useStylesForMenu = makeStyles((theme) => ({
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -64,59 +69,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type MenuProps = {
-  store: UserStoreType;
-}
-
-type MenuComponentProps = {
-  store: UserStoreType;
-  cartItemNumberStore: CartItemNumberStoreType;
-}
-
-export const StyledBadge = withStyles(() => ({
-  badge: {
-    border: `1px solid white`,
-    background:'#8ba48a'
-  },
-}))(Badge);
-
 export const Menu = ({store}: MenuProps) => 
-  <MenuComponent store={store} cartItemNumberStore={cartItemNumberStore} />
+  <MenuComponent store={store} />
 
-const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps) => {
-    const {content, appBar, appBarShift, contentShift} = useStyles();
+const MenuComponent = observer(({store}: MenuComponentProps) => {
+    const {content, appBar, appBarShift, contentShift} = useStylesForMenu();
     const {root, hide, menuButton,drawerHeader, header, filterDiv, link, text, login, filterBar, 
       margin, padding, siteName, loginDiv, welcome, span, logout, icons} = styles;
     const [open, setOpen] = useState(false);
-    const { setMenuCategory, setOpenNotification,setSuccessMsg } = useContext(AppContext);
+    const { setMenuCategory, setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber } = useContext(AppContext);
 
-    const logoutAction = () => {
-      localStorage.setItem('accessToken', undefined);
-      store.setValues({firstName: undefined, lastName: undefined, email: undefined, _id: undefined});
-      cartItemNumberStore.changeValue(CartItemNumberStoreKey.cartItemNumber, 0);
-      setOpenNotification(true);
-      setSuccessMsg('You have successfully logged out.')
-    };
-  
     const handleDrawerOpen = () => { setOpen(true) };
 
     const handleDrawerClose = () => { setOpen(false) };
 
     const handleGetAllProduct = () => { setMenuCategory('') };
 
-    const getFilters = async() => {
-      const res = await getData('/api/product/filter');
-      filterQueryStore.changeValue(FilterQueryStoreKeys.allManufacturer, res.data.allManufacturer);
-      filterQueryStore.changeValue(FilterQueryStoreKeys.minPrice, res.data.minPrice);
-      filterQueryStore.changeValue(FilterQueryStoreKeys.maxPrice, res.data.maxPrice);
+    const handleLogout = () => {
+      logoutAction(store)
+      setCartItemNumber(0)
+      setOpenNotification(true);
+      setSuccessMsg('You have successfully logged out.')
     };
 
     useEffect(()=>{
       getFilters();
-    },[])
-
-    useEffect(()=> {
-      getCartItemsNumber(store.id)
     },[])
   
     return (
@@ -147,7 +124,7 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
                   <div className={welcome}>
                     <div className={span}>{`Welcome, ${store.firstName}`}</div>
                     <Link to='/' className={cn(link, text, logout)}>
-                      <LogOutButton logoutAction={logoutAction} />
+                      <LogOutButton logoutAction={handleLogout} />
                     </Link>
                   </div> : 
                   <Link to="/login" className={login}>
@@ -157,7 +134,7 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
               </div>
               <Link to="/cart" className={link}>
                 <IconButton className={icons}>
-                  <StyledBadge badgeContent={cartItemNumberStore.cartItemNumber}>
+                  <StyledBadge badgeContent={cartItemNumber}>
                     <ShoppingCartIcon />
                   </StyledBadge>
                 </IconButton>
@@ -169,11 +146,7 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
           </Toolbar>
         </AppBar>
         <MenuDrawer open={open} handleDrawerClose={handleDrawerClose}/>
-        <main
-          className={clsx(content, {
-            [contentShift]: open,
-          })}
-        >
+        <main className={clsx(content, {[contentShift]: open})}>
           <div className={drawerHeader} />
         </main>
       </div>
@@ -187,3 +160,4 @@ const MenuComponent = observer(({store, cartItemNumberStore}: MenuComponentProps
       </>
     );
   })
+

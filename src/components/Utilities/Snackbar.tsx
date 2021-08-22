@@ -8,7 +8,7 @@ type AlertProps = {
 }
 
 type NotificationSnackbarProps = {
-  state: 'error' | 'success';
+  notificationState: 'error' | 'success';
   openNotification: boolean;
   setOpenNotification: (a: boolean) => void;
   errorMsg: string;
@@ -20,7 +20,7 @@ const Alert: React.FC<AlertProps> = (props: AlertProps) => {
 }
 
 export const NotificationSnackbar = (
-  {state, openNotification, setOpenNotification, errorMsg, successMsg}: NotificationSnackbarProps) => {
+  {notificationState, openNotification, setOpenNotification, errorMsg, successMsg}: NotificationSnackbarProps) => {
   const {root, sucessStyle, errorStyle} = styles;
 
   const handleClose = (event: React.ChangeEvent<{}>, reason: any) => {
@@ -33,8 +33,8 @@ export const NotificationSnackbar = (
   return (
     <div className={root}>
       <Snackbar open={openNotification} autoHideDuration={4000} onClose={handleClose} >
-        <Alert severity={state === 'error'? 'error' : "success"} className={state === 'error' ? errorStyle : sucessStyle } >
-          {state === 'error' ? errorMsg : successMsg}
+        <Alert severity={notificationState === 'error'? 'error' : "success"} className={notificationState === 'error' ? errorStyle : sucessStyle } >
+          {notificationState === 'error' ? errorMsg : successMsg}
         </Alert>
       </Snackbar>
     </div>

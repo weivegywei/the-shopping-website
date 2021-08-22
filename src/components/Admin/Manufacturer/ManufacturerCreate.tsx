@@ -24,9 +24,10 @@ export const ManufacturerCreate = () => <ManufacturerCreateComponent store={stor
 export const ManufacturerCreateComponent = observer(
   ( {store}: ManufacturerCreateComponentProps ) => {
   const {root, box, title, button} = styles;
-  const [formFields, setFormFields] = useState(defaultFormFields);
-  const [disabled, setDisabled] = useState(false);
-  const { setState, setOpenNotification, setErrorMsg, setSuccessMsg } = useContext(AppContext);
+  const [errorMessage, setErrorMessage] = useState<string>();
+  //const [formFields, setFormFields] = useState(defaultFormFields);
+  const [disabled, setDisabled] = useState(true);
+  const { setNotificationState, setOpenNotification, setErrorMsg, setSuccessMsg } = useContext(AppContext);
 
   const createNewManufacturer = async() => {const res = await postData('/api/admin/manufacturer/create',{
     manufacturerName: store.manufacturerName,
@@ -34,7 +35,7 @@ export const ManufacturerCreateComponent = observer(
     });
     setOpenNotification(true);
     if(res.hasOwnProperty('error')) {
-      setState('error');
+      setNotificationState('error');
       setErrorMsg('Error! Manufacturer adding failed');
     } else {
       setSuccessMsg('Manufacturer added successfully')
@@ -42,24 +43,24 @@ export const ManufacturerCreateComponent = observer(
     return res;
   };
 
+  //util
   useEffect(() => {
-    const pattern = urlValidityPattern; 
-    const urlValidation = pattern.test(store.logoUrl);
-    if (!urlValidation && store.logoUrl.length > 0) {
-      const newFormFields = [...defaultFormFields];
-      const errorField = newFormFields.find((it) => it.key === 'logoUrl');
-      if(errorField) {
-        errorField.error = true;
-        errorField.errorMessage = 'Invalid Url';
-        setFormFields(newFormFields);
-        setDisabled(true);
-      }
-    } if (!!urlValidation && store.logoUrl.length > 0) {
+    const urlValidation = urlValidityPattern.test(store.logoUrl); //output boolean value
+    if (urlValidation) {
       setDisabled(false);
-      setFormFields(defaultFormFields);
-    }
+      //setFormFields(defaultFormFields);
+    } else if (!urlValidation && store.logoUrl.length) {
+      setErrorMessage('Invalid Url');
+      //const newFormFields = [...defaultFormFields];
+      //const errorField = newFormFields.find((it) => it.key === 'logoUrl');
+      //if(errorField) {
+        //errorField.error = true;
+        //errorField.errorMessage = 'Invalid Url';
+        //setFormFields(newFormFields);
+        setDisabled(true);
+      //}
+    } 
   }, [store.logoUrl])
-  
 
   return (
     <>
@@ -69,8 +70,10 @@ export const ManufacturerCreateComponent = observer(
               New Manufacturer
           </Typography>
           <List component="nav">
-              {formFields.map((item) => <TextInput store={store} item={item} 
-                  key={`${item.key}${item.error}${item.errorMessage}`} />)}
+              <TextInput inputLabel={'Manufacturer name'} type={'text'} changeValue={(e) => 
+                store.changeValue(ManufacturerStoreKeys.manufacturerName, e.target.value)} />
+              <TextInput inputLabel={'Logo URL'} type={'text'} errorMessage={errorMessage}
+                changeValue={(e) => store.changeValue(ManufacturerStoreKeys.logoUrl, e.target.value)} />
           </List>
           <Button variant="contained" className={button} disableElevation disabled={disabled} onClick={createNewManufacturer}>
               Create New Manufacturer
@@ -80,3 +83,4 @@ export const ManufacturerCreateComponent = observer(
     </>
   );
 })
+

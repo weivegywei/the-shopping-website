@@ -14,6 +14,44 @@ export enum ProductStoreKeys {
     category = 'category'
 }
 
+export enum CategoryType {
+    skinCare = 'skin care',
+    garments = 'garments',
+    electricAppliances = 'electric appliances',
+    fitness = 'fitness',
+    footwears = 'footwears',
+    perfumesAndFragrances = 'perfumes & fragrances',
+    personalProtectiveEquipment = 'personal protective equipment',
+    cosmetics = 'cosmetics',
+    kitchenware = 'kitchenware',
+    beddings = 'beddings'
+}
+
+export enum SpecificationType {
+    none = '',
+    type = 'type',
+    volume = 'volume',
+    size = 'size',
+    color = 'color',
+    flavor = 'flavor',
+    aroma = 'aroma'
+}
+
+export type ProductStoreType = {
+    productName: string;
+    manufacturerName: string;
+    inventory: number;
+    imageUrl: string;
+    price: number;
+    description: string;
+    packageSize: string;
+    availability: boolean;
+    specification: SpecificationType;
+    specificationDescr: string[];
+    category: CategoryType | null;
+    changeValue: (a: ProductStoreKeys, b: string | number | boolean) => void
+}
+
 class ProductStore {
     productName = ''
     manufacturerName = ''
@@ -23,7 +61,7 @@ class ProductStore {
     description = ''
     packageSize = ''
     availability = true
-    specification = ''
+    specification = SpecificationType.none
     specificationDescr = ['']
     category = null
   
@@ -39,30 +77,5 @@ class ProductStore {
   
 export const productStore = new ProductStore();
 
-export enum CategoryType {
-    skinCare = 'skin care',
-    garments = 'garments',
-    electricAppliances = 'electric appliances',
-    fitness = 'fitness',
-    footwears = 'footwears',
-    perfumesAndFragrances = 'perfumes & fragrances',
-    personalProtectiveEquipment = 'personal protective equipment',
-    cosmetics = 'cosmetics',
-    kitchenware = 'kitchenware',
-    beddings = 'beddings'
-}
 
-export type ProductStoreType = {
-    productName: string;
-    manufacturerName: string;
-    inventory: number;
-    imageUrl: string;
-    price: number;
-    description: string;
-    packageSize: string;
-    availability: boolean;
-    specification: string;
-    specificationDescr: string[];
-    category: CategoryType | null;
-    changeValue: (a: ProductStoreKeys, b: string | number | boolean) => void
-}
+

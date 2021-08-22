@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
+import { FilterMenu } from '../../util/FilterMenu';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -20,20 +20,11 @@ const StyledMenu = withStyles({
     height: 500,
     width: 223
   },
+  list: {
+    padding: 0,
+  }
 })((props: {open: boolean; anchorEl: any; keepMounted: boolean; onClose: () => void}) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
+  <FilterMenu props={props} />
 ));
 
 type ManufacturerFilterComponentProps = {

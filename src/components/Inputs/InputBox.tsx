@@ -14,7 +14,8 @@ type InputBoxProps = {
   type: string; 
   error?: any;
   errorMsg?: string;
-  changeValue: ChangeEventHandler<HTMLInputElement>
+  changeValue: ChangeEventHandler<HTMLInputElement>;
+  onBlur?: () => void
 }
 
 type ValuesType = {
@@ -23,7 +24,7 @@ type ValuesType = {
 }
 
 export const InputBox = observer(
-  ( { labelName, type, error, errorMsg, changeValue }: InputBoxProps ) => {
+  ( { labelName, type, error, errorMsg, changeValue, onBlur }: InputBoxProps ) => {
     
     const {input, label, inputDiv, errorinput, button, helperText} = styles;
     const [showPassword, setShowPassword] = useState(false);
@@ -37,7 +38,7 @@ export const InputBox = observer(
           </Typography>
           </div>
           <input type={ type === 'password' && showPassword === true ? 'text' : type } 
-          className={ error ? errorinput : input } placeholder={ error? errorMsg : '' }
+          className={ error ? errorinput : input } placeholder={ error? errorMsg : '' } onBlur={onBlur}
           onChange={changeValue} />
           {type == 'password' ? 
             <IconButton className={button} onClick={handleClickShowPassword}>

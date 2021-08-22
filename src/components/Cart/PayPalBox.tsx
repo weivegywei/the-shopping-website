@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { postData } from '../../api/postData';
+import styles from './PayPalBox.module.scss';
 
 type PayPalBoxProps = {
   totalAmount: number;
@@ -15,6 +16,7 @@ declare global {
 
 export const PayPalBox = ({totalAmount, userId}: PayPalBoxProps) => {
     const history = useHistory();
+    const { paypalbtn } = styles;
 
     useEffect(() => {
         window.paypal.Button.render({
@@ -42,7 +44,6 @@ export const PayPalBox = ({totalAmount, userId}: PayPalBoxProps) => {
               })
                 .then((res: {totalAmount: number; currency: string}) => {
                   // 3. Show the buyer a confirmation message.
-                  //const order = actions.order.capture();
                   history.push({pathname: '/afterPayment', state:{orderID: data.orderID, 
                     paidAmount: res.totalAmount, currencyUnit: res.currency}});
                   postData('/api/store-payment',{userId, orderId: data.orderID, 
@@ -55,6 +56,6 @@ export const PayPalBox = ({totalAmount, userId}: PayPalBoxProps) => {
           }, '#paypal-button');
     }, [])
     
-
-      return <div id="paypal-button"></div>
+      return <div id="paypal-button" className={paypalbtn}></div>
 }
+

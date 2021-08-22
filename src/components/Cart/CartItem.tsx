@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState, useContext } from 'react';
 import cn from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,6 +10,7 @@ import { AlertDialog } from '../Utilities/AlertDialog';
 import styles from './CartItem.module.scss';
 import { ChangeEvent } from 'react';
 import { UserStoreType } from '../../store/userStore';
+import { AppContext } from '../../AppContext'
 
 export type CartItemProductType = {
   _id: string;
@@ -30,20 +31,21 @@ type CartItemProps = {
 }
 
 export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, setCartItemsHandler}: CartItemProps) => {
-  const {wrapper,productInfo,textarea,itemInfoDiv,textColor, iconDiv, iconButton, icon, 
+  const {wrapper,img, productInfo,textarea,itemInfoDiv,textColor, iconDiv, iconButton, icon, 
     divider, panel,input,flexFiller,panelItem,subtotal} = styles;
   const { _id, quantity, imageUrl, name, specification, specificationValue, inventory, price } = item;
   const [itemQuantity, setItemQuantity] = useState<number>(quantity);
   const [openAlert, setOpenAlert] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CartItemProductType>();
-  const handleClickOpen = (item: CartItemProductType) => {
+  const { cartItemNumber, setCartItemNumber } = useContext(AppContext);
+
+  const handleClickOpenAlert = (item: CartItemProductType) => {
     setOpenAlert(true);
     setSelectedItem(item);
   };
 
   const handleChange = async(e: ChangeEvent<HTMLInputElement>) => {
-      await postData('/api/cart/change', {userId: userStore.id, cartItemId: _id,
-    quantity: e.target.value})};
+      await postData('/api/cart/change', {userId: userStore.id, cartItemId: _id, quantity: e.target.value})};
   
   const handleDelete = async(item: CartItemProductType) => {
     await postData('/api/cart/delete', {userId: userStore.id, cartItemId: _id})};
@@ -51,10 +53,12 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, s
   const itemQuantityChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
       setItemQuantity(Number(e.target.value));
       handleChange(e);
+      setCartItemNumber(cartItemNumber - quantity + Number(e.target.value));
       setCartItemsHandler();
   };
   const handleConfirm = (item: CartItemProductType) => {
       handleDelete(item);
+      setCartItemNumber(cartItemNumber - quantity);
       setCartItemsAndNotificationHandler();
       setOpenAlert(false);
   }
@@ -62,9 +66,9 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, s
   return (  
     <>
       <div className={wrapper}>
-        <img src={imageUrl} alt='' width='104px' height='120px'/>
+        <img src={imageUrl} alt='' width='104px' height='120px' className={img}/>
         <div className={productInfo} >
-        <Typography variant='body1'>
+            <Typography variant='body1'>
             <div  className={textarea}>
                 <div className={itemInfoDiv}>{name}</div>
                 <div className={cn(itemInfoDiv, textColor)}>
@@ -75,8 +79,8 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, s
             </div>
             </Typography>
             <div className={flexFiller} />
-                <Typography variant='caption' className={iconDiv}>
-                <IconButton className={iconButton} onClick={() => handleClickOpen(item)} >
+            <Typography variant='caption' className={iconDiv}>
+                <IconButton className={iconButton} onClick={() => handleClickOpenAlert(item)} >
                     <DeleteOutlineOutlinedIcon className={icon} />
                     Delete
                 </IconButton>
@@ -85,7 +89,7 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, s
                     <FavoriteBorderOutlinedIcon className={icon} />
                     Add to wishlist
                 </IconButton>
-                </Typography>
+            </Typography>
         </div>
         <div className={flexFiller} />
         <div className={panel}>

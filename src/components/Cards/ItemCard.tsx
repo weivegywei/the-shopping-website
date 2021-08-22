@@ -3,8 +3,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import IconButton from '@material-ui/core/IconButton';
-import { postData } from '../../api/postData';
-import { getCartItemsNumber } from '../../App.util';
+import { addToCart } from  '../../util/helper';
+import { getCartItemsNumber } from '../../App.util'
 import styles from './ItemCard.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { MouseEvent, useContext } from 'react';
@@ -25,23 +25,16 @@ type ItemCardProps = {
 
 export const ItemCard = ({item, userStore}: ItemCardProps) => {
   const {root, p, card, action, flexfiller, icon} = styles;
-  const userId = userStore.id;
-  const productId = item._id;
-  const specificationValue = item.specificationDescr[0].split(',')[0];
-  const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
+  const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber } = useContext(AppContext);
   
   const handleClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    addToCart();
+    addToCart(userStore.id, item._id, 1, item.specificationDescr[0].split(',')[0]); //choose the first specification 
+    //value to add to cart
+    setCartItemNumber(cartItemNumber + 1)
     setOpenNotification(true);
     setSuccessMsg('Item added to cart.')
-  }
-  const addToCart = async() => {
-    const updatedCart = await postData('/api/cart', {
-      userId, productId, quantity: 1, specificationValue});
-      getCartItemsNumber(userStore.id);
-    return updatedCart;
   }
 
   return (

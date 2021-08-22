@@ -19,13 +19,13 @@ export const RegisterPage = observer(() => {
   const history = useHistory(); 
   const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
 
-  useEffect(() => {
-    if (store.password !== store.confirmPassword) {
+  const onBlur = () => {
+      if (store.password !== store.confirmPassword) {
         setPasswordMatchingState(false);
     } else if (store.password === store.confirmPassword) {
         setPasswordMatchingState(true);
     }
-  },[store.password, store.confirmPassword]);
+  }
 
   const createNewUser = async() => {
     const res = await postData('/api/register', {
@@ -41,7 +41,7 @@ export const RegisterPage = observer(() => {
       setUserExistsState(true);
     } else {
       setOpenNotification(true);
-      setSuccessMsg('Sign up succeed! Welcome! 😄 Now please log in to continue');
+      setSuccessMsg('Sign up succeed! Welcome! Please log in to continue');
       history.push('/login');
     }
   };
@@ -60,7 +60,7 @@ export const RegisterPage = observer(() => {
         <InputBox labelName={'Email address'} type={'email'}changeValue={(e) => changeValue(e, RegisterStoreKeys.email)} 
           error={userExistsState} errorMsg='This email had been registered' />
         <InputBox labelName={'Password'} type={'password'} changeValue={(e) => changeValue(e, RegisterStoreKeys.password)} />
-        <InputBox labelName={'Confirm password'} type={'password'} error={!passwordMatchingState} 
+        <InputBox labelName={'Confirm password'} type={'password'} error={!passwordMatchingState} onBlur={onBlur}
           errorMsg='Password does not match' changeValue={(e) => changeValue(e, RegisterStoreKeys.confirmPassword)} />
         <InputBox labelName={'Address'} type={'text'} changeValue={(e) => changeValue(e, RegisterStoreKeys.address)} />
         <div className={label}>
@@ -77,3 +77,4 @@ export const RegisterPage = observer(() => {
     </div>
   );
 })
+

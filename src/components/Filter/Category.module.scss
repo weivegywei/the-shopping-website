@@ -16,6 +16,10 @@
   color: $mainDark;
 }
 
+.formControl {
+  width: 100%;
+}
+
 .formControlLabel {
     margin: 0!important;
     //font-size: 13px!important;
@@ -31,10 +35,13 @@
   color: $backgroundGreen;
   border: 1px solid $backgroundGreen;
   border-left: none;
+  font-size: 11px;
   font-weight: bold;
+  letter-spacing: 0.7px;
   width: 50%;
   min-width: 103px;
   height: 35px;
+  text-transform: uppercase;
   &:hover {
       cursor: pointer;
       background: $highlightGreen;
@@ -53,10 +60,13 @@
     background: $backgroundGreen;
     color: $mainBeige;
     border: 1px solid $backgroundGreen;
+    font-size: 11px;
     font-weight: bold;
+    letter-spacing: 0.7px;
     width: 50%;
     min-width: 103px;
     height: 35px;
+    text-transform: uppercase;
     &:hover {
         cursor: pointer;
         background: $highlightGreen;

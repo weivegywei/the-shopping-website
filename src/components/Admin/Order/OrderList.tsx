@@ -97,20 +97,20 @@ export const OrderList = observer(() => {
     const [openOrderInfo, setOpenOrderInfo] = useState(false);
     const [selectedItem, setSelectedItem] = useState<InfoItemProps[] | UserDataType | ListItemProps | InfoItemType | null>(null);
 
-    const getOrderList = async() => {
+    const setOrderList = async() => {
         const res = await getData('/api/admin/order/list');
         setList(res.data.map((it: ResDataMapProps) => ({...it, userData: it.userInfo[0]})));
-      };
+    };
     
-      useEffect(() => {
-        getOrderList();
-        },[]);
-
+    useEffect(() => {
+        setOrderList();
+    },[]);
+//util
     const returnedTime = (item: ReturnedTimeProps) => {
         const event = item.events?.find(({status}) => status === 'returned');
         return event ? event.time : null;
     };
-
+//TODO: all handle function can be wrapped with useCallBack();
     const handleUserInfoClickOpen = (item: UserDataType) => {
         const info = [{fieldName: 'First Name', fieldValue: item.firstName}, {fieldName: 'Last Name', fieldValue: item.lastName}, 
         {fieldName: 'Email', fieldValue: item.email}, {fieldName: 'Address', fieldValue: item.address}, 
@@ -146,7 +146,7 @@ export const OrderList = observer(() => {
         //@ts-ignore
         const editStatus = async() => await postData('/api/admin/order/edit', {id: selectedItem?._id, status: store.status});
         editStatus();
-        getOrderList();
+        setOrderList();
         setOpenStatusEdit(false);
     };
 

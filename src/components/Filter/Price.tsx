@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
+import { FilterMenu } from '../../util/FilterMenu';
 import { PriceRangeSlider } from './PriceRangeSlider';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -12,20 +12,11 @@ const StyledMenu = withStyles({
   paper: {
     border: '1px solid #d3d4d5',
   },
+  list: {
+    padding: 0,
+  }
 })((props: {open: boolean; anchorEl: EventTarget | null; keepMounted: boolean; onClose: () => void}) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
+  <FilterMenu props={props} />
 ));
 
 export const PriceFilter = () => {

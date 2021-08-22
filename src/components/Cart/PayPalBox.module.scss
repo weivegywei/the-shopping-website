@@ -1,0 +1,11 @@
+.paypalbtn {
+    opacity: 0;
+    width: 290px;
+    height: 36px; 
+    z-index: 1;
+    position: absolute;
+    :global(.zoid-outlet) {
+        width: 290px !important;
+    }
+}
+

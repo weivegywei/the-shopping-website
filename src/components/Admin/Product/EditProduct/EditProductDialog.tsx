@@ -2,11 +2,11 @@ import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import { CategoryType } from '../../../../store/productStore';
+import { CategoryType, SpecificationType } from '../../../../store/productStore';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { EditProductContext, SpecificationType, useEditProductContext } from './EditProductContext';
+import { EditProductContext, useEditProductContext } from './EditProductContext';
 import { EditSpecificationDropdown } from './EditSpecificationDropdown';
 import { EditAvailabilitySwitch } from './EditAvailabilitySwitch';
 import { EditCategoryDropdown } from './EditCategoryDropdown';
@@ -81,7 +81,7 @@ export const EditProductDialog = ({open, item, handleClose}: EditProductDialogPr
         setEditErrorMsg(res.error.message);
       }
     };
-    
+    //TODO: change EditProductContext to useState
     useEffect(() => {
       setProductName(name);
       setManufacturer(manufacturerInfo[0].name);

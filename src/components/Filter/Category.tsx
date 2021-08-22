@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
+import { FilterMenu } from '../../util/FilterMenu';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -19,22 +19,13 @@ const StyledMenu = withStyles({
   paper: {
     border: '1px solid #d3d4d5',
     width: 280,
-    fontSize: 13
+    fontSize: 13,
   },
+  list: {
+    padding: 0,
+  }
 })((props: {open: boolean; anchorEl: EventTarget | null; keepMounted: boolean; onClose: () => void}) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
+  <FilterMenu props={props} />
 ));
 
 type CategoryFilterComponentProps = {
@@ -44,9 +35,10 @@ type CategoryFilterComponentProps = {
 export const CategoryFilter = () => <CategoryFilterComponent store={store} />
 
 const CategoryFilterComponent = observer(({store}: CategoryFilterComponentProps) => {
-  const {filterButton, expandIcon, formControlLabel, formGroup, buttonClear, buttonConfirm} = styles;
+  const {filterButton, expandIcon, formControl, formControlLabel, formGroup, buttonClear, buttonConfirm} = styles;
   const [anchorEl, setAnchorEl] = useState<EventTarget | null>(null);
   const changeValue = async (e: ChangeEvent<HTMLInputElement>, fieldName: string) => {
+    console.log('inner', store.categoryFilters,'filters', fieldName, 'fieldname', e.target.checked, 'etargetchecked')
       await set(store.categoryFilters, fieldName, e.target.checked);
       store.changeValue(FilterQueryStoreKeys.hack, !store.hack);
   }
@@ -60,6 +52,7 @@ const CategoryFilterComponent = observer(({store}: CategoryFilterComponentProps)
   };
 
   const filters = toJS(store.categoryFilters);
+  //console.log('outer',toJS(store.categoryFilters))
 
   return (
     <div>
@@ -72,7 +65,7 @@ const CategoryFilterComponent = observer(({store}: CategoryFilterComponentProps)
         {Boolean(anchorEl) ? <ExpandLessIcon className={expandIcon} /> : <ExpandMoreIcon className={expandIcon} />}
       </Button>
       <StyledMenu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-        <FormControl component="fieldset">
+        <FormControl component="fieldset" className={formControl}>
           <FormGroup className={formGroup}>
             {productCategory.map((item) => 
             <FormControlLabel

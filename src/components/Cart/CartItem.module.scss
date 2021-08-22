@@ -4,13 +4,19 @@
     width: 100%;
 }
 
+.img {
+    min-width: 104px;
+}
+
 .productInfo {
     display: flex;
     flex-direction: column;
 }
 
 .textarea {
-    margin: 5px 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 18px;
     display: flex;
     flex-direction: column;
     justify-content: left;
@@ -22,6 +28,7 @@
     width: 100%;
     font-size: 14px;
     text-transform: capitalize;
+    text-align: left;
 }
 
 .iconDiv {
@@ -32,7 +39,7 @@
 
 .iconButton {
     font-size: 0.75rem!important;
-    padding: 10px;
+    padding: 8px;
     padding-left: 5px;
     height: 30px;
     border-radius: 0!important;
@@ -45,7 +52,6 @@
 }
 
 .icon {
-    font-size: 1rem;
     padding: 5px;
 }
 
@@ -55,7 +61,7 @@
 }
 
 .panel {
-    min-width: 150px;
+    min-width: 100px;
     display: flex;
     align-items: flex-end;
     justify-content: start;
