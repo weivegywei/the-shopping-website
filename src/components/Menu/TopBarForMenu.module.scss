@@ -1,0 +1,79 @@
+@import '../../variables.scss';
+
+.topBar {
+    flex: 1;
+    height: 64px;
+    background-color: $mainGreen !important;
+    box-shadow: 0px 8px 4px -4px rgba(0, 0, 0, 0.2),
+                0px 8px 5px -4px rgba(0, 0, 0, 0.14), 
+                0px 4px 4px -4px rgba(0, 0, 0, 0.12)
+     !important;
+}
+
+.header {
+    color: $mainBeige;
+    text-decoration: none;
+    letter-spacing: 0.018em;
+    font-size: 1.75rem;
+}
+
+.link {
+    text-decoration: none
+}
+
+.text {
+    color: $mainBeige;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.login {
+    text-decoration: none;
+    margin-top: 10px
+}
+
+.margin {
+    margin: 0 42px 0 30px
+}
+
+.padding {
+    padding: 0
+}
+
+.siteName {
+    width: 250px;
+    padding: 0;
+    margin-right: 90px
+}
+
+.loginDiv {
+    width: 400px;
+}
+
+.welcome {
+    display: flex;
+}
+
+.span {
+    display: flex;
+    min-width: 120px;
+    width: 60%;
+    align-items: center;
+}
+
+.logout {
+    width: 40%
+}
+
+.icons {
+    color: $mainBeige!important;
+    border-radius: 3px!important;
+    font-size: small;
+    width: 40;
+    height: 40;
+    margin: 5;
+    &:hover {
+        background-color: $mainGreen!important;
+    }
+}

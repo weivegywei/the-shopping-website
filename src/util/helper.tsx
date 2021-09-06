@@ -7,10 +7,20 @@ export const logoutAction = (userStore: UserStoreType) => {
 };
 
 export const addToCart = async(
-        userId: string, productId: string, quantity: number, 
-        specificationValue: string
+    userId: string, productId: string, quantity: number, specificationValue: string
     ) => {
     const updatedCart = await postData('/api/cart/add', {
       userId, productId, quantity, specificationValue});
     return updatedCart;
+}
+
+export const addToGuestCart = async(
+  guestId: string, productId: string, quantity: number, specificationValue: string
+  ) => {
+    console.log(guestId, 'guestId')
+    const updatedGuestCart = await postData('/api/guestcart/add', {
+      guestId, productId, quantity, specificationValue
+    });
+    return updatedGuestCart
   }
+

@@ -14,7 +14,7 @@ import { ProductCreate } from './components/Admin/Product/ProductCreate';
 import { ProductList } from './components/Admin/Product/ProductList';
 import { RegisterPage } from './components/Register/RegisterPage';
 import { observer } from 'mobx-react';
-import { getUserInfo, getCartItemsNumber } from './App.util';
+import { getUserInfo, getCartItemsNumber, getGuestCartItemNumber } from './App.util';
 import { ManufacturerCreate } from './components/Admin/Manufacturer/ManufacturerCreate';
 import { AfterPaymentPage } from './components/Cart/AfterPaymentPage';
 import { OrderList } from './components/Admin/Order/OrderList';
@@ -35,15 +35,20 @@ const App = observer(({userStore}) => {
   }, []);
 
   const fetchAndSetCartItemNum = async() => {
-    const itemNumber = await getCartItemsNumber(userStore.id);
+    let itemNumber: number;
+    if (userStore.id) {
+      itemNumber = await getCartItemsNumber(userStore.id);
+    } else if (localStorage.guestId) {
+      itemNumber = await getGuestCartItemNumber(localStorage.guestId)
+    }
     setCartItemNumber(itemNumber)
   }
 
   useEffect(() => {
-    if(userStore.id) {
+    if(userStore.id || localStorage.guestId) {
       fetchAndSetCartItemNum()
     }
-  },[userStore.id])
+  },[userStore.id, localStorage.guestId])
 
   return (
     <>

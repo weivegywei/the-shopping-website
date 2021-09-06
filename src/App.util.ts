@@ -15,6 +15,13 @@ export  const getCartItemsNumber = async(userId) => {
   }
 }
 
+export const getGuestCartItemNumber = async(guestId) => {
+  if (guestId) {
+    const res = await postData('/api/guestcart/number', {guestId});
+    return res.data
+  }
+}
+
 export const getUserInfo = async () => {
     const res = await getUser();
     if(res && res.data) {

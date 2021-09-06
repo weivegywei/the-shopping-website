@@ -1,15 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import cn from 'classnames';
-import { Link } from "react-router-dom";
-import IconButton from '@material-ui/core/IconButton';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { StyledBadge } from '../../util/StyledBadge';
+import { TopBar } from '../Menu/TopBar'
 import Typography from '@material-ui/core/Typography';
 import { postData } from '../../api/postData';
 import { SpecificationValueDropdown } from './SpecificationValueDropdown';
@@ -18,12 +9,10 @@ import { cartItemStore, CartItemStoreType } from '../../store/cartStore';
 import styles from './ProductPage.module.scss';
 import { ChangeEvent } from 'react';
 import { AppContext } from '../../AppContext';
-import { SearchBar } from '../Menu/SearchBox';
-import { LogOutButton } from '../Menu/LogOutButton';
-import { LoginButton } from '../Menu/LoginButton';
 import { UserStoreType } from '../../store/userStore';
 import { loremIpsum } from '../../const/constants';
-import { logoutAction, addToCart } from '../../util/helper';
+import { addToCart, addToGuestCart } from '../../util/helper';
+import { v4 as uuidv4 } from 'uuid';
 
 type ProductPageProps = {
   userStore: UserStoreType 
@@ -33,24 +22,12 @@ type ProductPageComponentProps = {
   cartItemStore: CartItemStoreType
 }
 
-const useStylesForProductPage = makeStyles((theme) => ({
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    background: '#8ba48a'
-  }
-}));
-
 export const ProductPage = observer(
   ( {userStore}: ProductPageProps ) => 
   <ProductPageComponent userStore={userStore} cartItemStore={cartItemStore} />)
 
 const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentProps) => {
-  const {appBarRoot, root, img, textDiv, text, h1, h2, h3, inputDiv, dropDownDiv, numDiv, input, button, siteName, header, link, margin, 
-    padding, loginDiv, welcome, span, logout, login, icons, flexfiller, description} = styles;
-  const { appBar } = useStylesForProductPage();
+  const {root, img, textDiv, text, h1, h2, h3, inputDiv, dropDownDiv, numDiv, input, button, description} = styles;
   const {location} = useHistory<{item: {
     _id: string;
     manufacturerId: string;
@@ -68,18 +45,21 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
   const [ ready, setReady ] = useState<boolean>(false);
   const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber } = useContext(AppContext);
 
-  const handleLogout = () => {
-    logoutAction(userStore)
-    setCartItemNumber(0)
-    setOpenNotification(true);
-    setSuccessMsg('You have successfully logged out.')
-  };
   const handleAddToCart = () => {
-    addToCart( userStore.id, productId, quantity, cartItemStore.specificationValue)
+    if (userStore.id) {
+      addToCart( userStore.id, productId, quantity, cartItemStore.specificationValue)
+    } else if (localStorage.guestId) {
+      addToGuestCart( localStorage.guestId, productId, quantity, cartItemStore.specificationValue)
+    } else {
+      const generatedGuestId = uuidv4();
+      localStorage.setItem('guestId', generatedGuestId);
+      addToGuestCart( generatedGuestId, productId, quantity, cartItemStore.specificationValue)
+    }
     setCartItemNumber(cartItemNumber + quantity)
     setOpenNotification(true);
     setSuccessMsg('Item added to cart.')
   }
+
   const setQty = (e: ChangeEvent<HTMLInputElement>) => setQuantity(Number(e.target.value));
 
   useEffect(() => {
@@ -96,47 +76,7 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
 
   return ready ? (
     <>
-      <div className={appBarRoot}>
-        <CssBaseline />
-        <AppBar position="fixed" className={appBar}>
-          <Toolbar>
-            <Toolbar className={siteName}>
-              <Typography variant="h5" noWrap >
-                  <Link to="/" className={cn(header, link)}>
-                    My Wei Shop
-                  </Link>
-              </Typography>
-            </Toolbar>
-            <SearchBar />
-            <div className={flexfiller} ></div>
-            <Toolbar className={cn(margin, padding, loginDiv)} >
-              <div className={text}>
-                {userStore.email ? 
-                  <div className={welcome}>
-                    <div className={span}>{`Welcome, ${userStore.firstName}`}</div>
-                    <Link to='/' className={cn(link, text, logout)}>
-                      <LogOutButton logoutAction={handleLogout} />
-                    </Link>
-                  </div> : 
-                  <Link to="/login" className={login}>
-                    <LoginButton />
-                  </Link>
-                }
-              </div>
-              <Link to="/cart" className={link}>
-                <IconButton className={icons}>
-                  <StyledBadge badgeContent={cartItemNumber}>
-                    <ShoppingCartIcon />
-                  </StyledBadge>
-                </IconButton>
-              </Link>
-              <IconButton className={icons}>
-                <FavoriteBorderIcon />
-              </IconButton>
-            </Toolbar>
-          </Toolbar>
-        </AppBar>
-      </div>
+      <TopBar userStore={userStore} />
       <div className={root}>
         <img src={location.state.item.imageUrl} alt='' className={img} />
         <div className={textDiv}>
@@ -168,3 +108,4 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
     </>
   ) : null;
 }
+

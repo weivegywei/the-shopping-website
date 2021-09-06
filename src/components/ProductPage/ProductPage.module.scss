@@ -1,10 +1,5 @@
 @import '../../variables.scss';
 
-.appBarRoot {
-  display: flex;
-  height: 92px
-}
-
 .root {
     display: flex;
     flex-wrap: nowrap;
@@ -17,10 +12,6 @@
     margin-bottom: 32px;
     width: 520px;
     height: 600px;
-}
-
-.flexfiller {
-  flex: 1
 }
 
 .textDiv {
@@ -102,69 +93,6 @@
     &:focus {
       outline: none;
     }
-}
-
-.header {
-  color: $mainBeige;
-  text-decoration: none;
-  margin-left: 30px;
-  letter-spacing: 0.018em;
-  font-size: 1.75rem;
-}
-
-.link {
-  text-decoration: none
-}
-
-.siteName {
-  width: 250px;
-  padding: 0;
-  margin: 0 30px
-}
-
-.margin {
-  margin: 0 42px 0 30px
-}
-
-.padding {
-  padding: 0
-}
-
-.loginDiv {
-  width: 350px;
-}
-
-.welcome {
-  display: flex;
-}
-
-.span {
-  display: flex;
-  min-width: 120px;
-  width: 60%;
-  align-items: center;
-  font-weight: bold;
-}
-
-.login {
-  text-decoration: none;
-  margin-top: 10px
-}
-
-.logout {
-  width: 40%
-}
-
-.icons {
-  color: $mainBeige!important;
-  border-radius: 3px!important;
-  font-size: small;
-  width: 40;
-  height: 40;
-  margin: 5;
-  &:hover {
-      background-color: $mainGreen!important;
-  }
 }
 
 .description {

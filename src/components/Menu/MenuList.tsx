@@ -21,8 +21,8 @@ type MenuItemType = {
   name: CategoryType,
   icon: any
 }
-//icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> ??
-  const menuItems = [
+
+const menuItems = [
     {name: CategoryType.skinCare, icon: <FaceRoundedIcon />}, 
     {name: CategoryType.garments, icon: <RiTShirtLine style={{ fontSize : 24 }} />},
     {name: CategoryType.cosmetics, icon: <SpaRoundedIcon />},
@@ -33,7 +33,7 @@ type MenuItemType = {
     {name: CategoryType.personalProtectiveEquipment, icon:<RiSurgicalMaskLine style={{ fontSize : 24 }}/>},
     {name: CategoryType.kitchenware, icon:<FreeBreakfastIcon /> },
     {name: CategoryType.beddings, icon:<KingBedIcon />}
-  ];
+];
 
 export const MenuList = () => { 
   const {icon, text, button} = styles;

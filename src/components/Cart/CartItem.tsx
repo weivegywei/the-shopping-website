@@ -25,12 +25,14 @@ export type CartItemProductType = {
 
 type CartItemProps = {
   item: CartItemProductType;
-  userStore: UserStoreType;
-  setCartItemsAndNotificationHandler: () => void;
-  setCartItemsHandler: () => void;
+  userStore?: UserStoreType;
+  setCartItemsAndNotificationAfterDeleteHandler: () => void;
+  setCartItemsAndNotificationAfterChangeHandler: () => void
 }
 
-export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, setCartItemsHandler}: CartItemProps) => {
+export const CartItem = ({
+  item, userStore, setCartItemsAndNotificationAfterDeleteHandler, setCartItemsAndNotificationAfterChangeHandler
+}: CartItemProps) => {
   const {wrapper,img, productInfo,textarea,itemInfoDiv,textColor, iconDiv, iconButton, icon, 
     divider, panel,input,flexFiller,panelItem,subtotal} = styles;
   const { _id, quantity, imageUrl, name, specification, specificationValue, inventory, price } = item;
@@ -45,21 +47,32 @@ export const CartItem = ({item, userStore, setCartItemsAndNotificationHandler, s
   };
 
   const handleChange = async(e: ChangeEvent<HTMLInputElement>) => {
-      await postData('/api/cart/change', {userId: userStore.id, cartItemId: _id, quantity: e.target.value})};
+    if (userStore.id) {
+      await postData('/api/cart/change', {userId: userStore.id, cartItemId: _id, quantity: e.target.value})
+    } else if (localStorage.guestId) {
+      await postData('/api/guestcart/change', {guestId: localStorage.guestId, cartItemId: _id, quantity: e.target.value})
+    }
+  };
   
   const handleDelete = async(item: CartItemProductType) => {
-    await postData('/api/cart/delete', {userId: userStore.id, cartItemId: _id})};
+    if (userStore.id) {
+      await postData('/api/cart/delete', {userId: userStore.id, cartItemId: _id})
+    } else if (localStorage.guestId) {
+      await postData('/api/guestcart/delete', {guestId: localStorage.guestId, cartItemId: _id})
+    }
+  }
 
   const itemQuantityChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
       setItemQuantity(Number(e.target.value));
       handleChange(e);
       setCartItemNumber(cartItemNumber - quantity + Number(e.target.value));
-      setCartItemsHandler();
+      setCartItemsAndNotificationAfterChangeHandler()
   };
+
   const handleConfirm = (item: CartItemProductType) => {
       handleDelete(item);
       setCartItemNumber(cartItemNumber - quantity);
-      setCartItemsAndNotificationHandler();
+      setCartItemsAndNotificationAfterDeleteHandler();
       setOpenAlert(false);
   }
 
