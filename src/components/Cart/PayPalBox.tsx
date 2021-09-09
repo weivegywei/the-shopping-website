@@ -1,11 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router';
 import { postData } from '../../api/postData';
+import { AppContext } from '../../AppContext';
 import styles from './PayPalBox.module.scss';
 
 type PayPalBoxProps = {
   totalAmount: number;
-  userId: string;
+  userId?: string;
+  guestId?: string;
 }
 
 declare global {
@@ -14,9 +16,10 @@ declare global {
   }
 }
 
-export const PayPalBox = ({totalAmount, userId}: PayPalBoxProps) => {
+export const PayPalBox = ({totalAmount, userId, guestId}: PayPalBoxProps) => {
     const history = useHistory();
-    const { paypalbtn } = styles;
+    const { paypalButton } = styles;
+    const { setCartItemNumber } = useContext(AppContext)
 
     useEffect(() => {
         window.paypal.Button.render({
@@ -46,16 +49,24 @@ export const PayPalBox = ({totalAmount, userId}: PayPalBoxProps) => {
                   // 3. Show the buyer a confirmation message.
                   history.push({pathname: '/afterPayment', state:{orderID: data.orderID, 
                     paidAmount: res.totalAmount, currencyUnit: res.currency}});
-                  postData('/api/store-payment',{userId, orderId: data.orderID, 
-                    payerId: data.payerID, paymentId: data.paymentID, amount: res.totalAmount, currency: res.currency});
-                  postData('/api/admin/product/inventory', {userId});
-                  postData('/api/cart/status', {userId});
+                  if (userId) {
+                    postData('/api/store-payment',{userId, orderId: data.orderID, 
+                      payerId: data.payerID, paymentId: data.paymentID, amount: res.totalAmount, currency: res.currency});
+                    postData('/api/admin/product/inventory', {userId});
+                    postData('/api/cart/status', {userId});
+                  } else if (guestId) {
+                    postData('/api/store-guest-payment',{guestId, orderId: data.orderID, 
+                      payerId: data.payerID, paymentId: data.paymentID, amount: res.totalAmount, currency: res.currency});
+                    postData('/api/admin/product/inventory', {guestId});
+                    postData('/api/guestcart/status', {guestId})
+                    setCartItemNumber(0)
+                  }
                 });
                   
             }
           }, '#paypal-button');
     }, [])
     
-      return <div id="paypal-button" className={paypalbtn}></div>
+      return <div id="paypal-button" className={paypalButton}></div>
 }
 

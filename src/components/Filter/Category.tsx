@@ -38,7 +38,6 @@ const CategoryFilterComponent = observer(({store}: CategoryFilterComponentProps)
   const {filterButton, expandIcon, formControl, formControlLabel, formGroup, buttonClear, buttonConfirm} = styles;
   const [anchorEl, setAnchorEl] = useState<EventTarget | null>(null);
   const changeValue = async (e: ChangeEvent<HTMLInputElement>, fieldName: string) => {
-    console.log('inner', store.categoryFilters,'filters', fieldName, 'fieldname', e.target.checked, 'etargetchecked')
       await set(store.categoryFilters, fieldName, e.target.checked);
       store.changeValue(FilterQueryStoreKeys.hack, !store.hack);
   }
@@ -52,7 +51,6 @@ const CategoryFilterComponent = observer(({store}: CategoryFilterComponentProps)
   };
 
   const filters = toJS(store.categoryFilters);
-  //console.log('outer',toJS(store.categoryFilters))
 
   return (
     <div>

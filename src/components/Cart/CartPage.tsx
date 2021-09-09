@@ -37,12 +37,16 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
     setItemsHandler()
   }
   //TODO: figure out the type of res in TS
-  const setItemsHandler = async():Promise<any> => {
+  const setItemsHandler = async() => {
     let res;
-    if (userStore.id) {
-      res = await postData('/api/cart/get', {userId: userStore.id});
-    } else if (localStorage.guestId) {
-      res = await postData('/api/guestcart/get', {guestId: localStorage.guestId});
+    try {
+      if (userStore.id) {
+        res = await postData('/api/cart/get', {userId: userStore.id});
+      } else if (localStorage.guestId) {
+        res = await postData('/api/guestcart/get', {guestId: localStorage.guestId});
+      } else res = {}
+    } catch (error) {
+      res = {}
     }
     setCartItems(res.data);
     setReady(true)
@@ -102,7 +106,7 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
                 </div>
                 <Button variant="contained" className={button} disableElevation>
                   Checkout
-                  {getTotalAmount && <PayPalBox totalAmount={getTotalAmount} userId={userStore.id} />}
+                  {getTotalAmount && <PayPalBox totalAmount={getTotalAmount} userId={userStore.id} guestId={localStorage.guestId}/>}
                 </Button>
             </Typography>
           </Paper>

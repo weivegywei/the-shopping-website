@@ -33,7 +33,6 @@ export const SpecificationValueDropdown = observer(
           onChange={changeValue}
           input={<BootstrapInputForSpecificationValueDropdown />}
         >
-          <option value=''> </option>
           {specificationValueArr.map((item) => <option value={item}>{item}</option>)}
         </NativeSelect>
       </FormControl>

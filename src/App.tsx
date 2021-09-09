@@ -40,7 +40,7 @@ const App = observer(({userStore}) => {
       itemNumber = await getCartItemsNumber(userStore.id);
     } else if (localStorage.guestId) {
       itemNumber = await getGuestCartItemNumber(localStorage.guestId)
-    }
+    } else itemNumber = 0
     setCartItemNumber(itemNumber)
   }
 

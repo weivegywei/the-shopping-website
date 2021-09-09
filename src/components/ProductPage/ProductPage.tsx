@@ -91,7 +91,7 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
                 cartItemStore={cartItemStore} />
               </div>
               <div className={numDiv}>
-                <input type='number' className={input} min='0' max={`${location.state.item.inventory}`} 
+                <input type='number' className={input} defaultValue='1' min='1' max={`${location.state.item.inventory}`} 
                   onChange={setQty}></input>
               </div>
             </div>

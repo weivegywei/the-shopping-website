@@ -17,8 +17,12 @@ export  const getCartItemsNumber = async(userId) => {
 
 export const getGuestCartItemNumber = async(guestId) => {
   if (guestId) {
-    const res = await postData('/api/guestcart/number', {guestId});
-    return res.data
+    try {
+      const res = await postData('/api/guestcart/number', {guestId});
+      return res.data
+    } catch (error) {
+      return 0
+    }
   }
 }
 
