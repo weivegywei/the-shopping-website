@@ -40,7 +40,7 @@ export const InputBox = observer(
           <input type={ type === 'password' && showPassword === true ? 'text' : type } 
           className={ error ? errorinput : input } placeholder={ error? errorMsg : '' } onBlur={onBlur}
           onChange={changeValue} />
-          {type == 'password' ? 
+          {type === 'password' ? 
             <IconButton className={button} onClick={handleClickShowPassword}>
               {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton> : 

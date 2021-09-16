@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
+import { useHistory } from 'react-router';
 import cn from 'classnames';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +14,7 @@ import { UserStoreType } from '../../store/userStore';
 import { CartItemProductType } from './CartItem';
 import { AppContext } from '../../AppContext';
 import { TopBar } from '../Menu/TopBar';
+import { BackToHomeButton } from './BackToHomeButton';
 
 type CartPageProps = {
   userStore: UserStoreType
@@ -20,7 +22,7 @@ type CartPageProps = {
 
 export const CartPage = observer(({userStore}: CartPageProps) => {
   const {rootDiv, root, order, title, itemcard, flexFiller, checkout, amountDiv, amountLabelDiv, amountNum,
-    button, divider, fontWeight } = styles;
+    button, divider, fontWeight, goToShopSuggestion, suggestionDiv } = styles;
   const [cartItems, setCartItems] = useState<CartItemProductType[]>([]);
   const [ ready, setReady ] = useState<boolean>(false);
   const { setOpenNotification, setSuccessMsg, cartItemNumber } = useContext(AppContext);
@@ -48,8 +50,12 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
     } catch (error) {
       res = {}
     }
-    setCartItems(res.data);
-    setReady(true)
+    if (res.data) {
+      setReady(true); 
+      setCartItems(res.data)
+    } else {
+      setCartItems([])
+    }
   }
 
   useEffect(() => {
@@ -60,6 +66,9 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
   const cartOrderValue = Number(cartItemsAmount.toFixed(2));
   const cartDeliveryAmount = 4.00;
   const getTotalAmount =  cartOrderValue ? Number((cartOrderValue + cartDeliveryAmount).toFixed(2)) : 0;
+  const history = useHistory();
+  const handleClick = () => history.push('/');
+  const buttonMsg = 'Go shopping'
   
   return ready ? (
     <>
@@ -113,5 +122,17 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
         </div>
       </div>
     </>
-  ) : null
+  ) : (
+    <>
+      <TopBar userStore={userStore} />
+        <div className={rootDiv}>
+          <div className={suggestionDiv}>
+            <Typography className={goToShopSuggestion} variant='h6'>
+              You have no item in cart. Put some items here!
+            </Typography>
+            <BackToHomeButton onClick={handleClick} buttonMsg={buttonMsg}/>
+          </div>
+        </div>
+    </>
+  )
 });

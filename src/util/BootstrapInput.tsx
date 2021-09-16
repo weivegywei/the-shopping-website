@@ -1,6 +1,9 @@
 import { withStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 
+const inputBoxHeight = '22px';
+const inputBoxWidth = `335px`;
+
 export const BootstrapInput = withStyles((theme) => ({
     root: {
       'label + &': {
@@ -44,4 +47,49 @@ export const BootstrapInputForSpecificationValueDropdown = withStyles((theme) =>
     },
   },
 }))(InputBase);
+
+export const BootstrapInputForCountryDropdown = withStyles((theme) => ({
+  root: {
+    'label + &': {
+      marginTop: theme.spacing(3),
+    },
+  },
+  input: {
+    position: 'relative',
+    width: `${inputBoxWidth}`,
+    height: `${inputBoxHeight}`,
+    padding: '14px 22px 14px 10px',
+    backgroundColor: '#fff',
+    border: '1px solid lightgrey',
+    fontSize: 14,
+    fontWeight: 500,
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    '&:focus': {
+      outline: 'none',
+      border: 'solid 1px black'
+    },
+  }
+}))(InputBase);
+
+export const BootstrapInputForEditStatusDropdown = withStyles((theme) => ({
+  root: {
+    'label + &': {
+      marginTop: theme.spacing(3),
+    },
+  },
+  input: {
+    position: 'relative',
+    width: '262px',
+    height: '22px',
+    backgroundColor: '#e8fdff',
+    border: '1px solid darkgrey',
+    fontSize: 14,
+    fontWeight: 500,
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    '&:focus': {
+      outline: 'none',
+    },
+  }
+}))(InputBase);
+
 

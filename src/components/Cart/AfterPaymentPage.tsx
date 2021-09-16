@@ -15,6 +15,7 @@ export const AfterPaymentPage = () => {
     const paidAmount = location.state.paidAmount;
     const currencyUnit = location.state.currencyUnit;
     const handleClick = () => history.push('/');
+    const buttonMsg = 'Go back'
 
     return (
         <div className={root}>
@@ -27,7 +28,7 @@ export const AfterPaymentPage = () => {
                     Payment Succeed!<br />
                     Order ID: {orderID}
                 </Typography>
-                <BackToHomeButton onClick={handleClick} />
+                <BackToHomeButton onClick={handleClick} buttonMsg={buttonMsg}/>
             </>
             : 
             <Typography variant='h6' className={text}>

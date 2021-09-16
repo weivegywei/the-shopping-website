@@ -6,105 +6,44 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import EditIcon from '@material-ui/icons/Edit';
+//import EditIcon from '@material-ui/icons/Edit';
 import { getData } from '../../../api/getData';
 import { postData } from '../../../api/postData';
-import IconButton from '@material-ui/core/IconButton';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+//import IconButton from '@material-ui/core/IconButton';
+//import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { InfoDialog, InfoItemProps } from '../../Utilities/InfoDialog';
 import { InfoTableDialog, InfoItemType } from '../../Utilities/InfoTableDialog';
 import { EditDialog } from '../../Utilities/EditDialog';
 import { orderStatusStore as store } from '../../../store/orderStatusStore';
 import { observer } from "mobx-react";
 import styles from './OrderList.module.scss';
-
-type UserName = {
-    firstName: string;
-    lastName: string
-}
-
-type Events = {
-    status: string;
-    time: string
-}
-
-type OrderInfoType = {
-    productId: string;
-    quantity: number;
-    specificationValue: string;
-    _id: string;
-}
-
-type CartInfoType = {
-    cartItems: OrderInfoType;
-}
-
-type ResDataMapProps = {
-    _id: string;
-    userInfo: UserName[];
-    cartInfo: CartInfoType;
-    createdAt: string;
-    status: string
-}
-
-type ReturnedTimeProps = {
-    events: Events[]
-}
-
-type UserDataType = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    address: string;
-    country: string
-}
-
-type ListItemProps = {
-    _id: string;
-    cartId: string;
-    userData: UserDataType;
-    createdAt: string;
-    amount: number;
-    status: string;
-    events: Events[]
-}
-
-enum AlignTypes {
-    align = "center"
-}
-
-type tableHeadItemsProps = {
-    entry: string;
-    align?: AlignTypes
-}
-
-const tableHeadItems = [
-    {entry: 'User name & info'},
-    {entry: 'Order info', align: AlignTypes.align},
-    {entry: 'Paid time', align: AlignTypes.align},
-    {entry: 'Order amount', align: AlignTypes.align},
-    {entry: 'Returned status', align: AlignTypes.align},
-    {entry: 'Current status', align: AlignTypes.align},
-    {entry: 'Edit status', align: AlignTypes.align}
-];
+import { UserDataType, ListItemProps, ResDataMapProps, ReturnedTimeProps, Events, tableHeadItems, tableHeadItemsProps} from './OrderList.util'
+import { OrderListTable } from './OrderListTable'
 
 export const OrderList = observer(() => {
     const {container, table, button} = styles;
     const [list, setList] = useState([]);
+    const [guestOrderList, setGuestOrderList] = useState([]);
     const [openUserInfo, setOpenUserInfo] = useState(false);
     const [openStatusInfo, setOpenStatusInfo] = useState(false);
     const [openStatusEdit, setOpenStatusEdit] = useState(false);
     const [openOrderInfo, setOpenOrderInfo] = useState(false);
     const [selectedItem, setSelectedItem] = useState<InfoItemProps[] | UserDataType | ListItemProps | InfoItemType | null>(null);
 
-    const setOrderList = async() => {
+    const getAndSetOrderList = async() => {
         const res = await getData('/api/admin/order/list');
         setList(res.data.map((it: ResDataMapProps) => ({...it, userData: it.userInfo[0]})));
     };
+
+    const getAndSetGuestOrderList = async() => {
+        const res = await getData('/api/admin/guestorder/list');
+        setGuestOrderList(res.data)
+    }
     
     useEffect(() => {
-        setOrderList();
-    },[]);
+        getAndSetOrderList();
+        getAndSetGuestOrderList()
+    },[openStatusEdit]);
 //util
     const returnedTime = (item: ReturnedTimeProps) => {
         const event = item.events?.find(({status}) => status === 'returned');
@@ -119,8 +58,13 @@ export const OrderList = observer(() => {
         setSelectedItem(info);
     };
     
-    const handleOrderInfoClickOpen = async(cartId) => {
-        const res = await postData('/api/admin/order/info', {cartId});
+    const handleOrderInfoClickOpen = async(guestId: string, cartId: string) => {
+        let res;
+        if (guestId) {
+            res = await postData('/api/admin/order/info', {guestId, cartId})
+        } else {
+            res = await postData('/api/admin/order/info', {cartId});
+        }   
         const info = res.data.map(it => {
             const { name, _id, inventory, price, packageSize, _doc: { quantity, specificationValue }} = it;
             return [{fieldName: 'Product Name', fieldValue: name}, {fieldName: 'Product Id', fieldValue: _id}, 
@@ -144,9 +88,18 @@ export const OrderList = observer(() => {
 
     const handleSave = () => {
         //@ts-ignore
-        const editStatus = async() => await postData('/api/admin/order/edit', {id: selectedItem?._id, status: store.status});
-        editStatus();
-        setOrderList();
+        if (selectedItem.guestId) {
+            const editStatus = async() => await postData('/api/admin/order/edit', {   //@ts-ignore
+                id: selectedItem?._id, status: store.status, guestId: selectedItem.guestId
+            });
+            editStatus();
+        } else {
+            //@ts-ignore
+            const editGuestStatus = async() => await postData('/api/admin/order/edit', {id: selectedItem?._id, status: store.status});
+            editGuestStatus();
+        }
+        getAndSetOrderList();
+        getAndSetGuestOrderList()
         setOpenStatusEdit(false);
     };
 
@@ -160,7 +113,7 @@ export const OrderList = observer(() => {
 return (
     <>
         <TableContainer component={Paper} className={container}>
-            <Table className={table}>
+          <Table className={table}>
             <TableHead>
                 <TableRow>
                 {tableHeadItems.map((item: tableHeadItemsProps) => 
@@ -169,44 +122,27 @@ return (
                 </TableRow>
             </TableHead>
             <TableBody>
-                {list.map((item: ListItemProps) => {
-                    return(
-                <TableRow key={item._id}>
-                    <TableCell component='th' scope='row' align='inherit'>
-                        {`${item.userData.firstName} ${item.userData.lastName}`}
-                        <IconButton className={button} onClick={() => handleUserInfoClickOpen(item.userData)}>
-                            <InfoOutlinedIcon color="action" />
-                        </IconButton>
-                    </TableCell>
-                    <TableCell align='center'>
-                        <IconButton className={button} onClick={() => handleOrderInfoClickOpen(item.cartId)}>
-                            <InfoOutlinedIcon color="action" />
-                        </IconButton>
-                    </TableCell>
-                    <TableCell align='center'>
-                        {item.createdAt}
-                    </TableCell>
-                    <TableCell align='center'>
-                        {item.amount}
-                    </TableCell>
-                    <TableCell align='center'>
-                        {returnedTime(item) ? 'true' : 'false'}
-                    </TableCell>
-                    <TableCell align='center'>
-                        {item.status}
-                        <IconButton className={button} onClick={() => handleStatusInfoClickOpen(item.events)}>
-                            <InfoOutlinedIcon color="action" />
-                        </IconButton>
-                    </TableCell>
-                    <TableCell align='center'>
-                        <IconButton className={button} onClick={() => handleStatusEditOpen(item)}>
-                            <EditIcon color="action" />
-                        </IconButton>
-                    </TableCell>
-                </TableRow>
-                )})}
+                {list.map((item: ListItemProps) => 
+                    <OrderListTable item={item} 
+                        handleUserInfoClickOpen={handleUserInfoClickOpen} 
+                        handleOrderInfoClickOpen={handleOrderInfoClickOpen} 
+                        returnedTime={returnedTime} 
+                        handleStatusInfoClickOpen={handleStatusInfoClickOpen} 
+                        handleStatusEditOpen={handleStatusEditOpen}
+                    />
+                )}
             </TableBody>
-            </Table>
+            <TableBody>
+                {guestOrderList.map((item: ListItemProps) =>
+                    <OrderListTable item={item} 
+                        handleOrderInfoClickOpen={handleOrderInfoClickOpen} 
+                        returnedTime={returnedTime} 
+                        handleStatusInfoClickOpen={handleStatusInfoClickOpen} 
+                        handleStatusEditOpen={handleStatusEditOpen}
+                    />
+                )}
+            </TableBody>
+          </Table>
         </TableContainer>
         {openUserInfo && <InfoDialog 
             open={openUserInfo} 
@@ -234,3 +170,41 @@ return (
     </>
     );
 })
+
+
+{/* {list.map((item: ListItemProps) => {
+                    return(
+                    <TableRow key={item._id}>
+                        <TableCell component='th' scope='row' align='inherit'>
+                            {`${item.userData.firstName} ${item.userData.lastName}`}
+                            <IconButton className={button} onClick={() => handleUserInfoClickOpen(item.userData)}>
+                                <InfoOutlinedIcon color="action" />
+                            </IconButton>
+                        </TableCell>
+                        <TableCell align='center'>
+                            <IconButton className={button} onClick={() => handleOrderInfoClickOpen(item.cartId)}>
+                                <InfoOutlinedIcon color="action" />
+                            </IconButton>
+                        </TableCell>
+                        <TableCell align='center'>
+                            {item.createdAt}
+                        </TableCell>
+                        <TableCell align='center'>
+                            {item.amount}
+                        </TableCell>
+                        <TableCell align='center'>
+                            {returnedTime(item) ? 'true' : 'false'}
+                        </TableCell>
+                        <TableCell align='center'>
+                            {item.status}
+                            <IconButton className={button} onClick={() => handleStatusInfoClickOpen(item.events)}>
+                                <InfoOutlinedIcon color="action" />
+                            </IconButton>
+                        </TableCell>
+                        <TableCell align='center'>
+                            <IconButton className={button} onClick={() => handleStatusEditOpen(item)}>
+                                <EditIcon color="action" />
+                            </IconButton>
+                        </TableCell>
+                    </TableRow>
+                )})} */}

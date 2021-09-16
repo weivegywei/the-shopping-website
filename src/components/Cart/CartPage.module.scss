@@ -87,3 +87,13 @@
     font-weight: bold;
 }
 
+.goToShopSuggestion {
+    color: $secondaryGreen;
+}
+
+.suggestionDiv {
+    display: flex;
+    height: 390px;
+    justify-content: center; 
+    flex-direction: column;
+}
