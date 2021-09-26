@@ -1,6 +1,4 @@
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { userStore } from '../../store/userStore';
+import {Button, Typography} from '@material-ui/core';
 import styles from './LogOutButton.module.scss';
 
 export const LogOutButton = ({logoutAction}) => {

@@ -1,12 +1,5 @@
 import { makeAutoObservable } from "mobx";
 
-enum UserStoreKeys {
-    firstName = 'firstName',
-    lastName = 'lastName',
-    email = 'email',
-    id = 'id'
-}
-
 type ValuesProps = {
     firstName: string;
     lastName: string;

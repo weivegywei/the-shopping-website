@@ -10,11 +10,6 @@ import styles from './ManufacturerCreate.module.scss';
 import { urlValidityPattern } from '../../../const/constants';
 import { AppContext } from '../../../AppContext';
 
-const defaultFormFields = [
-    {primary: 'Manufacturer name', type: 'text', key: ManufacturerStoreKeys.manufacturerName, error: false, errorMessage: ''},
-    {primary: "Logo URL", type: 'text', key: ManufacturerStoreKeys.logoUrl, error: false, errorMessage: ''}
-];
-
 type ManufacturerCreateComponentProps = {
   store: manufacturerStoreType;
 }
@@ -25,7 +20,6 @@ export const ManufacturerCreateComponent = observer(
   ( {store}: ManufacturerCreateComponentProps ) => {
   const {root, box, title, button} = styles;
   const [errorMessage, setErrorMessage] = useState<string>();
-  //const [formFields, setFormFields] = useState(defaultFormFields);
   const [disabled, setDisabled] = useState(true);
   const { setNotificationState, setOpenNotification, setErrorMsg, setSuccessMsg } = useContext(AppContext);
 
@@ -43,22 +37,13 @@ export const ManufacturerCreateComponent = observer(
     return res;
   };
 
-  //util
   useEffect(() => {
     const urlValidation = urlValidityPattern.test(store.logoUrl); //output boolean value
     if (urlValidation) {
       setDisabled(false);
-      //setFormFields(defaultFormFields);
     } else if (!urlValidation && store.logoUrl.length) {
       setErrorMessage('Invalid Url');
-      //const newFormFields = [...defaultFormFields];
-      //const errorField = newFormFields.find((it) => it.key === 'logoUrl');
-      //if(errorField) {
-        //errorField.error = true;
-        //errorField.errorMessage = 'Invalid Url';
-        //setFormFields(newFormFields);
         setDisabled(true);
-      //}
     } 
   }, [store.logoUrl])
 

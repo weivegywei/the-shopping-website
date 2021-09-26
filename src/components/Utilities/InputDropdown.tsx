@@ -2,7 +2,7 @@ import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { BootstrapInput } from '../../util/BootstrapInput';
 import { observer } from 'mobx-react-lite';
-import { ProductStoreKeys, ProductStoreType, CategoryType } from '../../store/productStore';
+import { CategoryType } from '../../store/productStore';
 import { ChangeEvent } from 'react';
 import styles from './InputDropdown.module.scss';
 
@@ -15,7 +15,6 @@ type InputDropdownProps = {
 export const InputDropdown = observer(
   ({onChange, selectValue, options}: InputDropdownProps) => {
   const { margin } = styles;
-  //const changeValue = (e: ChangeEvent<HTMLSelectElement>) => {store.changeValue(ProductStoreKeys.category, e.target.value)};
 
   return (
     <div>

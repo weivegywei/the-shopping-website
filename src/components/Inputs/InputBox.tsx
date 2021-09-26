@@ -1,11 +1,7 @@
-import {useState} from 'react';
-import Typography from '@material-ui/core/Typography';
-import Input from "@material-ui/core/Input";
+import { useState, ChangeEventHandler} from 'react';
+import { Typography, FormHelperText, IconButton} from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import styles from './InputBox.module.scss';
-import { ChangeEventHandler } from 'react';
-import IconButton from "@material-ui/core/IconButton";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
@@ -16,11 +12,6 @@ type InputBoxProps = {
   errorMsg?: string;
   changeValue: ChangeEventHandler<HTMLInputElement>;
   onBlur?: () => void
-}
-
-type ValuesType = {
-  password: string,
-  showPassword: boolean
 }
 
 export const InputBox = observer(

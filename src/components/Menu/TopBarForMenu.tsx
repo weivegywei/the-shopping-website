@@ -14,6 +14,7 @@ import styles from './TopBarForMenu.module.scss'
 import { useContext } from 'react';
 import { AppContext } from '../../AppContext';
 import { UserStoreType } from '../../store/userStore';
+import myWeiStoreLogo from '../Pics/myWeiStoreLogo.png';
 
 type TopBarForMenuProps = {
     store: UserStoreType;
@@ -22,8 +23,8 @@ type TopBarForMenuProps = {
 }
 
 export const TopBarForMenu = ({store, handleGetAllProduct, handleLogout}: TopBarForMenuProps) => {
-    const {header, link, text, login, margin, padding, siteName, loginDiv, welcome, span, logout, 
-        icons, topBar} = styles;
+    const {header, link, text, login, margin, padding, siteName, loginDiv, welcome, span, logout, icons, 
+      topBar, logo} = styles;
     const { cartItemNumber } = useContext(AppContext)
 
     return (
@@ -31,9 +32,9 @@ export const TopBarForMenu = ({store, handleGetAllProduct, handleLogout}: TopBar
           <Toolbar>
             <Toolbar className={siteName}>
               <Typography variant="h5" noWrap >
-                  <Link to="/" className={cn(header, link)} onMouseDown={handleGetAllProduct}>
-                    My Wei Shop
-                  </Link>
+                <Link to="/" className={cn(header, link)} onMouseDown={handleGetAllProduct}>
+                  My Wei Shop
+                </Link>
               </Typography>
             </Toolbar>
             <SearchBar />

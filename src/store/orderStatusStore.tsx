@@ -1,5 +1,4 @@
 import { makeAutoObservable } from "mobx";
-import { orderStatus } from '../const/constants'
 
 export enum OrderStatusStoreKey {
     status = 'status'

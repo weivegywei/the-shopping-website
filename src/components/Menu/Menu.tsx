@@ -14,7 +14,8 @@ import styles from './Menu.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { getFilters } from '../../App.util';
 import { AppContext } from '../../AppContext';
-import { logoutAction } from '../../util/helper'
+import { logoutAction } from '../../util/helper';
+import { getData } from '../../api/getData';
 
 type MenuProps = {
   store: UserStoreType;
@@ -30,7 +31,7 @@ export const Menu = ({store}: MenuProps) =>
 const MenuComponent = observer(({store}: MenuComponentProps) => {
     const {root, hide, menuButton, filterDiv, filterBar, btnAndDrawer, drawerOpen} = styles;
     const [open, setOpen] = useState(false);
-    const { setMenuCategory, setOpenNotification, setSuccessMsg, setCartItemNumber } = useContext(AppContext);
+    const { setMenuCategory, setOpenNotification, setSuccessMsg, setCartItemNumber, setAllManufacturer } = useContext(AppContext);
 
     const handleDrawerOpen = () => { setOpen(true) };
 
@@ -46,7 +47,15 @@ const MenuComponent = observer(({store}: MenuComponentProps) => {
     };
 
     useEffect(()=>{
-      getFilters();
+      const getAndSetManufacturers = async() => {
+        const res = await getData('/api/product/filter');
+        if (res.data) {
+          const allM = res.data.allManufacturer.map(m => m.name)
+          setAllManufacturer(allM)
+        }
+      }
+      getAndSetManufacturers();
+      getFilters()
     },[])
   
     return (
@@ -78,36 +87,3 @@ const MenuComponent = observer(({store}: MenuComponentProps) => {
     );
   })
 
-/* const useStylesForMenu = makeStyles((theme) => ({
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    background: '#8ba48a'
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  },
-})); */

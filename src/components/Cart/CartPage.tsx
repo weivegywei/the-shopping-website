@@ -25,6 +25,7 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
     button, divider, fontWeight, goToShopSuggestion, suggestionDiv } = styles;
   const [cartItems, setCartItems] = useState<CartItemProductType[]>([]);
   const [ ready, setReady ] = useState<boolean>(false);
+  const [ loading , setLoading ] = useState<boolean>(true);
   const { setOpenNotification, setSuccessMsg, cartItemNumber } = useContext(AppContext);
   
   const setCartItemsAndNotificationAfterDeleteHandler = () => {
@@ -52,8 +53,10 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
     }
     if (res.data) {
       setReady(true); 
+      setLoading(false)
       setCartItems(res.data)
     } else {
+      setLoading(false)
       setCartItems([])
     }
   }
@@ -70,7 +73,9 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
   const handleClick = () => history.push('/');
   const buttonMsg = 'Go shopping'
   
-  return ready ? (
+  return loading ?
+    null :
+  ready ? (
     <>
       <TopBar userStore={userStore} />
       <div className={rootDiv}>

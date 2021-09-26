@@ -23,9 +23,9 @@ export const EditStatusDropdown = observer(({store}: EditStatusDropdownProps) =>
           onChange={changeValue}
           input={<BootstrapInputForEditStatusDropdown />}
         >
-          {orderStatus.map((item) => {
+          {orderStatus.map((item) => 
             <option value={`${item}`}>{item}</option>
-          })}
+          )}
         </NativeSelect>
       </FormControl>
     </div>

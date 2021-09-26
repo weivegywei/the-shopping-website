@@ -18,8 +18,7 @@ type OrderListTableProps = {
 export const OrderListTable = ({ item, handleUserInfoClickOpen, handleOrderInfoClickOpen, returnedTime, 
     handleStatusInfoClickOpen, handleStatusEditOpen }: OrderListTableProps) => {
         const { button } = styles;
-        const getUserFullName = (item) => item.userData.firstName + item.userData.lastName
-
+//TODO: show user full name
     return (
         <TableRow key={item._id}>
             <TableCell component='th' scope='row' align='inherit'>

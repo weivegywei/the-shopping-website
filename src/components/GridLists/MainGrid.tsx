@@ -43,7 +43,7 @@ export const MainGrid = () =>
 const MainGridComponent = observer(({store, userStore}: MainGridComponentProps) => {
   const {root, card, row} = styles;
   const [list, setList] = useState<MainGridItemType[]>([]);
-  const { menuCategory } = useContext(AppContext);
+  const { menuCategory, manufacturerFilter } = useContext(AppContext);
 
   useEffect(() => {try{
     const res = getData('/api/homepage/maingrid');
@@ -58,7 +58,7 @@ const MainGridComponent = observer(({store, userStore}: MainGridComponentProps) 
   useEffect(() => {
     const getFilterResults = async () => {
       const res = await postData('/api/product/filter/result', {
-        manufacturerFilters: Object.keys(toJS(store.manufacturerFilters)),
+        manufacturerFilters: manufacturerFilter,
         categoryFilters: Object.keys(toJS(store.categoryFilters)),
         priceFilterMin: store.priceFilterMin,
         priceFilterMax: store.priceFilterMax
@@ -68,7 +68,7 @@ const MainGridComponent = observer(({store, userStore}: MainGridComponentProps) 
         }
     };
     getFilterResults();
-  },[store.filter])
+  },[manufacturerFilter, store.filter])
 
   useEffect(() => {
     const getMenuFilteredResults = async() => {

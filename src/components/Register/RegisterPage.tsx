@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import cn from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from "react-router-dom";

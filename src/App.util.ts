@@ -35,7 +35,8 @@ export const getUserInfo = async () => {
 
 export const getFilters = async() => {
   const res = await getData('/api/product/filter');
-  filterQueryStore.changeValue(FilterQueryStoreKeys.allManufacturer, res.data.allManufacturer);
+  //filterQueryStore.changeValue(FilterQueryStoreKeys.allManufacturer, res.data.allManufacturer);
   filterQueryStore.changeValue(FilterQueryStoreKeys.minPrice, res.data.minPrice);
   filterQueryStore.changeValue(FilterQueryStoreKeys.maxPrice, res.data.maxPrice);
 };
+

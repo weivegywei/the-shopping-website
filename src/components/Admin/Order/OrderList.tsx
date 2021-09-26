@@ -1,16 +1,7 @@
 import { useEffect, useState } from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-//import EditIcon from '@material-ui/icons/Edit';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@material-ui/core';
 import { getData } from '../../../api/getData';
 import { postData } from '../../../api/postData';
-//import IconButton from '@material-ui/core/IconButton';
-//import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { InfoDialog, InfoItemProps } from '../../Utilities/InfoDialog';
 import { InfoTableDialog, InfoItemType } from '../../Utilities/InfoTableDialog';
 import { EditDialog } from '../../Utilities/EditDialog';
@@ -21,7 +12,7 @@ import { UserDataType, ListItemProps, ResDataMapProps, ReturnedTimeProps, Events
 import { OrderListTable } from './OrderListTable'
 
 export const OrderList = observer(() => {
-    const {container, table, button} = styles;
+    const {container, table} = styles;
     const [list, setList] = useState([]);
     const [guestOrderList, setGuestOrderList] = useState([]);
     const [openUserInfo, setOpenUserInfo] = useState(false);
@@ -171,40 +162,3 @@ return (
     );
 })
 
-
-{/* {list.map((item: ListItemProps) => {
-                    return(
-                    <TableRow key={item._id}>
-                        <TableCell component='th' scope='row' align='inherit'>
-                            {`${item.userData.firstName} ${item.userData.lastName}`}
-                            <IconButton className={button} onClick={() => handleUserInfoClickOpen(item.userData)}>
-                                <InfoOutlinedIcon color="action" />
-                            </IconButton>
-                        </TableCell>
-                        <TableCell align='center'>
-                            <IconButton className={button} onClick={() => handleOrderInfoClickOpen(item.cartId)}>
-                                <InfoOutlinedIcon color="action" />
-                            </IconButton>
-                        </TableCell>
-                        <TableCell align='center'>
-                            {item.createdAt}
-                        </TableCell>
-                        <TableCell align='center'>
-                            {item.amount}
-                        </TableCell>
-                        <TableCell align='center'>
-                            {returnedTime(item) ? 'true' : 'false'}
-                        </TableCell>
-                        <TableCell align='center'>
-                            {item.status}
-                            <IconButton className={button} onClick={() => handleStatusInfoClickOpen(item.events)}>
-                                <InfoOutlinedIcon color="action" />
-                            </IconButton>
-                        </TableCell>
-                        <TableCell align='center'>
-                            <IconButton className={button} onClick={() => handleStatusEditOpen(item)}>
-                                <EditIcon color="action" />
-                            </IconButton>
-                        </TableCell>
-                    </TableRow>
-                )})} */}

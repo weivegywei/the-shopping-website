@@ -21,21 +21,6 @@ enum AlignType {
   align = 'right'
 }
 
-enum ProductListItemKeys {
-  _id = '_id',
-  specificationDescr = 'specificationDescr',
-  name = 'name',
-  manufacturerId = 'manufacturerId',
-  price = 'price',
-  imageUrl = 'imageUrl',
-  inventory = 'inventory',
-  description = 'description',
-  packageSize = 'packageSize',
-  availability = 'availability',
-  specification = 'specification',
-  category = 'category'
-}
-
 type TableHeadItems = {
   entry: string;
   align?: AlignType

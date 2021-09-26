@@ -1,18 +1,10 @@
-import { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import { useState, useEffect, useContext, ChangeEvent } from 'react';
 import { FilterMenu } from '../../util/FilterMenu';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { filterQueryStore as store, FilterQueryStoreType, FilterQueryStoreKeys } from '../../store/filterStore';
-import { observer } from "mobx-react";
-import { set, toJS } from 'mobx';
+import { Checkbox, FormControl, FormGroup, FormControlLabel, Button, withStyles } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import styles from './Manufacturer.module.scss';
-import { ChangeEvent } from 'react';
+import { AppContext } from '../../AppContext';
 
 const StyledMenu = withStyles({
   paper: {
@@ -27,18 +19,32 @@ const StyledMenu = withStyles({
   <FilterMenu props={props} />
 ));
 
-type ManufacturerFilterComponentProps = {
-  store: FilterQueryStoreType;
+type ManufacturerItem = {
+  name: string,
+  state: boolean
 }
 
-export const ManufacturerFilter = () => <ManufacturerFilterComponent store={store} />
+export const ManufacturerFilter = () => {
+  const { filterButton, expandIcon, formGroup, formControlLabel, buttonClear, buttonConfirm } = styles;
+  const [ anchorEl, setAnchorEl ] = useState<EventTarget | null>(null);
+  const { allManufacturer, setManufacturerFilter } = useContext(AppContext);
+  const [ manufacturerSelection, setManufacturerSelection ] = useState<ManufacturerItem[]>();
 
-const ManufacturerFilterComponent = observer(({store}: ManufacturerFilterComponentProps) => {
-  const {filterButton, expandIcon, formGroup, formControlLabel, buttonClear, buttonConfirm} = styles;
-  const [anchorEl, setAnchorEl] = useState<EventTarget | null>(null);
-  const changeValue = async (e: ChangeEvent<HTMLInputElement>, fieldName: string) => {
-      await set(store.manufacturerFilters, fieldName, e.target.checked);
-      store.changeValue(FilterQueryStoreKeys.hack, !store.hack);
+  useEffect(() => {
+    if(allManufacturer) {
+      setManufacturerSelection(allManufacturer.map((item) => ({name: item, state: false})))
+}
+  }, [allManufacturer])
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, item: ManufacturerItem) => {
+    const newManufacturerSelection = [...manufacturerSelection];
+    if (e.target.checked) {
+      newManufacturerSelection.find(it => it.name === item.name).state = true;
+      setManufacturerSelection(newManufacturerSelection);
+    } else {
+      newManufacturerSelection.find(it => it.name === item.name).state = false;
+      setManufacturerSelection(newManufacturerSelection);
+    }
   }
 
   const handleClick = (e: ChangeEvent<EventTarget>) => {
@@ -49,39 +55,37 @@ const ManufacturerFilterComponent = observer(({store}: ManufacturerFilterCompone
     setAnchorEl(null);
   };
 
-  const filters: any = toJS(store.manufacturerFilters);
-
   return (
-    <div>
-      <Button
-        variant="contained"
-        className={filterButton}
-        onClick={handleClick}
-      >
+    manufacturerSelection ? <div>
+      <Button variant="contained" className={filterButton} onClick={handleClick}>
         Manufacturer
         {Boolean(anchorEl) ? <ExpandLessIcon className={expandIcon} /> : <ExpandMoreIcon className={expandIcon} />}
       </Button>
       <StyledMenu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
         <FormControl component="fieldset">
           <FormGroup className={formGroup}>
-            {store.allManufacturer.map((item) => 
+            {manufacturerSelection.map((item) => 
             <FormControlLabel
-              key={item.name}
-              className={formControlLabel}
-              control={<Checkbox color='default' onChange={(e) => changeValue(e, item.name)}  
-              name={item.name} checked={Boolean(filters[item.name])}/>}
-              label={item.name}
+              key={item.name} className={formControlLabel} label={item.name}
+              control={<Checkbox color='default' onChange={(e) => handleChange(e, item)}  
+              name={item.name} checked={item.state}/>}
               />
             )}
             <div>
                 <button className={buttonClear} onClick={()=>{
-                  store.changeValue(FilterQueryStoreKeys.filter, !store.filter)
-                  store.changeValue(FilterQueryStoreKeys.manufacturerFilters,{})}}>Clear</button>
-                <button className={buttonConfirm} onClick={()=>store.changeValue(FilterQueryStoreKeys.filter, !store.filter)}>Confirm</button>
+                  setManufacturerFilter([])
+                  setManufacturerSelection(allManufacturer.map((item) => ({name: item, state: false})))}}
+                >
+                  Clear</button>
+                <button className={buttonConfirm} onClick={()=>{
+                  setManufacturerFilter(manufacturerSelection.filter(it => it.state === true).map(it => it.name))}}
+                >
+                  Confirm</button>
             </div>
           </FormGroup>
         </FormControl>
       </StyledMenu>
-    </div>
+    </div> : null
   );
-})
+}
+
