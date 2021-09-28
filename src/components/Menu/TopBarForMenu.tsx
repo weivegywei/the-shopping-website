@@ -28,7 +28,7 @@ export const TopBarForMenu = ({store, handleGetAllProduct, handleLogout}: TopBar
     const { cartItemNumber } = useContext(AppContext)
 
     return (
-        <AppBar position='relative' className={topBar}>
+        <AppBar position='relative' className={topBar} elevation={0}>
           <Toolbar>
             <Toolbar className={siteName}>
               <Typography variant="h5" noWrap >

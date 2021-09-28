@@ -10,7 +10,8 @@ const StyledMenu = withStyles({
   paper: {
     border: '1px solid #d3d4d5',
     height: 500,
-    width: 223
+    width: 223,
+    overflowY: 'hidden'
   },
   list: {
     padding: 0,
@@ -19,14 +20,30 @@ const StyledMenu = withStyles({
   <FilterMenu props={props} />
 ));
 
+/* const MenuForButtons = withStyles({
+  paper: {
+    display: 'flex',
+    border: '1px solid #d3d4d5',
+    height: 35,
+    width: 223,
+    marginTop: 465
+  },
+  list: {
+    padding: 0,
+  }
+})((props: {open: boolean; anchorEl: any; keepMounted: boolean; onClose: () => void}) => (
+  <FilterMenu props={props} />
+));
+ */
 type ManufacturerItem = {
   name: string,
   state: boolean
 }
 
 export const ManufacturerFilter = () => {
-  const { filterButton, expandIcon, formGroup, formControlLabel, buttonClear, buttonConfirm } = styles;
+  const { filterButton, expandIcon, formGroup, formControlLabel, buttonDiv, buttonClear, buttonConfirm, menuDiv } = styles;
   const [ anchorEl, setAnchorEl ] = useState<EventTarget | null>(null);
+  //const [ buttonAnchorEl, setButtonAnchorEl ] = useState<any>(null);
   const { allManufacturer, setManufacturerFilter } = useContext(AppContext);
   const [ manufacturerSelection, setManufacturerSelection ] = useState<ManufacturerItem[]>();
 
@@ -49,10 +66,12 @@ export const ManufacturerFilter = () => {
 
   const handleClick = (e: ChangeEvent<EventTarget>) => {
     setAnchorEl(e.currentTarget);
+    //setButtonAnchorEl(StyledMenu);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    //setButtonAnchorEl(null)
   };
 
   return (
@@ -62,7 +81,7 @@ export const ManufacturerFilter = () => {
         {Boolean(anchorEl) ? <ExpandLessIcon className={expandIcon} /> : <ExpandMoreIcon className={expandIcon} />}
       </Button>
       <StyledMenu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-        <FormControl component="fieldset">
+        <FormControl component="fieldset" className={menuDiv}>
           <FormGroup className={formGroup}>
             {manufacturerSelection.map((item) => 
             <FormControlLabel
@@ -71,19 +90,22 @@ export const ManufacturerFilter = () => {
               name={item.name} checked={item.state}/>}
               />
             )}
-            <div>
-                <button className={buttonClear} onClick={()=>{
-                  setManufacturerFilter([])
-                  setManufacturerSelection(allManufacturer.map((item) => ({name: item, state: false})))}}
-                >
-                  Clear</button>
-                <button className={buttonConfirm} onClick={()=>{
-                  setManufacturerFilter(manufacturerSelection.filter(it => it.state === true).map(it => it.name))}}
-                >
-                  Confirm</button>
-            </div>
           </FormGroup>
         </FormControl>
+      
+      <div>
+        
+            <button className={buttonClear} onClick={()=>{
+              setManufacturerFilter([])
+              setManufacturerSelection(allManufacturer.map((item) => ({name: item, state: false})))}}
+            >
+              Clear</button>
+            <button className={buttonConfirm} onClick={()=>{
+              setManufacturerFilter(manufacturerSelection.filter(it => it.state === true).map(it => it.name))}}
+            >
+              Confirm</button>
+        
+      </div>
       </StyledMenu>
     </div> : null
   );

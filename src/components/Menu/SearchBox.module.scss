@@ -19,23 +19,27 @@
     max-width: 500px;
     min-width: 150px;
     width: $searchBoxWidth;
-    height: 173px;
-    border: solid 1px gray;
+    max-height: 173px;
+    border: solid 1px $mainGreen;
     background: white;
     color: black;
     text-align: start;
     font-size: 13px;
 }
 
-.li {
-    display: flex;
-    margin: 3px 5px 3px 0;
-    align-items: center;
+.itemDiv {
     color: black;
     &:hover {
-      cursor: pointer;
-      background: #fcfcf0;
-    }
+        cursor: pointer;
+        background: $backgroundGreen;
+        color: white
+      }
+}
+
+.li {
+    display: flex;
+    margin: 3px 5px 3px 5px;
+    align-items: center;
 }
 
 .searchDiv {
@@ -54,7 +58,7 @@
 .list {
     list-style: none;
     margin: 4px 0 4px 0;
-    padding: 0 0 0 10px
+    padding: 0 
 }
 
 .itemName {

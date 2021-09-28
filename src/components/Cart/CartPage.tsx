@@ -51,12 +51,13 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
     } catch (error) {
       res = {}
     }
-    if (res.data) {
+    if (res.data && res.data.length) {
       setReady(true); 
       setLoading(false)
       setCartItems(res.data)
     } else {
       setLoading(false)
+      setReady(false)
       setCartItems([])
     }
   }

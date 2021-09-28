@@ -55,11 +55,13 @@ export const CartItem = ({
   };
   
   const handleDelete = async(item: CartItemProductType) => {
+    let res;
     if (userStore.id) {
-      await postData('/api/cart/delete', {userId: userStore.id, cartItemId: _id})
+      res = await postData('/api/cart/delete', {userId: userStore.id, cartItemId: _id})
     } else if (localStorage.guestId) {
-      await postData('/api/guestcart/delete', {guestId: localStorage.guestId, cartItemId: _id})
+      res = await postData('/api/guestcart/delete', {guestId: localStorage.guestId, cartItemId: _id})
     }
+    return res
   }
 
   const itemQuantityChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -70,10 +72,12 @@ export const CartItem = ({
   };
 
   const handleConfirm = (item: CartItemProductType) => {
-      handleDelete(item);
-      setCartItemNumber(cartItemNumber - quantity);
+    let res = handleDelete(item);
+    if (res) {
       setCartItemsAndNotificationAfterDeleteHandler();
+      setCartItemNumber(cartItemNumber - quantity);
       setOpenAlert(false);
+    }
   }
 
   return (  

@@ -15,7 +15,7 @@ type SearchBoxItemType = {
 }
 
 export const SearchBar = observer(() => {
-  const {input,dropdown,searchDiv,form, li, list, itemName, flexfiller, priceDiv} = styles;
+  const {input,dropdown,searchDiv,form, itemDiv, li, list, itemName, flexfiller, priceDiv} = styles;
   const [open, setOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<any>([]);
   const changeValue = async(e: ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +51,7 @@ export const SearchBar = observer(() => {
       {open && Boolean(suggestions.length) && <div className={dropdown}>
         <ul className={list}>
           {suggestions.map((item: SearchBoxItemType) =>
-            <div key={item._id.toString()} onMouseDown={(e) => handleClick(e, item)}>
+            <div key={item._id.toString()} onMouseDown={(e) => handleClick(e, item)} className={itemDiv}>
               <li className={li}>
                 <img src={item.imageUrl} alt='' width='26px' height='30px'/>
                 <div className={itemName}>{item.name}</div>

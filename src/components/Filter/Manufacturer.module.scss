@@ -15,6 +15,7 @@
   font-size: 13px!important;
   color: $mainDark;
   padding: 0;
+  width: 206px
 }
 
 .formControlLabel {
@@ -27,6 +28,21 @@
     }
 }
 
+.menuDiv {
+  overflow-y: scroll;
+  height: 465px;
+}
+
+.buttonDiv {
+  position: absolute;
+  top: 630px;
+  transition: opacity 357ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 238ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition-property: opacity, transform;
+    transition-duration: 357ms, 238ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: 0ms, 0ms;
+} 
+
 .buttonClear {
   background: $mainBeige;
   color: $backgroundGreen;
@@ -36,7 +52,7 @@
   font-weight: bold;
   letter-spacing: 0.7px;
   width: 50%;
-  min-width: 103px;
+  min-width: 110.5px;
   height: 35px;
   text-transform: uppercase;
   &:hover {
@@ -61,7 +77,7 @@
   font-weight: bold;
   letter-spacing: 0.7px;
   width: 50%;
-  min-width: 103px;
+  min-width: 110.5px;
   height: 35px;
   text-transform: uppercase;
   &:hover {
