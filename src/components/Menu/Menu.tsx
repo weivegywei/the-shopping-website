@@ -31,7 +31,8 @@ export const Menu = ({store}: MenuProps) =>
 const MenuComponent = observer(({store}: MenuComponentProps) => {
     const {root, hide, menuButton, filterDiv, filterBar, btnAndDrawer, drawerOpen} = styles;
     const [open, setOpen] = useState(false);
-    const { setMenuCategory, setOpenNotification, setSuccessMsg, setCartItemNumber, setAllManufacturer } = useContext(AppContext);
+    const { setMenuCategory, setOpenNotification, setSuccessMsg, setCartItemNumber, setAllManufacturer, 
+      setWishlistItemNumber } = useContext(AppContext);
 
     const handleDrawerOpen = () => { setOpen(true) };
 
@@ -42,6 +43,7 @@ const MenuComponent = observer(({store}: MenuComponentProps) => {
     const handleLogout = () => {
       logoutAction(store)
       setCartItemNumber(0)
+      setWishlistItemNumber(0)
       setOpenNotification(true);
       setSuccessMsg('You have successfully logged out.')
     };
@@ -68,6 +70,7 @@ const MenuComponent = observer(({store}: MenuComponentProps) => {
               onClick={handleDrawerOpen}
               edge="start"
               className={clsx(menuButton, {[hide]: open})}
+              data-test='homepage-menu-openButton'
             >
               <MenuIcon />
             </IconButton>

@@ -2,11 +2,7 @@ import './App.scss';
 import { useEffect, useContext } from 'react';
 import { Menu } from './components/Menu/Menu';
 import { MainGrid } from './components/GridLists/MainGrid';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ProductPage } from './components/ProductPage/ProductPage';
 import { LoginPage } from './components/Login/LoginPage';
 import { CartPage } from './components/Cart/CartPage';
@@ -14,12 +10,13 @@ import { ProductCreate } from './components/Admin/Product/ProductCreate';
 import { ProductList } from './components/Admin/Product/ProductList';
 import { RegisterPage } from './components/Register/RegisterPage';
 import { observer } from 'mobx-react';
-import { getUserInfo, getCartItemsNumber, getGuestCartItemNumber } from './App.util';
+import { getUserInfo, getCartItemsNumber, getGuestCartItemNumber, getWishlistItemNumber } from './App.util';
 import { ManufacturerCreate } from './components/Admin/Manufacturer/ManufacturerCreate';
 import { AfterPaymentPage } from './components/Cart/AfterPaymentPage';
 import { OrderList } from './components/Admin/Order/OrderList';
 import { NotificationSnackbar } from './components/Utilities/Snackbar';
 import { AppContext, useAppContext } from './AppContext';
+import { WishlistPage } from './components/Wishlist/WishlistPage';
 
 export const AppWrapper = (props) => 
   <AppContext.Provider value={useAppContext()}>
@@ -27,26 +24,32 @@ export const AppWrapper = (props) =>
   </AppContext.Provider>
 
 const App = observer(({userStore}) => {
-  const { notificationState, openNotification, setOpenNotification, errorMsg, successMsg, 
-    setCartItemNumber } = useContext(AppContext);
+  const { notificationState, openNotification, setOpenNotification, errorMsg, successMsg, setCartItemNumber,
+    setWishlistItemNumber } = useContext(AppContext);
 
   useEffect(() => {
     getUserInfo();
   }, []);
 
-  const fetchAndSetCartItemNum = async() => {
-    let itemNumber: number;
+  const fetchAndSetCartAndWishlistItemNum = async() => {
+    let cartItemNumber: number, listItemNumber: number;
     if (userStore.id) {
-      itemNumber = await getCartItemsNumber(userStore.id);
+      cartItemNumber = await getCartItemsNumber(userStore.id);
+      listItemNumber = await getWishlistItemNumber(userStore.id)
     } else if (localStorage.guestId) {
-      itemNumber = await getGuestCartItemNumber(localStorage.guestId)
-    } else itemNumber = 0
-    setCartItemNumber(itemNumber)
+      cartItemNumber = await getGuestCartItemNumber(localStorage.guestId)
+      listItemNumber = await getWishlistItemNumber(localStorage.guestId)
+    } else {
+      cartItemNumber = 0;
+      listItemNumber = 0
+    }
+    setCartItemNumber(cartItemNumber)
+    setWishlistItemNumber(listItemNumber)
   }
 
   useEffect(() => {
     if(userStore.id || localStorage.guestId) {
-      fetchAndSetCartItemNum()
+      fetchAndSetCartAndWishlistItemNum()
     }
   },[userStore.id, localStorage.guestId])
 
@@ -73,6 +76,11 @@ const App = observer(({userStore}) => {
           <Route exact path="/cart">
             <div className="App">
               <CartPage userStore={userStore} />
+            </div>
+          </Route>
+          <Route exact path="/wishlist">
+            <div className="App">
+              <WishlistPage userStore={userStore} />
             </div>
           </Route>
           <Route exact path="/admin/product/create">

@@ -8,17 +8,28 @@ export const getUser = () => {
     return postData('/api/user', {token: userToken});
 };
 
-export  const getCartItemsNumber = async(userId) => {
+export  const getCartItemsNumber = async(userId: string) => {
   if (userId) {
     const res = await postData('/api/cart/number', {userId});
     return res.data
   }
 }
 
-export const getGuestCartItemNumber = async(guestId) => {
+export const getGuestCartItemNumber = async(guestId: string) => {
   if (guestId) {
     try {
       const res = await postData('/api/guestcart/number', {guestId});
+      return res.data
+    } catch (error) {
+      return 0
+    }
+  }
+}
+
+export const getWishlistItemNumber = async(ownerId: string) => {
+  if (ownerId) {
+    try {
+      const res = await postData('/api/wishlist/number', {ownerId});
       return res.data
     } catch (error) {
       return 0

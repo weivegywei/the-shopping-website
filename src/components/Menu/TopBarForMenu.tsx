@@ -25,7 +25,7 @@ type TopBarForMenuProps = {
 export const TopBarForMenu = ({store, handleGetAllProduct, handleLogout}: TopBarForMenuProps) => {
     const {header, link, text, login, margin, padding, siteName, loginDiv, welcome, span, logout, icons, 
       topBar, logo} = styles;
-    const { cartItemNumber } = useContext(AppContext)
+    const { cartItemNumber, wishlistItemNumber } = useContext(AppContext)
 
     return (
         <AppBar position='relative' className={topBar} elevation={0}>
@@ -59,9 +59,13 @@ export const TopBarForMenu = ({store, handleGetAllProduct, handleLogout}: TopBar
                   </StyledBadge>
                 </IconButton>
               </Link>
-              <IconButton className={icons}>
-                <FavoriteBorderIcon />
-              </IconButton>
+              <Link to="/wishlist" className={link}>
+                <IconButton className={icons}>
+                  <StyledBadge badgeContent={wishlistItemNumber}>
+                    <FavoriteBorderIcon />
+                  </StyledBadge>
+                </IconButton>
+              </Link>
             </Toolbar>
           </Toolbar>
         </AppBar>

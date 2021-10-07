@@ -11,7 +11,7 @@ import { ChangeEvent } from 'react';
 import { AppContext } from '../../AppContext';
 import { UserStoreType } from '../../store/userStore';
 import { loremIpsum } from '../../const/constants';
-import { addToCart, addToGuestCart } from '../../util/helper';
+import { addToCart, addToGuestCart, addToWishlist } from '../../util/helper';
 import { v4 as uuidv4 } from 'uuid';
 
 type ProductPageProps = {
@@ -27,7 +27,8 @@ export const ProductPage = observer(
   <ProductPageComponent userStore={userStore} cartItemStore={cartItemStore} />)
 
 const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentProps) => {
-  const {root, img, textDiv, text, h1, h2, h3, inputDiv, dropDownDiv, numDiv, input, button, description} = styles;
+  const {root, img, textDiv, text, h1, h2, h3, inputDiv, dropDownDiv, numDiv, input, addToCartButton, 
+    addToWishlistButton, description} = styles;
   const {location} = useHistory<{item: {
     _id: string;
     manufacturerId: string;
@@ -43,7 +44,8 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
   const [ quantity, setQuantity ] = useState(1);
   const [ manufacturerName, setManufactureruName ] = useState<string>('');
   const [ ready, setReady ] = useState<boolean>(false);
-  const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber } = useContext(AppContext);
+  const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber, setWishlistItemNumber, 
+    wishlistItemNumber } = useContext(AppContext);
 
   const handleAddToCart = () => {
     if (userStore.id) {
@@ -58,6 +60,21 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
     setCartItemNumber(cartItemNumber + quantity)
     setOpenNotification(true);
     setSuccessMsg('Item added to cart.')
+  }
+
+  const handleAddToWishlist = () => {
+    if (userStore.id) {
+      addToWishlist( userStore.id, productId, cartItemStore.specificationValue)
+    } else if (localStorage.guestId) {
+      addToWishlist( localStorage.guestId, productId, cartItemStore.specificationValue)
+    } else {
+      const generatedGuestId = uuidv4();
+      localStorage.setItem('guestId', generatedGuestId);
+      addToWishlist( generatedGuestId, productId, cartItemStore.specificationValue)
+    }
+    setWishlistItemNumber(wishlistItemNumber + 1)
+    setOpenNotification(true);
+    setSuccessMsg('Item added to wishlist.')
   }
 
   const setQty = (e: ChangeEvent<HTMLInputElement>) => setQuantity(Number(e.target.value));
@@ -95,8 +112,11 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
                   onChange={setQty}></input>
               </div>
             </div>
-            <button className={button} 
+            <button className={addToCartButton} 
               onClick={handleAddToCart}>Add to cart
+            </button>
+            <button className={addToWishlistButton} 
+              onClick={handleAddToWishlist}>Add to wishlist
             </button>
             <Typography variant='body1' className={description}>
               {location.state.item.description}<br /><br />{loremIpsum}<br /><br />{loremIpsum}

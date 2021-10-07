@@ -17,20 +17,20 @@ type InputBoxProps = {
 export const InputBox = observer(
   ( { labelName, type, error, errorMsg, changeValue, onBlur }: InputBoxProps ) => {
     
-    const {input, label, inputDiv, errorinput, button, helperText} = styles;
+    const {input, inputLabel, inputDiv, errorinput, button, helperText} = styles;
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
 
     return (
         <div className={inputDiv}>
-          <div className={label}>
+          <div className={inputLabel}>
           <Typography variant='caption' display='block'>
             {labelName}
           </Typography>
           </div>
           <input type={ type === 'password' && showPassword === true ? 'text' : type } 
           className={ error ? errorinput : input } placeholder={ error? errorMsg : '' } onBlur={onBlur}
-          onChange={changeValue} />
+          onChange={changeValue} data-test={`input-${labelName.split(' ').join('')}`}/>
           {type === 'password' ? 
             <IconButton className={button} onClick={handleClickShowPassword}>
               {showPassword ? <Visibility /> : <VisibilityOff />}

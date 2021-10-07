@@ -14,6 +14,8 @@ export type AppContextType = {
     setMenuCategory: (menuCategory: CategoryType | '') => void;
     cartItemNumber: number;
     setCartItemNumber: (cartItemNumber: number) => void;
+    wishlistItemNumber: number;
+    setWishlistItemNumber: (wishlistItemNumber: number) => void;
     allManufacturer: string[];
     setAllManufacturer: (allManufacturer: string[]) => void;
     manufacturerFilter: string[];
@@ -33,6 +35,8 @@ export const AppContext = createContext<AppContextType>({
     setMenuCategory: (menuCategory: CategoryType | '') => ({}),
     cartItemNumber: 0,
     setCartItemNumber: (cartItemNumber: number) => ({}),
+    wishlistItemNumber: 0,
+    setWishlistItemNumber: (wishlistItemNumber: number) => ({}),
     allManufacturer: [],
     setAllManufacturer: (allManufacturer: string[]) => ({}),
     manufacturerFilter: [],
@@ -40,17 +44,19 @@ export const AppContext = createContext<AppContextType>({
 });
 
 export const useAppContext = () => {
-    const [openNotification, setOpenNotification] = useState<boolean>(false);
-    const [notificationState, setNotificationState] = useState<'error' | 'success'>('success');
-    const [errorMsg, setErrorMsg] = useState<string>('Error');
-    const [successMsg, setSuccessMsg] = useState<string>('Success');
-    const [menuCategory, setMenuCategory] = useState<CategoryType | '' >('');
-    const [cartItemNumber, setCartItemNumber] = useState<number>(0);
+    const [ openNotification, setOpenNotification ] = useState<boolean>(false);
+    const [ notificationState, setNotificationState ] = useState<'error' | 'success'>('success');
+    const [ errorMsg, setErrorMsg ] = useState<string>('Error');
+    const [ successMsg, setSuccessMsg ] = useState<string>('Success');
+    const [ menuCategory, setMenuCategory ] = useState<CategoryType | '' >('');
+    const [ cartItemNumber, setCartItemNumber ] = useState<number>(0);
+    const [ wishlistItemNumber, setWishlistItemNumber ] = useState<number>(0);
     const [ allManufacturer, setAllManufacturer ] = useState<string[]>([]);
     const [ manufacturerFilter, setManufacturerFilter ] = useState<string[]>([]);
 
     return { notificationState, setNotificationState, openNotification, setOpenNotification, errorMsg, setErrorMsg, 
-        successMsg, setSuccessMsg, menuCategory, setMenuCategory, cartItemNumber, setCartItemNumber, allManufacturer, 
+        successMsg, setSuccessMsg, menuCategory, setMenuCategory, cartItemNumber, setCartItemNumber, 
+        wishlistItemNumber, setWishlistItemNumber, allManufacturer, 
         setAllManufacturer, manufacturerFilter, setManufacturerFilter };
 }
 

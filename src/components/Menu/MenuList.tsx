@@ -41,7 +41,7 @@ export const MenuList = () => {
 
 
   return (         
-      <List>
+      <List data-test='homepage-menu-list'>
       {menuItems.map((item: MenuItemType) => (
         <ListItem button key={item.name} className={button} onClick={() => 
           setMenuCategory(item.name)

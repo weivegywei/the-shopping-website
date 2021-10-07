@@ -1,5 +1,6 @@
 import FormControl from '@material-ui/core/FormControl';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import {Select} from '@material-ui/core';
+import MenuItem from '@material-ui/core/MenuItem';
 import { observer } from 'mobx-react-lite';
 import styles from './CountryDropdown.module.scss';
 import { ChangeEvent } from 'react';
@@ -20,18 +21,19 @@ export const CountryDropdown = observer(({store}: CountryDropdownProps) => {
   return (
     <div>
       <FormControl className={margin}>
-        <NativeSelect
+        <Select
           value={store.country}
           onChange={changeValue}
           input={<BootstrapInputForCountryDropdown />}
+          defaultValue='Finland'
         >
-          <option value='Finland'>Finland</option>
-          <option value='Sweden'>Sweden</option>
-          <option value='Norway'>Norway</option>
-          <option value='Estonia'>Estonia</option>
-          <option value='Danmark'>Danmark</option>
-          <option value='Other'>Other</option>
-        </NativeSelect>
+          <MenuItem value='Finland'>Finland</MenuItem>
+          <MenuItem value='Sweden'>Sweden</MenuItem>
+          <MenuItem value='Norway'>Norway</MenuItem>
+          <MenuItem value='Estonia'>Estonia</MenuItem>
+          <MenuItem value='Danmark'>Danmark</MenuItem>
+          <MenuItem value='Other'>Other</MenuItem>
+        </Select>
       </FormControl>
     </div>
   );

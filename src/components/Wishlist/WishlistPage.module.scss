@@ -1,0 +1,37 @@
+@import '../../variables.scss';
+
+.rootDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.root {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    background: $secondaryBeige;
+   // width: 85%;
+}
+
+.listDiv {
+    display: flex;
+    flex-direction: column;
+    width: 900px;
+    margin: 24px;
+}
+
+.listTitle {
+    margin: 25px!important;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    //font-weight: bold;
+}
+
+.itemcard {
+    margin: 25px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}

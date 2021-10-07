@@ -36,10 +36,12 @@ export const TopBar = ({userStore}: TopBarProp) => {
     const {appBarRoot, text,  siteName, header, link, margin, padding, loginDiv, welcome, span, logout, 
         login, icons, flexfiller} = styles;
     const { appBar } = useStylesForTopBar();
-    const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber } = useContext(AppContext);
+    const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber, wishlistItemNumber, 
+        setWishlistItemNumber } = useContext(AppContext);
     const handleLogout = () => {
         logoutAction(userStore)
         setCartItemNumber(0)
+        setWishlistItemNumber(0)
         setOpenNotification(true);
         setSuccessMsg('You have successfully logged out.')
       };
@@ -79,9 +81,13 @@ export const TopBar = ({userStore}: TopBarProp) => {
                                 </StyledBadge>
                             </IconButton>
                         </Link>
-                        <IconButton className={icons}>
-                            <FavoriteBorderIcon />
-                        </IconButton>
+                        <Link to="/wishlist" className={link}>
+                            <IconButton className={icons}>
+                                <StyledBadge badgeContent={wishlistItemNumber}>
+                                    <FavoriteBorderIcon />
+                                </StyledBadge>
+                            </IconButton>
+                        </Link>
                     </Toolbar>
                 </Toolbar>
             </AppBar>

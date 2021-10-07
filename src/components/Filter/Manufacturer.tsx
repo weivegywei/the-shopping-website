@@ -20,21 +20,6 @@ const StyledMenu = withStyles({
   <FilterMenu props={props} />
 ));
 
-/* const MenuForButtons = withStyles({
-  paper: {
-    display: 'flex',
-    border: '1px solid #d3d4d5',
-    height: 35,
-    width: 223,
-    marginTop: 465
-  },
-  list: {
-    padding: 0,
-  }
-})((props: {open: boolean; anchorEl: any; keepMounted: boolean; onClose: () => void}) => (
-  <FilterMenu props={props} />
-));
- */
 type ManufacturerItem = {
   name: string,
   state: boolean
@@ -43,7 +28,6 @@ type ManufacturerItem = {
 export const ManufacturerFilter = () => {
   const { filterButton, expandIcon, formGroup, formControlLabel, buttonDiv, buttonClear, buttonConfirm, menuDiv } = styles;
   const [ anchorEl, setAnchorEl ] = useState<EventTarget | null>(null);
-  //const [ buttonAnchorEl, setButtonAnchorEl ] = useState<any>(null);
   const { allManufacturer, setManufacturerFilter } = useContext(AppContext);
   const [ manufacturerSelection, setManufacturerSelection ] = useState<ManufacturerItem[]>();
 
@@ -66,12 +50,10 @@ export const ManufacturerFilter = () => {
 
   const handleClick = (e: ChangeEvent<EventTarget>) => {
     setAnchorEl(e.currentTarget);
-    //setButtonAnchorEl(StyledMenu);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    //setButtonAnchorEl(null)
   };
 
   return (

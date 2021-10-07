@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import Grid from '@material-ui/core/Grid';
+import { Grid, Typography } from '@material-ui/core';
 import { ItemCard } from '../Cards/ItemCard';
 import { Link } from "react-router-dom";
 import { getData } from '../../api/getData';
@@ -10,6 +10,8 @@ import { toJS } from 'mobx';
 import { userStore, UserStoreType } from '../../store/userStore';
 import styles from './MainGrid.module.scss';
 import { AppContext } from '../../AppContext';
+import {ImSad} from 'react-icons/im';
+import { withStyles } from '@material-ui/styles';
 
 type MainGridComponentProps = {
   store: FilterQueryStoreType;
@@ -36,13 +38,19 @@ type MainGridItemType = {
   _id: string;
 }
 
+const StyledTypography = withStyles({
+  h6: {
+    fontWeight: 600
+  }
+})(Typography)
 
 export const MainGrid = () => 
     <MainGridComponent store={store} userStore={userStore} />
 
 const MainGridComponent = observer(({store, userStore}: MainGridComponentProps) => {
-  const {root, card, row} = styles;
+  const {root, card, row, filterNoMatchInstruction, instructionDiv} = styles;
   const [list, setList] = useState<MainGridItemType[]>([]);
+  const [filtered, setFiltered] = useState<boolean>(false);
   const { menuCategory, manufacturerFilter } = useContext(AppContext);
 
   useEffect(() => {try{
@@ -63,8 +71,11 @@ const MainGridComponent = observer(({store, userStore}: MainGridComponentProps) 
         priceFilterMin: store.priceFilterMin,
         priceFilterMax: store.priceFilterMax
         });
-        if(res.data) {
+        if(res.data && res.data.length) {
           setList(res.data)
+        } else {
+          setFiltered(true)
+          setList([])
         }
     };
     getFilterResults();
@@ -97,6 +108,7 @@ const MainGridComponent = observer(({store, userStore}: MainGridComponentProps) 
   ): null};
             
   return ( 
+    list.length ? 
     <>
       <div className = { root }>
           <Grid container spacing = { 1 } >
@@ -107,6 +119,13 @@ const MainGridComponent = observer(({store, userStore}: MainGridComponentProps) 
               </Grid> : null )}
           </Grid> 
       </div>
-    </>
+    </> : filtered ? 
+    <div className={instructionDiv}>
+      <StyledTypography className={filterNoMatchInstruction} variant='h6'>
+        <ImSad style={{ fontSize : 48 }}/><br />
+        Oops...No results for your search. Please refine search filters.
+      </StyledTypography>
+    </div> : null
   );
 })
+

@@ -31,6 +31,14 @@
     text-align: left;
 }
 
+.textColor {
+    color: grey;
+}
+
+.flexFiller {
+    flex: 1;
+}
+
 .iconDiv {
     display: flex;
     flex-direction: row;
@@ -60,7 +68,7 @@
     width: 1px;
 }
 
-.panel {
+.priceDiv {
     min-width: 100px;
     display: flex;
     align-items: flex-end;
@@ -69,37 +77,8 @@
     font-size: 15px;
 }
 
-.panelItem {
+.priceText {
     align-items: flex-end;
     margin: 5px 0;
-}
-
-.subtotal {
     font-weight: bold;
-}
-
-.amountDiv {
-    width: 180px;
-}
-
-.quantityDiv {
-    width: 100px;
-}
-
-.input {
-    width: 60px;
-    height: 30px;
-    font-size: 15px;
-    padding: 2px 10px;
-    &:focus {
-        outline: none;
-    }
-}
-
-.flexFiller {
-    flex: 1;
-}
-
-.textColor {
-    color: grey;
 }

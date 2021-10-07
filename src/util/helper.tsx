@@ -21,5 +21,12 @@ export const addToGuestCart = async(
       guestId, productId, quantity, specificationValue
     });
     return updatedGuestCart
-  }
+}
+
+export const addToWishlist = async(ownerId: string, productId: string, specificationValue: string) => {
+  const updatedWishlist = await postData('/api/wishlist/add', {
+    ownerId, productId, specificationValue
+  });
+  return updatedWishlist;
+}
 

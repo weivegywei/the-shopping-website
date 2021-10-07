@@ -1,19 +1,17 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, ChangeEvent } from 'react';
 import cn from 'classnames';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import { Typography, IconButton, Divider } from '@material-ui/core';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
-import Divider from '@material-ui/core/Divider';
 import { postData } from '../../api/postData';
 import { AlertDialog } from '../Utilities/AlertDialog';
 import styles from './CartItem.module.scss';
-import { ChangeEvent } from 'react';
 import { UserStoreType } from '../../store/userStore';
 import { AppContext } from '../../AppContext'
 
 export type CartItemProductType = {
   _id: string;
+  productId: string;
   quantity: number;
   imageUrl: string;
   name: string;
@@ -34,17 +32,36 @@ export const CartItem = ({
   item, userStore, setCartItemsAndNotificationAfterDeleteHandler, setCartItemsAndNotificationAfterChangeHandler
 }: CartItemProps) => {
   const {wrapper,img, productInfo,textarea,itemInfoDiv,textColor, iconDiv, iconButton, icon, 
-    divider, panel,input,flexFiller,panelItem,subtotal} = styles;
+    iconDivider, panel,input,flexFiller,panelItem,subtotal} = styles;
   const { _id, quantity, imageUrl, name, specification, specificationValue, inventory, price } = item;
   const [itemQuantity, setItemQuantity] = useState<number>(quantity);
   const [openAlert, setOpenAlert] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CartItemProductType>();
-  const { cartItemNumber, setCartItemNumber } = useContext(AppContext);
+  const { cartItemNumber, setCartItemNumber, wishlistItemNumber, setWishlistItemNumber, setOpenNotification, 
+    setSuccessMsg } = useContext(AppContext);
 
   const handleClickOpenAlert = (item: CartItemProductType) => {
     setOpenAlert(true);
     setSelectedItem(item);
   };
+
+  const handleClickAddToWishlist = async(item: CartItemProductType) => {
+    let res;
+    const { productId, specificationValue } = item
+    if (userStore.id) {
+        res = await postData('/api/wishlist/add', {ownerId: userStore.id, productId, specificationValue})
+      } else if (localStorage.guestId) {
+        res = await postData('/api/wishlist/add', {ownerId: localStorage.guestId, productId, specificationValue})
+    }
+    if (typeof(res.data) === 'string') {
+      setOpenNotification(true)
+      setSuccessMsg('Item is already in the wishlist')
+    } else {
+      setWishlistItemNumber(wishlistItemNumber + 1)
+      setOpenNotification(true)
+      setSuccessMsg('Item added to wishlist')
+    }
+  }
 
   const handleChange = async(e: ChangeEvent<HTMLInputElement>) => {
     if (userStore.id) {
@@ -101,8 +118,8 @@ export const CartItem = ({
                     <DeleteOutlineOutlinedIcon className={icon} />
                     Delete
                 </IconButton>
-                <Divider orientation="vertical" className={divider} />
-                <IconButton className={iconButton} disableFocusRipple >
+                <Divider orientation="vertical" className={iconDivider} />
+                <IconButton className={iconButton} disableFocusRipple onClick={() => handleClickAddToWishlist(item)}>
                     <FavoriteBorderOutlinedIcon className={icon} />
                     Add to wishlist
                 </IconButton>

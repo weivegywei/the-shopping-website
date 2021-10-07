@@ -1,11 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router';
 import cn from 'classnames';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import { Paper, Typography, Button, Divider } from '@material-ui/core';
 import { CartItem } from './CartItem';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
 import { postData } from '../../api/postData';
 import { observer } from 'mobx-react';
 import { PayPalBox } from './PayPalBox';
@@ -23,7 +20,7 @@ type CartPageProps = {
 export const CartPage = observer(({userStore}: CartPageProps) => {
   const {rootDiv, root, order, title, itemcard, flexFiller, checkout, amountDiv, amountLabelDiv, amountNum,
     button, divider, fontWeight, goToShopSuggestion, suggestionDiv } = styles;
-  const [cartItems, setCartItems] = useState<CartItemProductType[]>([]);
+  const [ cartItems, setCartItems ] = useState<CartItemProductType[]>([]);
   const [ ready, setReady ] = useState<boolean>(false);
   const [ loading , setLoading ] = useState<boolean>(true);
   const { setOpenNotification, setSuccessMsg, cartItemNumber } = useContext(AppContext);
@@ -85,7 +82,7 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
               <Typography variant='h5' className={title}>
                 Shopping Cart
               </Typography>
-              {cartItems.map((item, idx)=>
+              {cartItems.map((item, idx)=> 
                 <div key={item._id.toString() + item.specificationValue}>
                 <Paper elevation={0} className={itemcard}>
                     <CartItem 

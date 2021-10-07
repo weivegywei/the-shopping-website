@@ -39,7 +39,7 @@ export const MenuDrawer = ({open, handleDrawerClose}: MenuDrawerProps) => {
           }}
         >
           <div className={drawerHeader}>
-            <IconButton className={icons} onClick={handleDrawerClose}>
+            <IconButton className={icons} onClick={handleDrawerClose} data-test='homepage-menu-closeButton'>
               {theme.direction === 'ltr' ? <ChevronLeftIcon className={color} /> : <ChevronRightIcon className={color} />}
             </IconButton>
           </div>
