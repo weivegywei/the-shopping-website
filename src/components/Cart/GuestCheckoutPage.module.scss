@@ -1,0 +1,62 @@
+@import '../../variables.scss';
+
+.root {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    background: $lightBeige;
+    height: 140vh;
+    & > * {
+      margin: 16px;
+      width: 528px;
+      height: 880px;
+    }
+}
+
+.title {
+    margin: 34px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    letter-spacing: 0.018em;
+}
+
+.label {
+    width: 300px;
+    display: flex;
+    justify-content: flex-start;
+    margin-left: $labelMargin;
+    letter-spacing: 0.012em
+}
+
+.buttonDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.proceedButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $inputBoxWidthBig; 
+    height: 42px;
+    border: solid 1px $secondaryGreen;
+    font-weight: 650;
+    letter-spacing: 0.018em;
+    &:focus {
+        outline: none;
+    };
+    background: $secondaryGreen;
+    color: $mainBeige;
+    &:hover {
+        background-color: $highlightGreen;
+        cursor: pointer;
+        border-color: $highlightGreen;
+    }
+    &:disabled {
+        background-color: $secondaryGreenDisabled;
+        cursor:unset;
+        border-color: $secondaryGreenDisabled
+    }
+}
+
