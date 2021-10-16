@@ -17,6 +17,7 @@ import { OrderList } from './components/Admin/Order/OrderList';
 import { NotificationSnackbar } from './components/Utilities/Snackbar';
 import { AppContext, useAppContext } from './AppContext';
 import { WishlistPage } from './components/Wishlist/WishlistPage';
+import { GuestCheckoutPage } from './components/Cart/GuestCheckoutPage'
 
 export const AppWrapper = (props) => 
   <AppContext.Provider value={useAppContext()}>
@@ -111,6 +112,11 @@ const App = observer(({userStore}) => {
           <Route exact path="/admin/order/list">
             <div className="App">
               <OrderList />
+            </div>
+          </Route>
+          <Route exact path="/guestcheckout">
+            <div className="App">
+              <GuestCheckoutPage _id={localStorage.guestId} />
             </div>
           </Route>
         </Switch>

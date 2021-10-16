@@ -19,7 +19,19 @@ export type AppContextType = {
     allManufacturer: string[];
     setAllManufacturer: (allManufacturer: string[]) => void;
     manufacturerFilter: string[];
-    setManufacturerFilter: (manufacturerFilter: string[]) => void
+    setManufacturerFilter: (manufacturerFilter: string[]) => void;
+    userCountry: string;
+    setUserCountry: (userCountry: string) => void;
+    guestFirstName: string;
+    setGuestFirstName: (guestFirstName: string) => void;
+    guestLastName: string;
+    setGuestLastName: (guestLastName: string) => void;
+    guestEmail: string;
+    setGuestEmail: (guestEmail: string) => void;
+    guestAddress: string;
+    setGuestAddress: (guestAddress: string) => void;
+    cartTotalAmount: number;
+    setCartTotalAmount: (cartTotalAmount: number) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -40,7 +52,19 @@ export const AppContext = createContext<AppContextType>({
     allManufacturer: [],
     setAllManufacturer: (allManufacturer: string[]) => ({}),
     manufacturerFilter: [],
-    setManufacturerFilter: (manufacturerFilter: string[]) => ({})
+    setManufacturerFilter: (manufacturerFilter: string[]) => ({}),
+    userCountry: '',
+    setUserCountry: (userCountry: string) => ({}),
+    guestFirstName: '',
+    setGuestFirstName: (guestFirstName: string) => ({}),
+    guestLastName: '',
+    setGuestLastName: (guestLastName: string) => ({}),
+    guestEmail: '',
+    setGuestEmail: (guestEmail: string) => ({}),
+    guestAddress: '',
+    setGuestAddress: (guestAddress: string) => ({}),
+    cartTotalAmount: 0,
+    setCartTotalAmount: (cartTotalAmount: number) => ({})
 });
 
 export const useAppContext = () => {
@@ -53,10 +77,18 @@ export const useAppContext = () => {
     const [ wishlistItemNumber, setWishlistItemNumber ] = useState<number>(0);
     const [ allManufacturer, setAllManufacturer ] = useState<string[]>([]);
     const [ manufacturerFilter, setManufacturerFilter ] = useState<string[]>([]);
+    const [ userCountry, setUserCountry ] = useState<string>('');
+    const [ cartTotalAmount, setCartTotalAmount ] = useState<number>(0);
+    const [ guestFirstName, setGuestFirstName ] = useState<string>('');
+    const [ guestLastName, setGuestLastName ] = useState<string>('');
+    const [ guestEmail, setGuestEmail ] = useState<string>('');
+    const [ guestAddress, setGuestAddress ] = useState<string>('');
 
     return { notificationState, setNotificationState, openNotification, setOpenNotification, errorMsg, setErrorMsg, 
         successMsg, setSuccessMsg, menuCategory, setMenuCategory, cartItemNumber, setCartItemNumber, 
-        wishlistItemNumber, setWishlistItemNumber, allManufacturer, 
-        setAllManufacturer, manufacturerFilter, setManufacturerFilter };
+        wishlistItemNumber, setWishlistItemNumber, allManufacturer, setAllManufacturer, manufacturerFilter, 
+        setManufacturerFilter, userCountry, setUserCountry, cartTotalAmount, setCartTotalAmount, 
+        guestFirstName, setGuestFirstName, guestLastName, setGuestLastName, guestEmail, setGuestEmail, 
+        guestAddress, setGuestAddress};
 }
 

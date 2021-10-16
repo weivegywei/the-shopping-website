@@ -5,7 +5,7 @@ import { AppContext } from '../../AppContext';
 import styles from './PayPalBox.module.scss';
 
 type PayPalBoxProps = {
-  totalAmount: number;
+  totalAmount?: number;
   userId?: string;
   guestId?: string;
 }
@@ -18,8 +18,9 @@ declare global {
 
 export const PayPalBox = ({totalAmount, userId, guestId}: PayPalBoxProps) => {
     const history = useHistory();
-    const { paypalButton } = styles;
-    const { setCartItemNumber } = useContext(AppContext)
+    const { paypalButton, paypalButtonGuest } = styles;
+    const { setCartItemNumber, cartTotalAmount, userCountry, guestFirstName, guestLastName, guestEmail, 
+      guestAddress } = useContext(AppContext)
 
     useEffect(() => {
         window.paypal.Button.render({
@@ -29,7 +30,7 @@ export const PayPalBox = ({totalAmount, userId, guestId}: PayPalBoxProps) => {
             payment: (data: any, actions: any) => {
               // 2. Make a request to your server
               return actions.request.post(process.env.REACT_APP_SERVER_ENDPOINT + '/api/create-payment',{
-                  totalAmount
+                  totalAmount: totalAmount ? totalAmount : cartTotalAmount
               })
                 .then((res: {id: string}) => {
                   // 3. Return res.id from the response
@@ -43,13 +44,12 @@ export const PayPalBox = ({totalAmount, userId, guestId}: PayPalBoxProps) => {
               return actions.request.post(process.env.REACT_APP_SERVER_ENDPOINT + '/api/execute-payment', {
                 paymentID: data.paymentID,
                 payerID: data.payerID,
-                totalAmount, 
+                totalAmount: totalAmount ? totalAmount : cartTotalAmount, 
               })
                 .then((res: {totalAmount: number; currency: string}) => {
                   // 3. Show the buyer a confirmation message.
-                  history.push({pathname: '/afterPayment', state:{orderID: data.orderID, 
-                    paidAmount: res.totalAmount, currencyUnit: res.currency}});
-                  if (userId) {
+                  console.log(userId, 'userid', guestId, 'guestid')
+                    if (userId) {
                     postData('/api/store-payment',{userId, orderId: data.orderID, 
                       payerId: data.payerID, paymentId: data.paymentID, amount: res.totalAmount, currency: res.currency});
                     postData('/api/admin/product/inventory', {userId});
@@ -57,16 +57,27 @@ export const PayPalBox = ({totalAmount, userId, guestId}: PayPalBoxProps) => {
                   } else if (guestId) {
                     postData('/api/store-guest-payment',{guestId, orderId: data.orderID, 
                       payerId: data.payerID, paymentId: data.paymentID, amount: res.totalAmount, currency: res.currency});
+                      postData('/api/guestregister', {
+                        _id: guestId,
+                        firstName: guestFirstName, 
+                        lastName: guestLastName, 
+                        email: guestEmail, 
+                        address: guestAddress, 
+                        country: userCountry, role: 'customer', type: 'guest'
+                    })
                     postData('/api/admin/product/inventory', {guestId});
                     postData('/api/guestcart/status', {guestId})
                     setCartItemNumber(0)
                   }
+                  history.push({pathname: '/afterPayment', state:{orderID: data.orderID, 
+                    paidAmount: res.totalAmount, currencyUnit: res.currency}});
+                  
                 });
                   
             }
           }, '#paypal-button');
     }, [])
     
-      return <div id="paypal-button" className={paypalButton}></div>
+      return <div id="paypal-button" className={cartTotalAmount ? paypalButtonGuest : paypalButton}></div>
 }
 

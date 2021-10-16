@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from 'react'
 import { useHistory } from 'react-router'
-import cn from 'classnames'
-import { Paper, Typography, Button, Divider } from '@material-ui/core'
+import { Paper, Typography, Divider } from '@material-ui/core'
 import { postData } from '../../api/postData'
 import { AppContext } from '../../AppContext'
 import { TopBar } from '../Menu/TopBar'
@@ -9,17 +8,21 @@ import { ListItem } from './ListItem'
 import { observer } from 'mobx-react'
 import { UserStoreType } from '../../store/userStore'
 import styles from './WishlistPage.module.scss'
+import { BackToHomeButton } from '../Cart/BackToHomeButton'
 
 type WishlistPageProps = {
     userStore: UserStoreType
   }
 
 export const WishlistPage = observer(({userStore}: WishlistPageProps) => {
-  const { rootDiv, root, listDiv, listTitle, itemcard } = styles;
+  const { rootDiv, root, listDiv, listTitle, itemcard, suggestionDiv, goToShopSuggestion } = styles;
   const [ listItems, setListItems ] = useState([]);
   const [ ready, setReady ] = useState<boolean>(false);
   const [ loading , setLoading ] = useState<boolean>(true);
   const { setOpenNotification, setSuccessMsg, wishlistItemNumber } = useContext(AppContext);
+  const history = useHistory();
+  const handleClick = () => history.push('/');
+  const buttonMsg = 'Go browsing'
 
   const setListItemsAndNotificationAfterDeleteHandler = () => {
     setOpenNotification(true);
@@ -81,7 +84,17 @@ export const WishlistPage = observer(({userStore}: WishlistPageProps) => {
       </div>
     </>
     ) : (
-      null
+      <>
+      <TopBar userStore={userStore} />
+        <div className={rootDiv}>
+          <div className={suggestionDiv}>
+            <Typography className={goToShopSuggestion} variant='h6'>
+              You have no item in wishlist. Put some items here!
+            </Typography>
+            <BackToHomeButton onClick={handleClick} buttonMsg={buttonMsg}/>
+          </div>
+        </div>
+    </>
     )
 })
 

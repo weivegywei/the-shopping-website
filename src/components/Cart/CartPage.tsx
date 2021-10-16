@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router';
+import { Link } from "react-router-dom";
 import cn from 'classnames';
 import { Paper, Typography, Button, Divider } from '@material-ui/core';
 import { CartItem } from './CartItem';
@@ -12,6 +13,7 @@ import { CartItemProductType } from './CartItem';
 import { AppContext } from '../../AppContext';
 import { TopBar } from '../Menu/TopBar';
 import { BackToHomeButton } from './BackToHomeButton';
+import { GuestCheckoutPage } from './GuestCheckoutPage'
 
 type CartPageProps = {
   userStore: UserStoreType
@@ -23,7 +25,7 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
   const [ cartItems, setCartItems ] = useState<CartItemProductType[]>([]);
   const [ ready, setReady ] = useState<boolean>(false);
   const [ loading , setLoading ] = useState<boolean>(true);
-  const { setOpenNotification, setSuccessMsg, cartItemNumber } = useContext(AppContext);
+  const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartTotalAmount } = useContext(AppContext);
   
   const setCartItemsAndNotificationAfterDeleteHandler = () => {
     setOpenNotification(true);
@@ -66,10 +68,17 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
   const cartItemsAmount = cartItems.reduce((a,b) => b.quantity * b.price + a, 0);
   const cartOrderValue = Number(cartItemsAmount.toFixed(2));
   const cartDeliveryAmount = 4.00;
-  const getTotalAmount =  cartOrderValue ? Number((cartOrderValue + cartDeliveryAmount).toFixed(2)) : 0;
+  const totalAmount =  cartOrderValue ? Number((cartOrderValue + cartDeliveryAmount).toFixed(2)) : 0;
   const history = useHistory();
-  const handleClick = () => history.push('/');
+  const handleBackToHome = () => history.push('/');
+  const handleGuestCheckout = () => {
+    if (totalAmount && localStorage.guestId) {
+      setCartTotalAmount(totalAmount)
+      history.push('/guestcheckout')
+    }
+  }
   const buttonMsg = 'Go shopping'
+  console.log(totalAmount, localStorage.guestId)
   
   return loading ?
     null :
@@ -114,11 +123,11 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
                 <div  className={cn(amountLabelDiv, fontWeight)}>
                   Total amount: 
                   <div className={flexFiller} />
-                  <div className={cn(amountNum,fontWeight)}> € {getTotalAmount.toFixed(2)}</div>
+                  <div className={cn(amountNum,fontWeight)}> € {totalAmount.toFixed(2)}</div>
                 </div>
-                <Button variant="contained" className={button} disableElevation>
+                <Button variant="contained" className={button} disableElevation onClick={handleGuestCheckout}>
                   Checkout
-                  {getTotalAmount && <PayPalBox totalAmount={getTotalAmount} userId={userStore.id} guestId={localStorage.guestId}/>}
+                  {totalAmount && userStore.id && <PayPalBox totalAmount={totalAmount} userId={userStore.id} />}
                 </Button>
             </Typography>
           </Paper>
@@ -133,9 +142,10 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
             <Typography className={goToShopSuggestion} variant='h6'>
               You have no item in cart. Put some items here!
             </Typography>
-            <BackToHomeButton onClick={handleClick} buttonMsg={buttonMsg}/>
+            <BackToHomeButton onClick={handleBackToHome} buttonMsg={buttonMsg}/>
           </div>
         </div>
     </>
   )
 });
+

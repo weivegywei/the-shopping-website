@@ -17,7 +17,7 @@ export const RegisterPage = observer(() => {
   const [passwordMatchingState, setPasswordMatchingState] = useState(true);
   const [userExistsState, setUserExistsState] = useState(false);
   const history = useHistory(); 
-  const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
+  const { setOpenNotification, setSuccessMsg, userCountry, setUserCountry } = useContext(AppContext);
 
   const onBlur = () => {
       if (store.password !== store.confirmPassword) {
@@ -34,8 +34,9 @@ export const RegisterPage = observer(() => {
       email: store.email,
       password: store.password,
       address: store.address,
-      country: store.country,
-      role: store.role
+      country: userCountry,
+      role: store.role,
+      type: store.type
     })
     if(res.error === 'USER_EXISTS') {
       setUserExistsState(true);
@@ -57,7 +58,7 @@ export const RegisterPage = observer(() => {
         </div>
         <InputBox labelName={'First name'} type={'text'} changeValue={(e) => changeValue(e, RegisterStoreKeys.firstName)} />
         <InputBox labelName={'Last name'} type={'text'} changeValue={(e) => changeValue(e, RegisterStoreKeys.lastName)} />
-        <InputBox labelName={'Email address'} type={'email'}changeValue={(e) => changeValue(e, RegisterStoreKeys.email)} 
+        <InputBox labelName={'Email address'} type={'email'} changeValue={(e) => changeValue(e, RegisterStoreKeys.email)} 
           error={userExistsState} errorMsg='This email had been registered' />
         <InputBox labelName={'Password'} type={'password'} changeValue={(e) => changeValue(e, RegisterStoreKeys.password)} />
         <InputBox labelName={'Confirm password'} type={'password'} error={!passwordMatchingState} onBlur={onBlur}
