@@ -8,7 +8,7 @@ import { ListItem } from './ListItem'
 import { observer } from 'mobx-react'
 import { UserStoreType } from '../../store/userStore'
 import styles from './WishlistPage.module.scss'
-import { BackToHomeButton } from '../Cart/BackToHomeButton'
+import { BackToHomeButton } from '../Utilities/BackToHomeButton'
 
 type WishlistPageProps = {
     userStore: UserStoreType

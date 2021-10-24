@@ -34,7 +34,7 @@ export const ItemCard = ({item, userStore}: ItemCardProps) => {
     wishlistItemNumber, setWishlistItemNumber } = useContext(AppContext);
   const itemFirstSpecificationValue = item.specificationDescr[0].split(',')[0];
   
-  const handleClickAddToCart = (e: MouseEvent<HTMLElement>) => {
+  const handleClickAddToCart = async(e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
     if (userStore.id) {
@@ -44,14 +44,17 @@ export const ItemCard = ({item, userStore}: ItemCardProps) => {
     } else {
       const generatedGuestId = uuidv4();
       localStorage.setItem('guestId', generatedGuestId);
-      addToGuestCart( generatedGuestId, item._id, 1, itemFirstSpecificationValue )
+      const resGuestCart = await addToGuestCart( generatedGuestId, item._id, 1, itemFirstSpecificationValue )
+      if(resGuestCart) {
+        console.log(resGuestCart, 'resGuestCart')
+      }
     }
     setCartItemNumber(cartItemNumber + 1)
     setOpenNotification(true);
     setSuccessMsg('Item added to cart.')
   }
 
-  const handleClickAddToWishlist = (e: MouseEvent<HTMLElement>) => {
+  const handleClickAddToWishlist = async(e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
     if (userStore.id) {
@@ -61,7 +64,8 @@ export const ItemCard = ({item, userStore}: ItemCardProps) => {
     } else {
       const generatedGuestId = uuidv4();
       localStorage.setItem('guestId', generatedGuestId);
-      addToWishlist( generatedGuestId, item._id, itemFirstSpecificationValue )
+      const resWishlist = await addToWishlist( generatedGuestId, item._id, itemFirstSpecificationValue )
+      console.log(resWishlist, 'resWishlist')
     }
     setWishlistItemNumber(wishlistItemNumber + 1)
     setOpenNotification(true);

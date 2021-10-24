@@ -11,6 +11,7 @@ import { postData } from '../../api/postData';
 import styles from './RegisterPage.module.scss';
 import { ChangeEvent } from 'react';
 import { AppContext } from '../../AppContext';
+import { v4 as uuidv4 } from 'uuid';
 
 export const RegisterPage = observer(() => {
   const {root, title, buttonDiv, buttons, signInButton, label} = styles;
@@ -28,7 +29,9 @@ export const RegisterPage = observer(() => {
   }
 
   const createNewUser = async() => {
+    const generatedUserId = uuidv4();
     const res = await postData('/api/register', {
+      _id: generatedUserId,
       firstName: store.firstName,
       lastName: store.lastName,
       email: store.email,
@@ -38,6 +41,7 @@ export const RegisterPage = observer(() => {
       role: store.role,
       type: store.type
     })
+    console.log(res, 'res')
     if(res.error === 'USER_EXISTS') {
       setUserExistsState(true);
     } else {

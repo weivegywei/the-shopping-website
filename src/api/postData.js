@@ -8,7 +8,7 @@ export const postData = async (route, postBody) => {
         return data;
     } catch(error) {
         if (error && error.response) {
-            console.log('catch within postdata')
+            console.log('catch error within postdata')
             return {error: error.response.data};
         }
     }

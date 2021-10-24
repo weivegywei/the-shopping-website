@@ -11,12 +11,10 @@ type CountryDropdownProps = {
     changeValue: (a: RegisterStoreKeys, b: string) => void,
     country: string
   };
-  //setValue?: ChangeEventHandler<HTMLSelectElement>
 }
 
 export const CountryDropdown = observer(({store}: CountryDropdownProps) => {
   const { margin } = styles;
-  const changeValue = (e: ChangeEvent<HTMLSelectElement>) => {store.changeValue(RegisterStoreKeys.country, e.target.value)};
   const { userCountry, setUserCountry } = useContext(AppContext);
   console.log(userCountry, 'userCountry')
 

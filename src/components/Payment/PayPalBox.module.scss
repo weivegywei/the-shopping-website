@@ -1,0 +1,22 @@
+.paypalButton {
+    //opacity: 0;
+    width: 450px;
+    height: 46px; 
+    z-index: 1;
+    position: relative;
+    :global(.zoid-outlet) {
+        width: 290px !important;
+    }
+}
+
+/* .paypalButtonGuest {
+    //opacity: 0;
+    width: 425px;
+    height: 46px; 
+    //z-index: 1;
+    //pointer-events: all;
+    position: absolute;
+    :global(.zoid-outlet) {
+        width: 370px !important;
+    }
+} */

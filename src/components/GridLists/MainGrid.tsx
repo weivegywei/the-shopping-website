@@ -99,8 +99,7 @@ const MainGridComponent = observer(({store, userStore}: MainGridComponentProps) 
           {items.map((item: MainGridItemType) => 
           <Grid key={item._id.toString()} item xs = { 2 } className={card}>
             <Link to={{
-                pathname: '/product',
-                state: {item}}} style={{textDecoration: 'none'}}>
+                pathname: `/product/${item._id}`}} style={{textDecoration: 'none'}}>
               <ItemCard item={item} userStore={userStore} />
             </Link>
           </Grid>)} 

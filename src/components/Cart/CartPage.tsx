@@ -1,19 +1,17 @@
 import { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router';
-import { Link } from "react-router-dom";
 import cn from 'classnames';
 import { Paper, Typography, Button, Divider } from '@material-ui/core';
 import { CartItem } from './CartItem';
 import { postData } from '../../api/postData';
 import { observer } from 'mobx-react';
-import { PayPalBox } from './PayPalBox';
+import { PayPalBox } from '../Payment/PayPalBox';
 import styles from './CartPage.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { CartItemProductType } from './CartItem';
 import { AppContext } from '../../AppContext';
 import { TopBar } from '../Menu/TopBar';
-import { BackToHomeButton } from './BackToHomeButton';
-import { GuestCheckoutPage } from './GuestCheckoutPage'
+import { BackToHomeButton } from '../Utilities/BackToHomeButton';
 
 type CartPageProps = {
   userStore: UserStoreType
@@ -71,14 +69,20 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
   const totalAmount =  cartOrderValue ? Number((cartOrderValue + cartDeliveryAmount).toFixed(2)) : 0;
   const history = useHistory();
   const handleBackToHome = () => history.push('/');
-  const handleGuestCheckout = () => {
-    if (totalAmount && localStorage.guestId) {
-      setCartTotalAmount(totalAmount)
-      history.push('/guestcheckout')
+  const handleCheckout = () => {
+    if (totalAmount) {
+      if (userStore.id) {
+        console.log('user')
+        setCartTotalAmount(totalAmount)
+        history.push('./paymentmethod')
+      } else {
+        console.log('guest', localStorage.guestId)
+        setCartTotalAmount(totalAmount)
+        history.push('/guestcheckout')
+      }
     }
   }
   const buttonMsg = 'Go shopping'
-  console.log(totalAmount, localStorage.guestId)
   
   return loading ?
     null :
@@ -125,9 +129,8 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
                   <div className={flexFiller} />
                   <div className={cn(amountNum,fontWeight)}> € {totalAmount.toFixed(2)}</div>
                 </div>
-                <Button variant="contained" className={button} disableElevation onClick={handleGuestCheckout}>
+                <Button variant="contained" className={button} disableElevation onClick={handleCheckout}>
                   Checkout
-                  {totalAmount && userStore.id && <PayPalBox totalAmount={totalAmount} userId={userStore.id} />}
                 </Button>
             </Typography>
           </Paper>

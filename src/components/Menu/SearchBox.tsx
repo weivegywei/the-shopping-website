@@ -17,7 +17,7 @@ type SearchBoxItemType = {
 export const SearchBar = observer(() => {
   const {input,dropdown,searchDiv,form, itemDiv, li, list, itemName, flexfiller, priceDiv} = styles;
   const [open, setOpen] = useState(false);
-  const [suggestions, setSuggestions] = useState<any>([]);
+  const [suggestions, setSuggestions] = useState<Object[]>([]);
   const changeValue = async(e: ChangeEvent<HTMLInputElement>) => {
     searchStore.changeValue(SearchStoreKey.query, e.target.value);
     const res = await postData('/api/homepage/search', {query: searchStore.query});
@@ -29,12 +29,17 @@ export const SearchBar = observer(() => {
       setSuggestions(newArr);
     }
   };
+  
 
   const history = useHistory();
   const handleClick = (e: MouseEvent<HTMLElement>, item: SearchBoxItemType) => {
     e.stopPropagation();
     e.preventDefault();
-    history.push({pathname: '/product', state: {item}})
+    console.log(item._id, 'id? in search box')
+    history.push({pathname: `/product/${item._id}`})
+    searchStore.changeValue(SearchStoreKey.query, '');
+    //history.go(0)
+    setOpen(false);
   };
 
   return (

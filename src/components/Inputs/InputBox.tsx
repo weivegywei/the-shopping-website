@@ -8,6 +8,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 type InputBoxProps = {
   labelName: string;
   type: string; 
+  value?: string;
   error?: any;
   errorMsg?: string;
   changeValue: ChangeEventHandler<HTMLInputElement>;
@@ -15,7 +16,7 @@ type InputBoxProps = {
 }
 
 export const InputBox = observer(
-  ( { labelName, type, error, errorMsg, changeValue, onBlur }: InputBoxProps ) => {
+  ( { labelName, type, value, error, errorMsg, changeValue, onBlur }: InputBoxProps ) => {
     
     const {input, inputLabel, inputDiv, errorinput, button, helperText} = styles;
     const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +29,7 @@ export const InputBox = observer(
             {labelName}
           </Typography>
           </div>
-          <input type={ type === 'password' && showPassword === true ? 'text' : type } 
+          <input type={ type === 'password' && showPassword === true ? 'text' : type } value={value}
           className={ error ? errorinput : input } placeholder={ error? errorMsg : '' } onBlur={onBlur}
           onChange={changeValue} data-test={`input-${labelName.split(' ').join('')}`}/>
           {type === 'password' ? 

@@ -14,7 +14,7 @@ import styles from './TopBarForMenu.module.scss'
 import { useContext } from 'react';
 import { AppContext } from '../../AppContext';
 import { UserStoreType } from '../../store/userStore';
-import myWeiStoreLogo from '../Pics/myWeiStoreLogo.png';
+import logo_full from '../Pics/logo_full.png'
 
 type TopBarForMenuProps = {
     store: UserStoreType;
@@ -33,7 +33,7 @@ export const TopBarForMenu = ({store, handleGetAllProduct, handleLogout}: TopBar
             <Toolbar className={siteName}>
               <Typography variant="h5" noWrap >
                 <Link to="/" className={cn(header, link)} onMouseDown={handleGetAllProduct}>
-                  My Wei Shop
+                  <img src={logo_full} className={logo} ></img>
                 </Link>
               </Typography>
             </Toolbar>

@@ -1,0 +1,36 @@
+@import '../../variables.scss';
+
+.root {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    background: $lightBeige;
+    height: 140vh;
+    & > * {
+      margin: 16px;
+      width: 528px;
+      height: 440px;
+    }
+}
+
+.title {
+    margin: 34px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    letter-spacing: 0.018em;
+}
+
+.paperDiv {
+    //display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.buttonDiv {
+    margin: 38px;
+}
+
+.flexfiller {
+    flex: 1;
+    height: 150px
+}

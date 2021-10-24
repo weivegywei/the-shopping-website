@@ -23,7 +23,7 @@ export const SpecificationValueDropdown = observer(
   const changeValue = (e: ChangeEvent<HTMLSelectElement>) => 
     cartItemStore.changeValue(CartItemStoreKey.specificationValue, e.target.value)
   
-  const specificationValueArr = values[0].split(',');
+  const specificationValueArr = values.split(',');
 
   return (
     <div>

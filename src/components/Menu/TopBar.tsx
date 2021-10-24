@@ -17,6 +17,7 @@ import { UserStoreType } from '../../store/userStore';
 import { AppContext } from '../../AppContext';
 import { logoutAction } from '../../util/helper';
 import styles from './TopBar.module.scss'
+import logo_full from '../Pics/logo_full.png'
 
 type TopBarProp = {
     userStore: UserStoreType
@@ -34,7 +35,7 @@ const useStylesForTopBar = makeStyles((theme) => ({
 
 export const TopBar = ({userStore}: TopBarProp) => {
     const {appBarRoot, text,  siteName, header, link, margin, padding, loginDiv, welcome, span, logout, 
-        login, icons, flexfiller} = styles;
+        login, icons, flexfiller, logo} = styles;
     const { appBar } = useStylesForTopBar();
     const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber, wishlistItemNumber, 
         setWishlistItemNumber } = useContext(AppContext);
@@ -54,7 +55,7 @@ export const TopBar = ({userStore}: TopBarProp) => {
                     <Toolbar className={siteName}>
                         <Typography variant="h5" noWrap >
                         <Link to="/" className={cn(header, link)}>
-                        My Wei Shop
+                            <img src={logo_full} className={logo} ></img>
                         </Link>
                         </Typography>
                     </Toolbar>

@@ -12,12 +12,13 @@ import { RegisterPage } from './components/Register/RegisterPage';
 import { observer } from 'mobx-react';
 import { getUserInfo, getCartItemsNumber, getGuestCartItemNumber, getWishlistItemNumber } from './App.util';
 import { ManufacturerCreate } from './components/Admin/Manufacturer/ManufacturerCreate';
-import { AfterPaymentPage } from './components/Cart/AfterPaymentPage';
+import { AfterPaymentPage } from './components/Payment/AfterPaymentPage';
 import { OrderList } from './components/Admin/Order/OrderList';
 import { NotificationSnackbar } from './components/Utilities/Snackbar';
 import { AppContext, useAppContext } from './AppContext';
 import { WishlistPage } from './components/Wishlist/WishlistPage';
 import { GuestCheckoutPage } from './components/Cart/GuestCheckoutPage'
+import { PaymentMethodPage } from './components/Payment/PaymentMethodPage'
 
 export const AppWrapper = (props) => 
   <AppContext.Provider value={useAppContext()}>
@@ -64,7 +65,7 @@ const App = observer(({userStore}) => {
               <MainGrid />
           </div>
           </Route>
-          <Route exact path="/product">
+          <Route path="/product/:id">
             <div className="App">
               <ProductPage userStore={userStore} />
             </div>
@@ -116,7 +117,12 @@ const App = observer(({userStore}) => {
           </Route>
           <Route exact path="/guestcheckout">
             <div className="App">
-              <GuestCheckoutPage _id={localStorage.guestId} />
+              <GuestCheckoutPage />
+            </div>
+          </Route>
+          <Route exact path="/paymentmethod">
+            <div className="App">
+              <PaymentMethodPage />
             </div>
           </Route>
         </Switch>

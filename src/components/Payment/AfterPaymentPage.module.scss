@@ -1,0 +1,30 @@
+@import '../../variables.scss';
+
+.root {
+    display: flex;
+    background: $secondaryBeige;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    & > * {
+        width: 496px;
+      }
+}
+
+.box {
+    display: flex;
+    background: $mainGreen;
+    height: 390px;
+    justify-content: center; 
+    flex-direction: column;
+    font-Family: Great Vibes, cursive;
+    font-size: 40px;
+    color: white;
+}
+
+.text {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

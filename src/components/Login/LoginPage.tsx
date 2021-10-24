@@ -23,6 +23,7 @@ export const LoginPage = observer(() => {
     if (res.data) {
       localStorage.setItem('accessToken',res.data.accessToken);
       getUserInfo();
+      localStorage.removeItem('guestId')
       history.push('/');
     } else {
       setLoginErrorState(true);
