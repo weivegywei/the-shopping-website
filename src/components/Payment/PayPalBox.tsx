@@ -45,23 +45,15 @@ export const PayPalBox = ({userId, guestId}: PayPalBoxProps) => {
                 totalAmount: cartTotalAmount, 
               })
                 .then((res: {totalAmount: number; currency: string}) => {
-                  // 3. Show the buyer a confirmation message.
                   console.log(userId, 'userid', guestId, 'guestid')
-                    if (userId) {
-                    postData('/api/store-payment',{userId, orderId: data.orderID, 
-                      payerId: data.payerID, paymentId: data.paymentID, amount: res.totalAmount, currency: res.currency});
-                    postData('/api/admin/product/inventory', {userId});
-                    postData('/api/cart/status', {userId});
-                  } else if (guestId) {
-                    postData('/api/store-guest-payment',{guestId, orderId: data.orderID, 
-                      payerId: data.payerID, paymentId: data.paymentID, amount: res.totalAmount, currency: res.currency});
-                    postData('/api/admin/product/inventory', {guestId});
-                    postData('/api/guestcart/status', {guestId})
-                    setCartItemNumber(0)
-                  }
+                  postData('/api/store-payment',{userId: userId ? userId : guestId, orderId: data.orderID, 
+                    payerId: data.payerID, paymentId: data.paymentID, amount: res.totalAmount, currency: res.currency});
+                  postData('/api/admin/product/inventory', {userId: userId ? userId : guestId});
+                  postData('/api/cart/status', {userId: userId ? userId : guestId});
+                  setCartItemNumber(0)
+                        // 3. Show the buyer a confirmation message.
                   history.push({pathname: '/afterPayment', state:{orderID: data.orderID, 
                     paidAmount: res.totalAmount, currencyUnit: res.currency}});
-                  
                 });
                   
             }

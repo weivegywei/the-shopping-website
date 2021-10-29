@@ -11,7 +11,7 @@ import { ChangeEvent } from 'react';
 import { AppContext } from '../../AppContext';
 import { UserStoreType } from '../../store/userStore';
 import { loremIpsum } from '../../const/constants';
-import { addToCart, addToGuestCart, addToWishlist } from '../../util/helper';
+import { addToCart, addToWishlist } from '../../util/helper';
 import { v4 as uuidv4 } from 'uuid';
 
 type ProductPageProps = {
@@ -39,25 +39,31 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
   const [ itemDescription, setItemDescription ] = useState<string>('');
   const [ manufacturerName, setManufactureruName ] = useState<string>('');
   const [ ready, setReady ] = useState<boolean>(false);
-  const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber, setWishlistItemNumber, 
-    wishlistItemNumber } = useContext(AppContext);
+  const { setOpenNotification, setSnackbarMsg, cartItemNumber, setCartItemNumber, setWishlistItemNumber, 
+    setNotificationState, wishlistItemNumber } = useContext(AppContext);
 
-  const handleAddToCart = () => {
-    if (userStore.id) {
-      addToCart( userStore.id, productId, quantity, cartItemStore.specificationValue)
-    } else if (localStorage.guestId) {
-      addToGuestCart( localStorage.guestId, productId, quantity, cartItemStore.specificationValue)
+  const handleAddToCart = async() => {
+    let resCart;
+    if (userStore.id || localStorage.guestId) {
+      resCart = await addToCart( userStore.id ? userStore.id : localStorage.guestId, productId, quantity, cartItemStore.specificationValue)
     } else {
       const generatedGuestId = uuidv4();
       localStorage.setItem('guestId', generatedGuestId);
-      addToGuestCart( generatedGuestId, productId, quantity, cartItemStore.specificationValue)
+      resCart = await addToCart( generatedGuestId, productId, quantity, cartItemStore.specificationValue)
     }
-    setCartItemNumber(cartItemNumber + quantity)
-    setOpenNotification(true);
-    setSuccessMsg('Item added to cart.')
+    if (resCart) {
+      setCartItemNumber(cartItemNumber + quantity)
+      setNotificationState('success')
+      setOpenNotification(true);
+      setSnackbarMsg('Item added to cart.')
+    } else {
+      setNotificationState('error')
+      setOpenNotification(true);
+      setSnackbarMsg('Adding item failed, please try again.')
+    }
   }
 
-  const handleAddToWishlist = () => {
+  const handleAddToWishlist = async() => {
     if (userStore.id) {
       addToWishlist( userStore.id, productId, cartItemStore.specificationValue)
     } else if (localStorage.guestId) {
@@ -68,8 +74,9 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
       addToWishlist( generatedGuestId, productId, cartItemStore.specificationValue)
     }
     setWishlistItemNumber(wishlistItemNumber + 1)
+    setNotificationState('success')
     setOpenNotification(true);
-    setSuccessMsg('Item added to wishlist.')
+    setSnackbarMsg('Item added to wishlist.')
   }
 
   const setQty = (e: ChangeEvent<HTMLInputElement>) => setQuantity(Number(e.target.value));

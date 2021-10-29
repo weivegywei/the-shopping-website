@@ -27,7 +27,7 @@ const defaultFormFields = [
 export const ProductCreate = observer(() => {
   const {root, box, title, formField, button, specInput} = styles;
   const [formFields, setFormFields] = useState(defaultFormFields);
-  const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
+  const { setNotificationState, setOpenNotification, setSnackbarMsg } = useContext(AppContext);
   const {manufacturerName, price, imageUrl, availability, inventory, specification, specificationDescr, description,
     packageSize, category, productName} = store;
 
@@ -46,8 +46,9 @@ export const ProductCreate = observer(() => {
       category
     });
     if (res.status === 200) {
+      setNotificationState('success')
       setOpenNotification(true);
-      setSuccessMsg('Product successfully created')
+      setSnackbarMsg('Product successfully created')
     } else if(res.error) {
       const newFormFields = [...formFields]; //TODO: stop using 'defaultFormFields'
       const errorField = newFormFields.find((it) => it.key === res.error.field);

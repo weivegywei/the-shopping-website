@@ -23,28 +23,30 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
   const [ cartItems, setCartItems ] = useState<CartItemProductType[]>([]);
   const [ ready, setReady ] = useState<boolean>(false);
   const [ loading , setLoading ] = useState<boolean>(true);
-  const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartTotalAmount } = useContext(AppContext);
+  const { setNotificationState, setOpenNotification, setSnackbarMsg, cartItemNumber, setCartTotalAmount } = useContext(AppContext);
   
   const setCartItemsAndNotificationAfterDeleteHandler = () => {
+    setNotificationState('success')
     setOpenNotification(true);
-    setSuccessMsg('You have deleted this item from your cart.');
+    setSnackbarMsg('You have deleted this item from your cart.');
     setItemsHandler()
   }
 
   const setCartItemsAndNotificationAfterChangeHandler = () => {
+    setNotificationState('success')
     setOpenNotification(true);
-    setSuccessMsg('Item quantity has been changed.');
+    setSnackbarMsg('Item quantity has been changed.');
     setItemsHandler()
   }
   //TODO: figure out the type of res in TS
   const setItemsHandler = async() => {
     let res;
     try {
-      if (userStore.id) {
-        res = await postData('/api/cart/get', {userId: userStore.id});
-      } else if (localStorage.guestId) {
-        res = await postData('/api/guestcart/get', {guestId: localStorage.guestId});
-      } else res = {}
+      if (userStore.id || localStorage.guestId) {
+        res = await postData('/api/cart/get', {userId: userStore.id ? userStore.id : localStorage.guestId});
+      } else {
+        res = {}
+      }
     } catch (error) {
       res = {}
     }

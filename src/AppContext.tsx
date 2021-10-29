@@ -2,14 +2,12 @@ import { createContext, useState } from 'react';
 import { CategoryType } from './store/productStore';
 
 export type AppContextType = {
-    notificationState: 'error' | 'success'; 
-    setNotificationState: (notificationState: 'error' | 'success') => void, 
+    notificationState: 'error' | 'success' | 'warning' | 'info'; 
+    setNotificationState: (notificationState: 'error' | 'success' | 'warning' | 'info') => void, 
     openNotification: boolean; 
     setOpenNotification: (openNotification: boolean) => void,
-    errorMsg: string;
-    setErrorMsg: (errorMsg: string) => void, 
-    successMsg: string;
-    setSuccessMsg: (successMsg: string) => void,
+    snackbarMsg: string;
+    setSnackbarMsg: (snackbarMsg: string) => void, 
     menuCategory: CategoryType | '' ; 
     setMenuCategory: (menuCategory: CategoryType | '') => void;
     cartItemNumber: number;
@@ -36,13 +34,11 @@ export type AppContextType = {
 
 export const AppContext = createContext<AppContextType>({
     notificationState: 'success', 
-    setNotificationState: (notificationState: 'error' | 'success') => ({}), 
+    setNotificationState: (notificationState: 'error' | 'success' | 'warning' | 'info') => ({}), 
     openNotification: false, 
     setOpenNotification: (openNotification: boolean) => ({}),
-    errorMsg: '',
-    setErrorMsg: (errorMsg: string) => ({}), 
-    successMsg: '',
-    setSuccessMsg: (successMsg: string) => ({}),
+    snackbarMsg: '',
+    setSnackbarMsg: (snackbarMsg: string) => ({}), 
     menuCategory: '', 
     setMenuCategory: (menuCategory: CategoryType | '') => ({}),
     cartItemNumber: 0,
@@ -69,9 +65,8 @@ export const AppContext = createContext<AppContextType>({
 
 export const useAppContext = () => {
     const [ openNotification, setOpenNotification ] = useState<boolean>(false);
-    const [ notificationState, setNotificationState ] = useState<'error' | 'success'>('success');
-    const [ errorMsg, setErrorMsg ] = useState<string>('Error');
-    const [ successMsg, setSuccessMsg ] = useState<string>('Success');
+    const [ notificationState, setNotificationState ] = useState<'error' | 'success' | 'warning' | 'info'>('success');
+    const [ snackbarMsg, setSnackbarMsg ] = useState<string>('');
     const [ menuCategory, setMenuCategory ] = useState<CategoryType | '' >('');
     const [ cartItemNumber, setCartItemNumber ] = useState<number>(0);
     const [ wishlistItemNumber, setWishlistItemNumber ] = useState<number>(0);
@@ -84,11 +79,12 @@ export const useAppContext = () => {
     const [ guestEmail, setGuestEmail ] = useState<string>('');
     const [ guestAddress, setGuestAddress ] = useState<string>('');
 
-    return { notificationState, setNotificationState, openNotification, setOpenNotification, errorMsg, setErrorMsg, 
-        successMsg, setSuccessMsg, menuCategory, setMenuCategory, cartItemNumber, setCartItemNumber, 
-        wishlistItemNumber, setWishlistItemNumber, allManufacturer, setAllManufacturer, manufacturerFilter, 
-        setManufacturerFilter, userCountry, setUserCountry, cartTotalAmount, setCartTotalAmount, 
-        guestFirstName, setGuestFirstName, guestLastName, setGuestLastName, guestEmail, setGuestEmail, 
+    return { notificationState, setNotificationState, openNotification, setOpenNotification, snackbarMsg, 
+        setSnackbarMsg , menuCategory, setMenuCategory, cartItemNumber, setCartItemNumber, wishlistItemNumber, 
+        setWishlistItemNumber, allManufacturer, setAllManufacturer, manufacturerFilter, setManufacturerFilter,
+        userCountry, setUserCountry, cartTotalAmount, setCartTotalAmount, 
+        guestFirstName, setGuestFirstName, guestLastName, setGuestLastName, 
+        guestEmail, setGuestEmail, 
         guestAddress, setGuestAddress};
 }
 

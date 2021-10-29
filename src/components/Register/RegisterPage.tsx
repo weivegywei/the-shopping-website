@@ -18,7 +18,7 @@ export const RegisterPage = observer(() => {
   const [passwordMatchingState, setPasswordMatchingState] = useState(true);
   const [userExistsState, setUserExistsState] = useState(false);
   const history = useHistory(); 
-  const { setOpenNotification, setSuccessMsg, userCountry, setUserCountry } = useContext(AppContext);
+  const { setNotificationState, setOpenNotification, setSnackbarMsg, userCountry, setUserCountry } = useContext(AppContext);
 
   const onBlur = () => {
       if (store.password !== store.confirmPassword) {
@@ -45,8 +45,9 @@ export const RegisterPage = observer(() => {
     if(res.error === 'USER_EXISTS') {
       setUserExistsState(true);
     } else {
+      setNotificationState('success')
       setOpenNotification(true);
-      setSuccessMsg('Sign up succeed! Welcome! Please log in to continue');
+      setSnackbarMsg('Sign up succeed! Welcome! Please log in to continue');
       history.push('/login');
     }
   };

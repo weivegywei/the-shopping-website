@@ -10,12 +10,16 @@ export const getUser = () => {
 
 export  const getCartItemsNumber = async(userId: string) => {
   if (userId) {
-    const res = await postData('/api/cart/number', {userId});
-    return res.data
+    try {
+      const res = await postData('/api/cart/number', {userId});
+      return res.data
+    } catch (error) {
+      return 0
+    }
   }
 }
 
-export const getGuestCartItemNumber = async(guestId: string) => {
+/* export const getGuestCartItemNumber = async(guestId: string) => {
   if (guestId) {
     try {
       const res = await postData('/api/guestcart/number', {guestId});
@@ -24,7 +28,7 @@ export const getGuestCartItemNumber = async(guestId: string) => {
       return 0
     }
   }
-}
+} */
 
 export const getWishlistItemNumber = async(ownerId: string) => {
   if (ownerId) {

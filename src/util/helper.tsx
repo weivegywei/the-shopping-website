@@ -14,15 +14,6 @@ export const addToCart = async(
     return updatedCart;
 }
 
-export const addToGuestCart = async(
-  guestId: string, productId: string, quantity: number, specificationValue: string
-  ) => {
-    const updatedGuestCart = await postData('/api/guestcart/add', {
-      guestId, productId, quantity, specificationValue
-    });
-    return updatedGuestCart
-}
-
 export const addToWishlist = async(ownerId: string, productId: string, specificationValue: string) => {
   const updatedWishlist = await postData('/api/wishlist/add', {
     ownerId, productId, specificationValue

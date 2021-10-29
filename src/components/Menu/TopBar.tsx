@@ -37,14 +37,15 @@ export const TopBar = ({userStore}: TopBarProp) => {
     const {appBarRoot, text,  siteName, header, link, margin, padding, loginDiv, welcome, span, logout, 
         login, icons, flexfiller, logo} = styles;
     const { appBar } = useStylesForTopBar();
-    const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber, wishlistItemNumber, 
-        setWishlistItemNumber } = useContext(AppContext);
+    const { setOpenNotification, setSnackbarMsg, cartItemNumber, setCartItemNumber, wishlistItemNumber, 
+        setNotificationState, setWishlistItemNumber } = useContext(AppContext);
     const handleLogout = () => {
         logoutAction(userStore)
         setCartItemNumber(0)
         setWishlistItemNumber(0)
+        setNotificationState('success')
         setOpenNotification(true);
-        setSuccessMsg('You have successfully logged out.')
+        setSnackbarMsg('You have successfully logged out.')
       };
 
     return (

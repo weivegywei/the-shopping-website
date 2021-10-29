@@ -1,7 +1,7 @@
 import { Card, CardActions, CardContent, IconButton, Tooltip } from '@material-ui/core';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import { withStyles } from '@material-ui/core/styles';
-import { addToCart, addToGuestCart, addToWishlist } from  '../../util/helper';
+import { addToCart, addToWishlist } from  '../../util/helper';
 import styles from './ItemCard.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { MouseEvent, useContext } from 'react';
@@ -30,46 +30,58 @@ const StyledIconButton = withStyles({
 
 export const ItemCard = ({item, userStore}: ItemCardProps) => {
   const {root, p, card, action, flexfiller, icon} = styles;
-  const { setOpenNotification, setSuccessMsg, cartItemNumber, setCartItemNumber, 
+  const { setOpenNotification, setSnackbarMsg, cartItemNumber, setCartItemNumber, setNotificationState,
     wishlistItemNumber, setWishlistItemNumber } = useContext(AppContext);
   const itemFirstSpecificationValue = item.specificationDescr[0].split(',')[0];
   
   const handleClickAddToCart = async(e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
+    let resCart;
     if (userStore.id) {
-      addToCart( userStore.id, item._id, 1, itemFirstSpecificationValue );
+      resCart = await addToCart( userStore.id, item._id, 1, itemFirstSpecificationValue );
     } else if (localStorage.guestId) {
-      addToGuestCart( localStorage.guestId, item._id, 1, itemFirstSpecificationValue )
+      resCart = await addToCart( localStorage.guestId, item._id, 1, itemFirstSpecificationValue )
     } else {
       const generatedGuestId = uuidv4();
       localStorage.setItem('guestId', generatedGuestId);
-      const resGuestCart = await addToGuestCart( generatedGuestId, item._id, 1, itemFirstSpecificationValue )
-      if(resGuestCart) {
-        console.log(resGuestCart, 'resGuestCart')
-      }
+      resCart = await addToCart( generatedGuestId, item._id, 1, itemFirstSpecificationValue )
     }
-    setCartItemNumber(cartItemNumber + 1)
-    setOpenNotification(true);
-    setSuccessMsg('Item added to cart.')
+    if(resCart) {
+      console.log(resCart, 'resCart')
+      setCartItemNumber(cartItemNumber + 1)
+      setNotificationState('success')
+      setOpenNotification(true);
+      setSnackbarMsg('Item added to cart.')
+    } else {
+      setNotificationState('error')
+      setOpenNotification(true);
+      setSnackbarMsg('Adding item failed, please try again.')
+    }
   }
 
   const handleClickAddToWishlist = async(e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    if (userStore.id) {
-      addToWishlist( userStore.id, item._id, itemFirstSpecificationValue );
-    } else if (localStorage.guestId) {
-      addToWishlist( localStorage.guestId, item._id, itemFirstSpecificationValue )
-    } else {
-      const generatedGuestId = uuidv4();
-      localStorage.setItem('guestId', generatedGuestId);
-      const resWishlist = await addToWishlist( generatedGuestId, item._id, itemFirstSpecificationValue )
-      console.log(resWishlist, 'resWishlist')
+    try {
+      const res = await addToWishlist(userStore.id ? userStore.id : localStorage.guestId, item._id, itemFirstSpecificationValue)
+      if (typeof(res.data) === 'string') {
+        setNotificationState('info')
+        setOpenNotification(true)
+        setSnackbarMsg('Item is already in the wishlist')
+      } else {
+        setWishlistItemNumber(wishlistItemNumber + 1)
+        setNotificationState('success')
+        setOpenNotification(true)
+        setSnackbarMsg('Item added to wishlist')
+      }
     }
-    setWishlistItemNumber(wishlistItemNumber + 1)
-    setOpenNotification(true);
-    setSuccessMsg('Item added to wishlist.')
+    catch (error) {
+      console.log(error, 'error in adding to wishlist')
+      setNotificationState('error')
+      setOpenNotification(true)
+      setSnackbarMsg('There is an error, please try again.')
+    }
   }
 
   return (

@@ -21,7 +21,7 @@ export const ManufacturerCreateComponent = observer(
   const {root, box, title, button} = styles;
   const [errorMessage, setErrorMessage] = useState<string>();
   const [disabled, setDisabled] = useState(true);
-  const { setNotificationState, setOpenNotification, setErrorMsg, setSuccessMsg } = useContext(AppContext);
+  const { setNotificationState, setOpenNotification, setSnackbarMsg } = useContext(AppContext);
 
   const createNewManufacturer = async() => {const res = await postData('/api/admin/manufacturer/create',{
     manufacturerName: store.manufacturerName,
@@ -30,9 +30,10 @@ export const ManufacturerCreateComponent = observer(
     setOpenNotification(true);
     if(res.hasOwnProperty('error')) {
       setNotificationState('error');
-      setErrorMsg('Error! Manufacturer adding failed');
+      setSnackbarMsg('Error! Manufacturer adding failed');
     } else {
-      setSuccessMsg('Manufacturer added successfully')
+      setNotificationState('success')
+      setSnackbarMsg('Manufacturer added successfully')
     }
     return res;
   };

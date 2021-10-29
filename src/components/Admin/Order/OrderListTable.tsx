@@ -9,7 +9,7 @@ import styles from './OrderListTable.module.scss'
 type OrderListTableProps = {
     item: ListItemProps,
     handleUserInfoClickOpen?: (item: UserDataType) => void,
-    handleOrderInfoClickOpen: (guestId: string, cartId: string) => void,
+    handleOrderInfoClickOpen: (cartId: string) => void,
     returnedTime: (item: ReturnedTimeProps) => string | null, 
     handleStatusInfoClickOpen: (items: Events[]) => void,
     handleStatusEditOpen: (item: ListItemProps) => void
@@ -27,11 +27,11 @@ export const OrderListTable = ({ item, handleUserInfoClickOpen, handleOrderInfoC
                     <IconButton className={button} onClick={() => handleUserInfoClickOpen(item.userData)}>
                         <InfoOutlinedIcon color="action" />
                     </IconButton> : 
-                    item.guestId
+                    null
                 }
             </TableCell>
             <TableCell align='center'>
-                <IconButton className={button} onClick={() => handleOrderInfoClickOpen(item.guestId, item.cartId)}>
+                <IconButton className={button} onClick={() => handleOrderInfoClickOpen(item.cartId)}>
                     <InfoOutlinedIcon color="action" />
                 </IconButton>
             </TableCell>

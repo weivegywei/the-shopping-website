@@ -58,7 +58,7 @@ export const EditProductDialog = ({open, item, handleClose}: EditProductDialogPr
       itemSpecification, setItemSpecification, itemAvailability, setItemAvailability
     } = useContext(EditProductContext);
 
-    const { setOpenNotification, setSuccessMsg } = useContext(AppContext);
+    const { setNotificationState, setOpenNotification, setSnackbarMsg } = useContext(AppContext);
 
     const {_id, name, manufacturerInfo, price, imageUrl, inventory, description, packageSize, availability, 
       specification, specificationDescr, category} = item;
@@ -73,7 +73,8 @@ export const EditProductDialog = ({open, item, handleClose}: EditProductDialogPr
         availability: itemAvailability, imageUrl: itemImageUrl, description: itemDescription, packageSize: 
         itemPackageSize, category: itemCategory});
       if (!res.error) {
-        setSuccessMsg(res.data);
+        setSnackbarMsg(res.data);
+        setNotificationState('success');
         setOpenNotification(true);
         handleClose();
       } else if (res.error) {

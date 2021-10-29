@@ -1,5 +1,4 @@
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import { ListItem, ListItemText }from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import { ChangeEvent } from 'react';
 import styles from './TextInput.module.scss';

@@ -32,7 +32,7 @@ export const GuestCheckoutPage = () => {
             const checkGuestExist = async() => {
                 const res = await postData('/api/checkguest', {_id: localStorage.guestId})
                 console.log(res, 'res')
-                if (typeof(res.data[0]) === 'string') {
+                if (!res.data.length) {
                     setReady(true)
                 } else {
                     const { firstName, lastName, email, address, country } = res.data[0]

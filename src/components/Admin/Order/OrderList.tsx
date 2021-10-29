@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@material-ui/core';
 import { getData } from '../../../api/getData';
 import { postData } from '../../../api/postData';
@@ -10,30 +10,25 @@ import { observer } from "mobx-react";
 import styles from './OrderList.module.scss';
 import { UserDataType, ListItemProps, ResDataMapProps, ReturnedTimeProps, Events, tableHeadItems, tableHeadItemsProps} from './OrderList.util'
 import { OrderListTable } from './OrderListTable'
+import { AppContext } from '../../../AppContext'
 
 export const OrderList = observer(() => {
     const {container, table} = styles;
     const [list, setList] = useState([]);
-    const [guestOrderList, setGuestOrderList] = useState([]);
     const [openUserInfo, setOpenUserInfo] = useState(false);
     const [openStatusInfo, setOpenStatusInfo] = useState(false);
     const [openStatusEdit, setOpenStatusEdit] = useState(false);
     const [openOrderInfo, setOpenOrderInfo] = useState(false);
     const [selectedItem, setSelectedItem] = useState<InfoItemProps[] | UserDataType | ListItemProps | InfoItemType | null>(null);
+    const { setOpenNotification, setSnackbarMsg, setNotificationState } = useContext(AppContext);
 
     const getAndSetOrderList = async() => {
         const res = await getData('/api/admin/order/list');
         setList(res.data.map((it: ResDataMapProps) => ({...it, userData: it.userInfo[0]})));
     };
 
-    const getAndSetGuestOrderList = async() => {
-        const res = await getData('/api/admin/guestorder/list');
-        setGuestOrderList(res.data)
-    }
-    
     useEffect(() => {
         getAndSetOrderList();
-        getAndSetGuestOrderList()
     },[openStatusEdit]);
 //util
     const returnedTime = (item: ReturnedTimeProps) => {
@@ -49,13 +44,8 @@ export const OrderList = observer(() => {
         setSelectedItem(info);
     };
     
-    const handleOrderInfoClickOpen = async(guestId: string, cartId: string) => {
-        let res;
-        if (guestId) {
-            res = await postData('/api/admin/order/info', {guestId, cartId})
-        } else {
-            res = await postData('/api/admin/order/info', {cartId});
-        }   
+    const handleOrderInfoClickOpen = async(cartId: string) => {
+        const res = await postData('/api/admin/order/info', {cartId});
         const info = res.data.map(it => {
             const { name, _id, inventory, price, packageSize, _doc: { quantity, specificationValue }} = it;
             return [{fieldName: 'Product Name', fieldValue: name}, {fieldName: 'Product Id', fieldValue: _id}, 
@@ -79,19 +69,13 @@ export const OrderList = observer(() => {
 
     const handleSave = () => {
         //@ts-ignore
-        if (selectedItem.guestId) {
-            const editStatus = async() => await postData('/api/admin/order/edit', {   //@ts-ignore
-                id: selectedItem?._id, status: store.status, guestId: selectedItem.guestId
-            });
-            editStatus();
-        } else {
-            //@ts-ignore
-            const editGuestStatus = async() => await postData('/api/admin/order/edit', {id: selectedItem?._id, status: store.status});
-            editGuestStatus();
-        }
+        const editStatus = async() => await postData('/api/admin/order/edit', {id: selectedItem?._id, status: store.status});
+        editStatus();
         getAndSetOrderList();
-        getAndSetGuestOrderList()
         setOpenStatusEdit(false);
+        setNotificationState('success')
+        setOpenNotification(true);
+        setSnackbarMsg(`Order status updated to '${store.status}'.`)
     };
 
     const handleClose = () => {
@@ -116,16 +100,6 @@ return (
                 {list.map((item: ListItemProps) => 
                     <OrderListTable item={item} 
                         handleUserInfoClickOpen={handleUserInfoClickOpen} 
-                        handleOrderInfoClickOpen={handleOrderInfoClickOpen} 
-                        returnedTime={returnedTime} 
-                        handleStatusInfoClickOpen={handleStatusInfoClickOpen} 
-                        handleStatusEditOpen={handleStatusEditOpen}
-                    />
-                )}
-            </TableBody>
-            <TableBody>
-                {guestOrderList.map((item: ListItemProps) =>
-                    <OrderListTable item={item} 
                         handleOrderInfoClickOpen={handleOrderInfoClickOpen} 
                         returnedTime={returnedTime} 
                         handleStatusInfoClickOpen={handleStatusInfoClickOpen} 

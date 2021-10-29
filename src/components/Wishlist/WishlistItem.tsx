@@ -1,15 +1,15 @@
-import { useState, useContext, ChangeEvent } from 'react';
+import { useState, useContext } from 'react';
 import cn from 'classnames';
 import { Typography, IconButton, Divider } from '@material-ui/core';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import { postData } from '../../api/postData';
 import { AlertDialog } from '../Utilities/AlertDialog';
-import styles from './ListItem.module.scss';
+import styles from './WishlistItem.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { AppContext } from '../../AppContext'
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 
-export type ListItemProductType = {
+export type WishlistItemProductType = {
     _id: string;
     productId: string;
     imageUrl: string;
@@ -19,54 +19,44 @@ export type ListItemProductType = {
     price: number;
   }
 
-type ListItemProps = {
-    item: ListItemProductType;
+type WishlistItemProps = {
+    item: WishlistItemProductType;
     userStore: UserStoreType;
-    setListItemsAndNotificationAfterDeleteHandler: () => void
+    setWishlistItemsAndNotificationAfterDeleteHandler: () => void
 }
 
-export const ListItem = ({item, userStore, setListItemsAndNotificationAfterDeleteHandler}: ListItemProps) => {
+export const WishlistItem = ({item, userStore, setWishlistItemsAndNotificationAfterDeleteHandler}: WishlistItemProps) => {
     const { _id, productId, imageUrl, name, specification, specificationValue, price } = item
     const { wrapper, img, productInfo, textarea, itemInfoDiv, textColor, iconDiv, iconButton, icon, flexFiller, 
         iconDivider, priceDiv, priceText } = styles
     const [ openAlert, setOpenAlert ] = useState(false)
-    const [ selectedItem, setSelectedItem ] = useState<ListItemProductType>()
-    const { wishlistItemNumber, setWishlistItemNumber, cartItemNumber, setCartItemNumber, 
-        setOpenNotification, setSuccessMsg } = useContext(AppContext)
+    const [ selectedItem, setSelectedItem ] = useState<WishlistItemProductType>()
+    const { wishlistItemNumber, setWishlistItemNumber, cartItemNumber, setCartItemNumber, setNotificationState,
+        setOpenNotification, setSnackbarMsg } = useContext(AppContext)
 
-    const handleClickOpenAlert = (item: ListItemProductType) => {
+    const handleClickOpenAlert = (item: WishlistItemProductType) => {
         setOpenAlert(true);
         setSelectedItem(item);
     }
 
-    const handleClickAddToCart = async(item: ListItemProductType) => {
-        let res;
-        const { productId, specificationValue } = item
-        if (userStore.id) {
-            res = await postData('/api/cart/add', {userId: userStore.id, productId, specificationValue, quantity: 1})
-        } else if (localStorage.guestId) {
-            res = await postData('/api/guestcart/add', {guestId: localStorage.guestId, productId, specificationValue, quantity: 1})
-        }
-        //if (res.data )
+    const handleClickAddToCart = async(item: WishlistItemProductType) => {
+        const { productId, specificationValue } = item;
+        const res = await postData('/api/cart/add', {userId: userStore.id ? userStore.id : localStorage.guestId, productId, specificationValue, quantity: 1})
         setCartItemNumber(cartItemNumber + 1)
+        setNotificationState('success')
         setOpenNotification(true)
-        setSuccessMsg('Item added to cart')
+        setSnackbarMsg('Item added to cart')
     }
 
-    const handleDelete = async(item: ListItemProductType) => {
-        let res;
-        if (userStore.id) {
-          res = await postData('/api/wishlist/delete', {ownerId: userStore.id, listItemId: _id})
-        } else if (localStorage.guestId) {
-          res = await postData('/api/wishlist/delete', {ownerId: localStorage.guestId, listItemId: _id})
-        }
+    const handleDelete = async(item: WishlistItemProductType) => {
+        const res = await postData('/api/wishlist/delete', {ownerId: userStore.id ? userStore.id : localStorage.guestId, WishlistItemId: _id})
         return res
       }
 
-    const handleConfirm = (item: ListItemProductType) => {
+    const handleConfirm = (item: WishlistItemProductType) => {
         let res = handleDelete(item);
         if (res) {
-            setListItemsAndNotificationAfterDeleteHandler();
+            setWishlistItemsAndNotificationAfterDeleteHandler();
             setWishlistItemNumber(wishlistItemNumber - 1);
             setOpenAlert(false);
         }

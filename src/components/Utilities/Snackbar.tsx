@@ -3,16 +3,15 @@ import MuiAlert from '@material-ui/lab/Alert';
 import styles from './SnackBar.module.scss';
 
 type AlertProps = {
-  severity: any;
-  className: string;
+  severity: 'error' | 'success' | 'warning' | 'info';
+  //className: string;
 }
 
 type NotificationSnackbarProps = {
-  notificationState: 'error' | 'success';
+  notificationState: 'error' | 'success' | 'warning' | 'info';
   openNotification: boolean;
   setOpenNotification: (a: boolean) => void;
-  errorMsg: string;
-  successMsg: string;
+  snackbarMsg: string
 }
 
 const Alert: React.FC<AlertProps> = (props: AlertProps) => {
@@ -20,7 +19,7 @@ const Alert: React.FC<AlertProps> = (props: AlertProps) => {
 }
 
 export const NotificationSnackbar = (
-  {notificationState, openNotification, setOpenNotification, errorMsg, successMsg}: NotificationSnackbarProps) => {
+  {notificationState, openNotification, setOpenNotification, snackbarMsg}: NotificationSnackbarProps) => {
   const {root, sucessStyle, errorStyle} = styles;
 
   const handleClose = (event: React.ChangeEvent<{}>, reason: any) => {
@@ -33,8 +32,8 @@ export const NotificationSnackbar = (
   return (
     <div className={root}>
       <Snackbar open={openNotification} autoHideDuration={4000} onClose={handleClose} >
-        <Alert severity={notificationState === 'error'? 'error' : "success"} className={notificationState === 'error' ? errorStyle : sucessStyle } >
-          {notificationState === 'error' ? errorMsg : successMsg}
+        <Alert severity={notificationState} >
+          {snackbarMsg}
         </Alert>
       </Snackbar>
     </div>

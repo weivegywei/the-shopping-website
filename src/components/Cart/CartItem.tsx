@@ -8,6 +8,7 @@ import { AlertDialog } from '../Utilities/AlertDialog';
 import styles from './CartItem.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { AppContext } from '../../AppContext'
+import { addToWishlist } from '../../util/helper';
 
 export type CartItemProductType = {
   _id: string;
@@ -38,7 +39,7 @@ export const CartItem = ({
   const [openAlert, setOpenAlert] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CartItemProductType>();
   const { cartItemNumber, setCartItemNumber, wishlistItemNumber, setWishlistItemNumber, setOpenNotification, 
-    setSuccessMsg } = useContext(AppContext);
+    setSnackbarMsg, setNotificationState } = useContext(AppContext);
 
   const handleClickOpenAlert = (item: CartItemProductType) => {
     setOpenAlert(true);
@@ -46,55 +47,49 @@ export const CartItem = ({
   };
 
   const handleClickAddToWishlist = async(item: CartItemProductType) => {
-    let res;
     const { productId, specificationValue } = item
-    if (userStore.id) {
-        res = await postData('/api/wishlist/add', {ownerId: userStore.id, productId, specificationValue})
-      } else if (localStorage.guestId) {
-        res = await postData('/api/wishlist/add', {ownerId: localStorage.guestId, productId, specificationValue})
+    try {
+      const res = await addToWishlist(userStore.id ? userStore.id : localStorage.guestId, productId, specificationValue)
+      if (typeof(res.data) === 'string') {
+        setNotificationState('info')
+        setOpenNotification(true)
+        setSnackbarMsg('Item is already in the wishlist')
+      } else {
+        setWishlistItemNumber(wishlistItemNumber + 1)
+        setNotificationState('success')
+        setOpenNotification(true)
+        setSnackbarMsg('Item added to wishlist')
+      }
     }
-    if (typeof(res.data) === 'string') {
+    catch (error) {
+      console.log(error, 'error in adding to wishlist')
+      setNotificationState('error')
       setOpenNotification(true)
-      setSuccessMsg('Item is already in the wishlist')
-    } else {
-      setWishlistItemNumber(wishlistItemNumber + 1)
-      setOpenNotification(true)
-      setSuccessMsg('Item added to wishlist')
+      setSnackbarMsg('There is an error, please try again.')
     }
+    
   }
 
-  const handleChange = async(e: ChangeEvent<HTMLInputElement>) => {
-    if (userStore.id) {
-      await postData('/api/cart/change', {userId: userStore.id, cartItemId: _id, quantity: e.target.value})
-    } else if (localStorage.guestId) {
-      await postData('/api/guestcart/change', {guestId: localStorage.guestId, cartItemId: _id, quantity: e.target.value})
-    }
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    return postData('/api/cart/change', {userId: userStore.id ? userStore.id : localStorage.guestId, cartItemId: _id, quantity: e.target.value})
   };
   
-  const handleDelete = async(item: CartItemProductType) => {
-    let res;
-    if (userStore.id) {
-      res = await postData('/api/cart/delete', {userId: userStore.id, cartItemId: _id})
-    } else if (localStorage.guestId) {
-      res = await postData('/api/guestcart/delete', {guestId: localStorage.guestId, cartItemId: _id})
-    }
-    return res
+  const handleDelete = (item: CartItemProductType) => {
+    return postData('/api/cart/delete', {userId: userStore.id ? userStore.id : localStorage.guestId, cartItemId: _id});
   }
 
-  const itemQuantityChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-      setItemQuantity(Number(e.target.value));
-      handleChange(e);
-      setCartItemNumber(cartItemNumber - quantity + Number(e.target.value));
-      setCartItemsAndNotificationAfterChangeHandler()
+  const itemQuantityChangeHandler = async(e: ChangeEvent<HTMLInputElement>) => {
+    setItemQuantity(Number(e.target.value));
+    await handleChange(e);
+    setCartItemNumber(cartItemNumber - quantity + Number(e.target.value));
+    setCartItemsAndNotificationAfterChangeHandler()
   };
 
-  const handleConfirm = (item: CartItemProductType) => {
-    let res = handleDelete(item);
-    if (res) {
-      setCartItemsAndNotificationAfterDeleteHandler();
-      setCartItemNumber(cartItemNumber - quantity);
-      setOpenAlert(false);
-    }
+  const handleConfirm = async (item: CartItemProductType) => {
+    await handleDelete(item);
+    setCartItemsAndNotificationAfterDeleteHandler();
+    setCartItemNumber(cartItemNumber - quantity);
+    setOpenAlert(false);
   }
 
   return (  

@@ -42,7 +42,7 @@ export type UserDataType = {
 export type ListItemProps = {
     _id: string;
     cartId: string;
-    guestId?: string;
+    userId: string;
     userData?: UserDataType;
     createdAt: string;
     amount: number;
@@ -60,7 +60,7 @@ export type tableHeadItemsProps = {
 }
 
 export const tableHeadItems = [
-    {entry: 'User name & info / Guest Id'},
+    {entry: 'User name & info'},
     {entry: 'Order info', align: AlignTypes.align},
     {entry: 'Paid time', align: AlignTypes.align},
     {entry: 'Order amount', align: AlignTypes.align},

@@ -31,8 +31,8 @@ export const Menu = ({store}: MenuProps) =>
 const MenuComponent = observer(({store}: MenuComponentProps) => {
     const {root, hide, menuButton, filterDiv, filterBar, btnAndDrawer, drawerOpen} = styles;
     const [open, setOpen] = useState(false);
-    const { setMenuCategory, setOpenNotification, setSuccessMsg, setCartItemNumber, setAllManufacturer, 
-      setWishlistItemNumber } = useContext(AppContext);
+    const { setMenuCategory, setOpenNotification, setSnackbarMsg, setNotificationState, setCartItemNumber, 
+      setAllManufacturer, setWishlistItemNumber } = useContext(AppContext);
 
     const handleDrawerOpen = () => { setOpen(true) };
 
@@ -44,8 +44,9 @@ const MenuComponent = observer(({store}: MenuComponentProps) => {
       logoutAction(store)
       setCartItemNumber(0)
       setWishlistItemNumber(0)
+      setNotificationState('success')
       setOpenNotification(true);
-      setSuccessMsg('You have successfully logged out.')
+      setSnackbarMsg('You have successfully logged out.')
     };
 
     useEffect(()=>{
