@@ -9,7 +9,7 @@ export const PaymentMethodPage = () => {
     const { root, title, paperDiv, buttonDiv, flexfiller } = styles;
     const history = useHistory();
     const onClick = () => {
-        history.push('./guestcheckout')
+        history.push(userStore.id ? '/cart' : '/guestcheckout')
     }
     const buttonMsg = 'Go back'
 

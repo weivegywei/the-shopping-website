@@ -41,7 +41,7 @@ export const WishlistItem = ({item, userStore, setWishlistItemsAndNotificationAf
 
     const handleClickAddToCart = async(item: WishlistItemProductType) => {
         const { productId, specificationValue } = item;
-        const res = await postData('/api/cart/add', {userId: userStore.id ? userStore.id : localStorage.guestId, productId, specificationValue, quantity: 1})
+        await postData('/api/cart/add', {userId: userStore.id ?? localStorage.guestId, productId, specificationValue, quantity: 1})
         setCartItemNumber(cartItemNumber + 1)
         setNotificationState('success')
         setOpenNotification(true)
@@ -49,12 +49,11 @@ export const WishlistItem = ({item, userStore, setWishlistItemsAndNotificationAf
     }
 
     const handleDelete = async(item: WishlistItemProductType) => {
-        const res = await postData('/api/wishlist/delete', {ownerId: userStore.id ? userStore.id : localStorage.guestId, WishlistItemId: _id})
-        return res
-      }
+        return await postData('/api/wishlist/delete', {ownerId: userStore.id ?? localStorage.guestId, wishlistItemId: _id})
+    }
 
     const handleConfirm = (item: WishlistItemProductType) => {
-        let res = handleDelete(item);
+        const res = handleDelete(item);
         if (res) {
             setWishlistItemsAndNotificationAfterDeleteHandler();
             setWishlistItemNumber(wishlistItemNumber - 1);
@@ -72,8 +71,7 @@ export const WishlistItem = ({item, userStore, setWishlistItemsAndNotificationAf
                             <div className={itemInfoDiv}>{name}</div>
                             <div className={cn(itemInfoDiv, textColor)}>
                                 {specification && specificationValue ? 
-                                specification + ': ' + specificationValue :
-                                null}
+                                specification + ': ' + specificationValue : null}
                             </div>
                         </div>
                     </Typography>

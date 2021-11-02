@@ -9,7 +9,8 @@ export enum RegisterStoreKeys {
     address = 'address',
     country = 'country',
     role = 'role',
-    type = 'type'
+    type = 'type', 
+    status = 'status'
 }
 
 export type RoleType = {
@@ -18,6 +19,10 @@ export type RoleType = {
 
 type TypeType = {
     type: 'regular' | 'guest'
+}
+
+type StatusType = {
+    status: 'active' | 'inactive'
 }
 
 class RegisterStore {
@@ -30,6 +35,7 @@ class RegisterStore {
     country = ''
     role = 'customer'
     type = 'regular'
+    status = 'active'
 
     constructor () {
         makeAutoObservable(this);
@@ -52,5 +58,6 @@ export type RegisterStoreType = {
     country: string;
     role: RoleType;
     type: TypeType;
+    status: StatusType;
     changeValue: (a: RegisterStoreKeys, b: string) => void;
 }

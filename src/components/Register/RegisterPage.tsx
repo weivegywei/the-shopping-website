@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import cn from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from "react-router-dom";
@@ -39,7 +39,8 @@ export const RegisterPage = observer(() => {
       address: store.address,
       country: userCountry,
       role: store.role,
-      type: store.type
+      type: store.type, 
+      status: store.status
     })
     console.log(res, 'res')
     if(res.error === 'USER_EXISTS') {
@@ -54,6 +55,21 @@ export const RegisterPage = observer(() => {
 
   const changeValue = (e: ChangeEvent<HTMLInputElement>, fieldName: RegisterStoreKeys) => 
     store.changeValue(fieldName, e.target.value)
+
+  useEffect(() => {
+    if (store.email.length) {
+      const checkExistingUserEmail = async() => {
+        const res = await postData('/api/checkuser', {email: store.email})
+        console.log(res.data, 'res')
+        if (res.data === 'This email has been registered.') {
+          setUserExistsState(true)
+        } else {
+          setUserExistsState(false)
+        }
+      }
+      checkExistingUserEmail()
+    }
+  }, [store.email])
 
   return (
     <div className={root}>
