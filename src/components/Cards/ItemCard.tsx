@@ -38,50 +38,51 @@ export const ItemCard = ({item, userStore}: ItemCardProps) => {
     e.stopPropagation();
     e.preventDefault();
     let resCart;
-    if (userStore.id) {
-      resCart = await addToCart( userStore.id, item._id, 1, itemFirstSpecificationValue );
-    } else if (localStorage.guestId) {
-      resCart = await addToCart( localStorage.guestId, item._id, 1, itemFirstSpecificationValue )
+    if (userStore.id || localStorage.guestId) {
+      resCart = await addToCart( userStore.id ?? localStorage.guestId, item._id, 1, itemFirstSpecificationValue );
     } else {
       const generatedGuestId = uuidv4();
       localStorage.setItem('guestId', generatedGuestId);
       resCart = await addToCart( generatedGuestId, item._id, 1, itemFirstSpecificationValue )
     }
     if(resCart) {
-      console.log(resCart, 'resCart')
       setCartItemNumber(cartItemNumber + 1)
       setNotificationState('success')
-      setOpenNotification(true);
       setSnackbarMsg('Item added to cart.')
     } else {
       setNotificationState('error')
-      setOpenNotification(true);
       setSnackbarMsg('Adding item failed, please try again.')
     }
+    setOpenNotification(true);
   }
 
   const handleClickAddToWishlist = async(e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     e.preventDefault();
+    let res;
     try {
-      const res = await addToWishlist(userStore.id ? userStore.id : localStorage.guestId, item._id, itemFirstSpecificationValue)
+      if (userStore.id || localStorage.guestId) {
+        res = await addToWishlist(userStore.id ?? localStorage.guestId, item._id, itemFirstSpecificationValue)
+      } else {
+        const generatedGuestId = uuidv4();
+        localStorage.setItem('guestId', generatedGuestId);
+        res = await addToWishlist( generatedGuestId, item._id, itemFirstSpecificationValue )
+      }
       if (typeof(res.data) === 'string') {
         setNotificationState('info')
-        setOpenNotification(true)
         setSnackbarMsg('Item is already in the wishlist')
       } else {
         setWishlistItemNumber(wishlistItemNumber + 1)
         setNotificationState('success')
-        setOpenNotification(true)
         setSnackbarMsg('Item added to wishlist')
       }
     }
     catch (error) {
       console.log(error, 'error in adding to wishlist')
       setNotificationState('error')
-      setOpenNotification(true)
       setSnackbarMsg('There is an error, please try again.')
     }
+    setOpenNotification(true)
   }
 
   return (
@@ -94,12 +95,12 @@ export const ItemCard = ({item, userStore}: ItemCardProps) => {
         <div className={p}>€ {Number(item.price).toFixed(2)}</div>
         <div className={flexfiller}></div>
         <Tooltip title='Add to wish list'>
-          <StyledIconButton className={icon}  onClick={handleClickAddToWishlist} >
+          <StyledIconButton className={icon}  onClick={handleClickAddToWishlist} data-test='itemCard-addToWishlistButton'>
             <RiHeartAddLine />
           </StyledIconButton>
         </Tooltip>
         <Tooltip title='Add to cart'>
-          <IconButton className={icon} onClick={handleClickAddToCart} >
+          <IconButton className={icon} onClick={handleClickAddToCart} data-test='itemCard-addToCartButton'>
             <AddShoppingCartIcon/>
           </IconButton>
         </Tooltip>

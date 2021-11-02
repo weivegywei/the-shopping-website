@@ -64,10 +64,8 @@ const ProductPageComponent = ({userStore, cartItemStore}: ProductPageComponentPr
   }
 
   const handleAddToWishlist = async() => {
-    if (userStore.id) {
-      addToWishlist( userStore.id, productId, cartItemStore.specificationValue)
-    } else if (localStorage.guestId) {
-      addToWishlist( localStorage.guestId, productId, cartItemStore.specificationValue)
+    if (userStore.id || localStorage.guestId) {
+      addToWishlist( userStore.id ?? localStorage.guestId, productId, cartItemStore.specificationValue)
     } else {
       const generatedGuestId = uuidv4();
       localStorage.setItem('guestId', generatedGuestId);
