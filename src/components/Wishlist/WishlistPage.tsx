@@ -19,46 +19,39 @@ export const WishlistPage = observer(({userStore}: WishlistPageProps) => {
   const [ WishlistItems, setWishlistItems ] = useState([]);
   const [ ready, setReady ] = useState<boolean>(false);
   const [ loading , setLoading ] = useState<boolean>(true);
-  const { setOpenNotification, setSnackbarMsg, wishlistItemNumber, setNotificationState } = useContext(AppContext);
+  const { setNotificationInfo, wishlistItemNumber } = useContext(AppContext);
   const history = useHistory();
   const handleClick = () => history.push('/');
   const buttonMsg = 'Go browsing'
 
-  const setWishlistItemsAndNotificationAfterDeleteHandler = () => {
-    setNotificationState('success')
-    setOpenNotification(true);
-    setSnackbarMsg('You have deleted this item from your wishlist.');
-    setItemsHandler()
+  const handleAfterDelete = () => {
+    setNotificationInfo('success', 'You have deleted this item from your wishlist.')
+    setItemsHandler();
   }
 
   const setItemsHandler = async() => {
-    setReady(false)
     setLoading(true)
     if (userStore.id || localStorage.guestId) {
-      const res = await postData('/api/wishlist/get', {ownerId: userStore.id ? userStore.id : localStorage.guestId});
+      const res = await postData('/api/wishlist/get', {ownerId: userStore.id ?? localStorage.guestId});
       if (res.data.length) {
-        setReady(true); 
-        setLoading(false)
         setWishlistItems(res.data)
+        setReady(true); 
       } else {
-        setLoading(false)
-        setReady(false)
         setWishlistItems([])
+        setReady(false)
       }
     } else {
-      setLoading(false)
-      setReady(false)
       setWishlistItems([])
+      setReady(false)
     }
+    setLoading(false)
   }
 
   useEffect(() => {
-    setItemsHandler()
-  },[userStore.id, wishlistItemNumber, localStorage.guestId]);
+    setItemsHandler();
+  },[wishlistItemNumber, userStore.id, localStorage.guestId]);
 
-  return loading ?
-    null :
-  ready ? (
+  return loading ? null : ready ? (
     <>
       <TopBar userStore={userStore} />
       <div className={rootDiv}>
@@ -71,7 +64,7 @@ export const WishlistPage = observer(({userStore}: WishlistPageProps) => {
               <div key={item._id.toString() + item.specificationValue}>
                 <Paper elevation={0} className={itemcard}>
                   <WishlistItem item={item} userStore={userStore} 
-                  setWishlistItemsAndNotificationAfterDeleteHandler={setWishlistItemsAndNotificationAfterDeleteHandler}/>
+                  handleAfterDelete={handleAfterDelete}/>
                 </Paper>
                 {idx + 1 < WishlistItems.length && <Divider variant="middle" />}
               </div>

@@ -2,12 +2,11 @@ import { createContext, useState } from 'react';
 import { CategoryType } from './store/productStore';
 
 export type AppContextType = {
-    notificationState: 'error' | 'success' | 'warning' | 'info'; 
-    setNotificationState: (notificationState: 'error' | 'success' | 'warning' | 'info') => void, 
-    openNotification: boolean; 
-    setOpenNotification: (openNotification: boolean) => void,
-    snackbarMsg: string;
-    setSnackbarMsg: (snackbarMsg: string) => void, 
+    setNotificationInfo: (a: 'error' | 'success' | 'warning' | 'info' | null, b: string) => void;
+    notificationState: 'error' | 'success' | 'warning' | 'info' | null; 
+    setNotificationState: (notificationState: 'error' | 'success' | 'warning' | 'info' | null) => void;
+    notificationMsg: string;
+    setNotificationrMsg: (notificationMsg: string) => void, 
     menuCategory: CategoryType | '' ; 
     setMenuCategory: (menuCategory: CategoryType | '') => void;
     cartItemNumber: number;
@@ -20,25 +19,18 @@ export type AppContextType = {
     setManufacturerFilter: (manufacturerFilter: string[]) => void;
     userCountry: string;
     setUserCountry: (userCountry: string) => void;
-    guestFirstName: string;
-    setGuestFirstName: (guestFirstName: string) => void;
-    guestLastName: string;
-    setGuestLastName: (guestLastName: string) => void;
-    guestEmail: string;
-    setGuestEmail: (guestEmail: string) => void;
-    guestAddress: string;
-    setGuestAddress: (guestAddress: string) => void;
     cartTotalAmount: number;
     setCartTotalAmount: (cartTotalAmount: number) => void;
+    itemSpecificationValue: string;
+    setItemSpecificationValue: (itemSpecificationValue: string) => void;
 }
 
 export const AppContext = createContext<AppContextType>({
-    notificationState: 'success', 
-    setNotificationState: (notificationState: 'error' | 'success' | 'warning' | 'info') => ({}), 
-    openNotification: false, 
-    setOpenNotification: (openNotification: boolean) => ({}),
-    snackbarMsg: '',
-    setSnackbarMsg: (snackbarMsg: string) => ({}), 
+    setNotificationInfo: (a: 'error' | 'success' | 'warning' | 'info' | null, b: string) => ({}),
+    notificationState: null, 
+    setNotificationState: (notificationState: 'error' | 'success' | 'warning' | 'info' | null) => ({}), 
+    notificationMsg: '',
+    setNotificationrMsg: (notificationMsg: string) => ({}), 
     menuCategory: '', 
     setMenuCategory: (menuCategory: CategoryType | '') => ({}),
     cartItemNumber: 0,
@@ -51,22 +43,15 @@ export const AppContext = createContext<AppContextType>({
     setManufacturerFilter: (manufacturerFilter: string[]) => ({}),
     userCountry: '',
     setUserCountry: (userCountry: string) => ({}),
-    guestFirstName: '',
-    setGuestFirstName: (guestFirstName: string) => ({}),
-    guestLastName: '',
-    setGuestLastName: (guestLastName: string) => ({}),
-    guestEmail: '',
-    setGuestEmail: (guestEmail: string) => ({}),
-    guestAddress: '',
-    setGuestAddress: (guestAddress: string) => ({}),
     cartTotalAmount: 0,
-    setCartTotalAmount: (cartTotalAmount: number) => ({})
+    setCartTotalAmount: (cartTotalAmount: number) => ({}),
+    itemSpecificationValue: '',
+    setItemSpecificationValue: (itemSpecificationValue: string) => ({}),
 });
 
 export const useAppContext = () => {
-    const [ openNotification, setOpenNotification ] = useState<boolean>(false);
-    const [ notificationState, setNotificationState ] = useState<'error' | 'success' | 'warning' | 'info'>('success');
-    const [ snackbarMsg, setSnackbarMsg ] = useState<string>('');
+    const [ notificationState, setNotificationState ] = useState<'error' | 'success' | 'warning' | 'info' | null>(null);
+    const [ notificationMsg, setNotificationrMsg ] = useState<string>('');
     const [ menuCategory, setMenuCategory ] = useState<CategoryType | '' >('');
     const [ cartItemNumber, setCartItemNumber ] = useState<number>(0);
     const [ wishlistItemNumber, setWishlistItemNumber ] = useState<number>(0);
@@ -74,17 +59,17 @@ export const useAppContext = () => {
     const [ manufacturerFilter, setManufacturerFilter ] = useState<string[]>([]);
     const [ userCountry, setUserCountry ] = useState<string>('');
     const [ cartTotalAmount, setCartTotalAmount ] = useState<number>(0);
-    const [ guestFirstName, setGuestFirstName ] = useState<string>('');
-    const [ guestLastName, setGuestLastName ] = useState<string>('');
-    const [ guestEmail, setGuestEmail ] = useState<string>('');
-    const [ guestAddress, setGuestAddress ] = useState<string>('');
+    const [ itemSpecificationValue, setItemSpecificationValue ] = useState<string>('');
 
-    return { notificationState, setNotificationState, openNotification, setOpenNotification, snackbarMsg, 
-        setSnackbarMsg , menuCategory, setMenuCategory, cartItemNumber, setCartItemNumber, wishlistItemNumber, 
+    const setNotificationInfo = (a: 'error' | 'success' | 'warning' | 'info' | null, b: string) => {
+        setNotificationState(a);
+        setNotificationrMsg(b)
+    }
+
+    return { setNotificationInfo, notificationState, setNotificationState, notificationMsg,
+        setNotificationrMsg , menuCategory, setMenuCategory, cartItemNumber, setCartItemNumber, wishlistItemNumber, 
         setWishlistItemNumber, allManufacturer, setAllManufacturer, manufacturerFilter, setManufacturerFilter,
-        userCountry, setUserCountry, cartTotalAmount, setCartTotalAmount, 
-        guestFirstName, setGuestFirstName, guestLastName, setGuestLastName, 
-        guestEmail, setGuestEmail, 
-        guestAddress, setGuestAddress};
+        userCountry, setUserCountry, cartTotalAmount, setCartTotalAmount, itemSpecificationValue, 
+        setItemSpecificationValue };
 }
 

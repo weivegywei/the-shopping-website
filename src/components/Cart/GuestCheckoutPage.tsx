@@ -10,8 +10,11 @@ import { useHistory } from 'react-router';
 export const GuestCheckoutPage = () => {
     const { root, title, label, buttonDiv,proceedButton } = styles;
     const [ ready, setReady ] = useState<boolean>(false);
-    const { userCountry, guestFirstName, setGuestFirstName, guestLastName, setGuestLastName, 
-        guestEmail, setGuestEmail, guestAddress, setGuestAddress,setUserCountry } = useContext(AppContext)
+    const [ guestFirstName, setGuestFirstName ] = useState<string>('');
+    const [ guestLastName, setGuestLastName ] = useState<string>('');
+    const [ guestEmail, setGuestEmail ] = useState<string>('');
+    const [ guestAddress, setGuestAddress ] = useState<string>('');
+    const { userCountry, setUserCountry } = useContext(AppContext)
     const history = useHistory();
     const handleClick = () => {
         if (localStorage.guestId) {
@@ -21,7 +24,7 @@ export const GuestCheckoutPage = () => {
               lastName: guestLastName, 
               email: guestEmail, 
               address: guestAddress, 
-              country: userCountry, role: 'customer', type: 'guest'
+              country: userCountry, role: 'customer', type: 'guest', status: 'active'
             })
           }
         history.push('/paymentmethod')
@@ -31,8 +34,7 @@ export const GuestCheckoutPage = () => {
         if (localStorage.guestId) {
             const checkGuestExist = async() => {
                 const res = await postData('/api/checkguest', {_id: localStorage.guestId})
-                console.log(res, 'res')
-                if (!res.data.length) {
+                if (!res?.data?.length) {
                     setReady(true)
                 } else {
                     const { firstName, lastName, email, address, country } = res.data[0]

@@ -30,8 +30,7 @@ const StyledIconButton = withStyles({
 
 export const ItemCard = ({item, userStore}: ItemCardProps) => {
   const {root, p, card, action, flexfiller, icon} = styles;
-  const { setOpenNotification, setSnackbarMsg, cartItemNumber, setCartItemNumber, setNotificationState,
-    wishlistItemNumber, setWishlistItemNumber } = useContext(AppContext);
+  const { setNotificationInfo, cartItemNumber, setCartItemNumber, wishlistItemNumber, setWishlistItemNumber } = useContext(AppContext);
   const itemFirstSpecificationValue = item.specificationDescr[0].split(',')[0];
   
   const handleClickAddToCart = async(e: MouseEvent<HTMLElement>) => {
@@ -47,13 +46,10 @@ export const ItemCard = ({item, userStore}: ItemCardProps) => {
     }
     if(resCart) {
       setCartItemNumber(cartItemNumber + 1)
-      setNotificationState('success')
-      setSnackbarMsg('Item added to cart.')
+      setNotificationInfo('success', 'Item added to cart.')
     } else {
-      setNotificationState('error')
-      setSnackbarMsg('Adding item failed, please try again.')
+      setNotificationInfo('error', 'Adding item failed, please try again.')
     }
-    setOpenNotification(true);
   }
 
   const handleClickAddToWishlist = async(e: MouseEvent<HTMLElement>) => {
@@ -69,20 +65,16 @@ export const ItemCard = ({item, userStore}: ItemCardProps) => {
         res = await addToWishlist( generatedGuestId, item._id, itemFirstSpecificationValue )
       }
       if (typeof(res.data) === 'string') {
-        setNotificationState('info')
-        setSnackbarMsg('Item is already in the wishlist')
+        setNotificationInfo('info', 'Item is already in the wishlist')
       } else {
         setWishlistItemNumber(wishlistItemNumber + 1)
-        setNotificationState('success')
-        setSnackbarMsg('Item added to wishlist')
+        setNotificationInfo('success', 'Item added to wishlist')
       }
     }
     catch (error) {
       console.log(error, 'error in adding to wishlist')
-      setNotificationState('error')
-      setSnackbarMsg('There is an error, please try again.')
+      setNotificationInfo('error', 'There is an error, please try again.')
     }
-    setOpenNotification(true)
   }
 
   return (

@@ -1,10 +1,9 @@
-import { makeStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import { makeStyles, FormControl, Select, MenuItem } from '@material-ui/core';
 import { BootstrapInputForSpecificationValueDropdown } from '../../util/BootstrapInput';
-import { observer } from 'mobx-react-lite';
-import { ChangeEvent } from 'react';
-import { CartItemStoreType, CartItemStoreKey } from '../../store/cartStore';
+//import { observer } from 'mobx-react-lite';
+import { ChangeEvent, useContext } from 'react';
+//import { CartItemStoreType, CartItemStoreKey } from '../../store/cartStore';
+import { AppContext } from '../../AppContext';
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -13,29 +12,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type SpecificationValueDropdownProps = {
-    cartItemStore: CartItemStoreType;
     values: string ;
 }
 
-export const SpecificationValueDropdown = observer(
-  ({cartItemStore, values}: SpecificationValueDropdownProps) => {
+export const SpecificationValueDropdown = 
+  ({values}: SpecificationValueDropdownProps) => {
   const {margin} = useStyles();
-  const changeValue = (e: ChangeEvent<HTMLSelectElement>) => 
-    cartItemStore.changeValue(CartItemStoreKey.specificationValue, e.target.value)
-  
+  //const changeValue = (e: ChangeEvent<HTMLSelectElement>) => 
+   // cartItemStore.changeValue(CartItemStoreKey.specificationValue, e.target.value)
+  const { itemSpecificationValue, setItemSpecificationValue } = useContext(AppContext)
   const specificationValueArr = values.split(',');
+  const onChange = (e: ChangeEvent<HTMLSelectElement>) => setItemSpecificationValue(e.target.value)
 
   return (
     <div>
       <FormControl className={margin}>
-        <NativeSelect
-          value={cartItemStore.specificationValue}
-          onChange={changeValue}
+        <Select
+          value={itemSpecificationValue}
+          onChange={onChange}
           input={<BootstrapInputForSpecificationValueDropdown />}
+          defaultValue={specificationValueArr[1]}
         >
-          {specificationValueArr.map((item) => <option value={item}>{item}</option>)}
-        </NativeSelect>
+          {specificationValueArr.map((item) => <MenuItem value={item}>{item}</MenuItem>)}
+        </Select>
       </FormControl>
     </div>
   );
-})
+}

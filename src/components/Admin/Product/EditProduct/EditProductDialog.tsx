@@ -51,17 +51,14 @@ export const EditProductDialog = ({open, item, handleClose}: EditProductDialogPr
     const {content, form, textField, flexField, inventoryField, priceField} = styles;
     const [editError, setEditError] = useState(false);
     const [editErrorMsg, setEditErrorMsg] = useState('');
-
-    const {productName, setProductName, manufacturer, setManufacturer, itemInventory, setItemInventory, itemPrice, 
+    const { setNotificationInfo } = useContext(AppContext);
+    const { productName, setProductName, manufacturer, setManufacturer, itemInventory, setItemInventory, itemPrice, 
       setItemPrice, itemSpecificationDescr, setItemSpecificationDescr, itemPackageSize, setItemPackageSize, 
       itemImageUrl, setItemImageUrl, itemDescription, setItemDescription, itemCategory, setItemCategory,
       itemSpecification, setItemSpecification, itemAvailability, setItemAvailability
     } = useContext(EditProductContext);
-
-    const { setNotificationState, setOpenNotification, setSnackbarMsg } = useContext(AppContext);
-
-    const {_id, name, manufacturerInfo, price, imageUrl, inventory, description, packageSize, availability, 
-      specification, specificationDescr, category} = item;
+    const { _id, name, manufacturerInfo, price, imageUrl, inventory, description, packageSize, availability, 
+      specification, specificationDescr, category } = item;
 
     const changeValue = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, setState: (e) => void) => {
       setState(e.target.value)
@@ -73,9 +70,7 @@ export const EditProductDialog = ({open, item, handleClose}: EditProductDialogPr
         availability: itemAvailability, imageUrl: itemImageUrl, description: itemDescription, packageSize: 
         itemPackageSize, category: itemCategory});
       if (!res.error) {
-        setSnackbarMsg(res.data);
-        setNotificationState('success');
-        setOpenNotification(true);
+        setNotificationInfo('success', res.data)
         handleClose();
       } else if (res.error) {
         setEditError(true);

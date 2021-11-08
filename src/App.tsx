@@ -26,25 +26,17 @@ export const AppWrapper = (props) =>
   </AppContext.Provider>
 
 const App = observer(({userStore}) => {
-  const { notificationState, openNotification, setOpenNotification, snackbarMsg, setCartItemNumber,
-    setWishlistItemNumber } = useContext(AppContext);
+  const { setCartItemNumber, setWishlistItemNumber } = useContext(AppContext);
 
   useEffect(() => {
     getUserInfo();
   }, []);
 
   const fetchAndSetCartAndWishlistItemNum = async() => {
-    let cartItemNumber: number, listItemNumber: number;
-    if (userStore.id) {
-      cartItemNumber = await getCartItemsNumber(userStore.id);
-      listItemNumber = await getWishlistItemNumber(userStore.id)
-    } else if (localStorage.guestId) {
-      cartItemNumber = await getCartItemsNumber(localStorage.guestId)
-      listItemNumber = await getWishlistItemNumber(localStorage.guestId)
-    } else {
-      cartItemNumber = 0;
-      listItemNumber = 0
-    }
+    let cartItemNumber = userStore.id ? await getCartItemsNumber(userStore.id) : localStorage.guestId ? 
+    await getCartItemsNumber(localStorage.guestId) : 0;
+    let listItemNumber = userStore.id ? await getWishlistItemNumber(userStore.id) : localStorage.guestId ? 
+    await getWishlistItemNumber(localStorage.guestId) : 0;
     setCartItemNumber(cartItemNumber)
     setWishlistItemNumber(listItemNumber)
   }
@@ -127,8 +119,7 @@ const App = observer(({userStore}) => {
           </Route>
         </Switch>
       </Router>
-      {openNotification && <NotificationSnackbar notificationState={notificationState} openNotification={openNotification} 
-      setOpenNotification={setOpenNotification} snackbarMsg={snackbarMsg} />}
+      <NotificationSnackbar />
     </>
   );
 } )

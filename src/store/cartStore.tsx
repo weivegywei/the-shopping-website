@@ -46,7 +46,7 @@ export type CartItemStoreType  = {
 }
 
 class CartItemStore {
-    specificationValue = ''
+    specificationValue = undefined
   
     constructor() {
         makeAutoObservable(this)

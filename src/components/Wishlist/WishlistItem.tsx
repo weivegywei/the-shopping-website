@@ -22,40 +22,33 @@ export type WishlistItemProductType = {
 type WishlistItemProps = {
     item: WishlistItemProductType;
     userStore: UserStoreType;
-    setWishlistItemsAndNotificationAfterDeleteHandler: () => void
+    handleAfterDelete: () => void
 }
 
-export const WishlistItem = ({item, userStore, setWishlistItemsAndNotificationAfterDeleteHandler}: WishlistItemProps) => {
+export const WishlistItem = ({item, userStore, handleAfterDelete}: WishlistItemProps) => {
     const { _id, productId, imageUrl, name, specification, specificationValue, price } = item
     const { wrapper, img, productInfo, textarea, itemInfoDiv, textColor, iconDiv, iconButton, icon, flexFiller, 
         iconDivider, priceDiv, priceText } = styles
     const [ openAlert, setOpenAlert ] = useState(false)
-    const [ selectedItem, setSelectedItem ] = useState<WishlistItemProductType>()
-    const { wishlistItemNumber, setWishlistItemNumber, cartItemNumber, setCartItemNumber, setNotificationState,
-        setOpenNotification, setSnackbarMsg } = useContext(AppContext)
-
-    const handleClickOpenAlert = (item: WishlistItemProductType) => {
+    const { wishlistItemNumber, setWishlistItemNumber, cartItemNumber, setCartItemNumber, setNotificationInfo } = useContext(AppContext)
+    const handleClickOpenAlert = () => {
         setOpenAlert(true);
-        setSelectedItem(item);
     }
 
-    const handleClickAddToCart = async(item: WishlistItemProductType) => {
-        const { productId, specificationValue } = item;
+    const handleClickAddToCart = async() => {
         await postData('/api/cart/add', {userId: userStore.id ?? localStorage.guestId, productId, specificationValue, quantity: 1})
         setCartItemNumber(cartItemNumber + 1)
-        setNotificationState('success')
-        setOpenNotification(true)
-        setSnackbarMsg('Item added to cart')
+        setNotificationInfo('success', 'Item added to cart')
     }
 
-    const handleDelete = async(item: WishlistItemProductType) => {
-        return await postData('/api/wishlist/delete', {ownerId: userStore.id ?? localStorage.guestId, wishlistItemId: _id})
+    const handleDelete = () => {
+        return postData('/api/wishlist/delete', {ownerId: userStore.id ?? localStorage.guestId, wishlistItemId: _id})
     }
 
-    const handleConfirm = (item: WishlistItemProductType) => {
-        const res = handleDelete(item);
+    const handleConfirm = async() => {
+        const res = await handleDelete();
         if (res) {
-            setWishlistItemsAndNotificationAfterDeleteHandler();
+            handleAfterDelete();
             setWishlistItemNumber(wishlistItemNumber - 1);
             setOpenAlert(false);
         }
@@ -77,12 +70,12 @@ export const WishlistItem = ({item, userStore, setWishlistItemsAndNotificationAf
                     </Typography>
                     <div className={flexFiller} />
                     <Typography variant='caption' className={iconDiv}>
-                        <IconButton className={iconButton} onClick={() => handleClickOpenAlert(item)} >
+                        <IconButton className={iconButton} onClick={handleClickOpenAlert} >
                             <DeleteOutlineOutlinedIcon className={icon} />
                             Delete
                         </IconButton>
                         <Divider orientation="vertical" className={iconDivider} />
-                        <IconButton className={iconButton} disableFocusRipple onClick={() => handleClickAddToCart(item)}>
+                        <IconButton className={iconButton} disableFocusRipple onClick={handleClickAddToCart}>
                             <AddShoppingCartIcon className={icon} />
                             Add to cart
                         </IconButton>
@@ -99,7 +92,7 @@ export const WishlistItem = ({item, userStore, setWishlistItemsAndNotificationAf
                 <AlertDialog
                 open={openAlert} 
                 handleClose={() => setOpenAlert(false)} 
-                handleConfirm={() => handleConfirm(selectedItem)}
+                handleConfirm={handleConfirm}
                 alertMsg = 'Are you sure you want to delete this item?'
                 confirmMsg = 'Delete'
                 />}

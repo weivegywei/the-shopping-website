@@ -12,7 +12,7 @@ import { DeleteButton } from './DeleteButton';
 import { getData } from '../../../api/getData';
 import { postData } from '../../../api/postData';
 import { AlertDialog } from '../../Utilities/AlertDialog';
-import { EditProductDialogWrapper, ProductListItem } from './EditProduct/EditProductDialog';
+import { EditProductDialog, ProductListItem } from './EditProduct/EditProductDialog';
 import styles from './ProductList.module.scss';
 
 const transformBoolean = (val: boolean) => val ? 'Yes' : 'No'
@@ -126,7 +126,7 @@ export const ProductList = () => {
       confirmMsg = 'Delete'
     />}
     {openEdit &&
-    <EditProductDialogWrapper
+    <EditProductDialog
       open={openEdit}
       item={selectedEditItem}
       handleClose={handleClose}

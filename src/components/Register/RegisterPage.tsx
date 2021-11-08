@@ -1,9 +1,8 @@
 import { useState, useContext, useEffect } from 'react';
 import cn from 'classnames';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Paper } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
-import Paper from '@material-ui/core/Paper';
-import {InputBox} from '../Inputs/InputBox';
+import { InputBox } from '../Inputs/InputBox';
 import { observer } from "mobx-react";
 import { CountryDropdown } from './CountryDropdown';
 import { registerStore as store, RegisterStoreKeys } from '../../store/registerStore';
@@ -18,7 +17,7 @@ export const RegisterPage = observer(() => {
   const [passwordMatchingState, setPasswordMatchingState] = useState(true);
   const [userExistsState, setUserExistsState] = useState(false);
   const history = useHistory(); 
-  const { setNotificationState, setOpenNotification, setSnackbarMsg, userCountry, setUserCountry } = useContext(AppContext);
+  const { setNotificationInfo, userCountry, setUserCountry } = useContext(AppContext);
 
   const onBlur = () => {
       if (store.password !== store.confirmPassword) {
@@ -42,13 +41,10 @@ export const RegisterPage = observer(() => {
       type: store.type, 
       status: store.status
     })
-    console.log(res, 'res')
     if(res.error === 'USER_EXISTS') {
       setUserExistsState(true);
     } else {
-      setNotificationState('success')
-      setOpenNotification(true);
-      setSnackbarMsg('Sign up succeed! Welcome! Please log in to continue');
+      setNotificationInfo('success', 'Sign up succeed! Welcome! Please log in to continue')
       history.push('/login');
     }
   };
@@ -60,7 +56,6 @@ export const RegisterPage = observer(() => {
     if (store.email.length) {
       const checkExistingUserEmail = async() => {
         const res = await postData('/api/checkuser', {email: store.email})
-        console.log(res.data, 'res')
         if (res.data === 'This email has been registered.') {
           setUserExistsState(true)
         } else {

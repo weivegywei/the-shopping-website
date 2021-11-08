@@ -61,7 +61,7 @@ export const TopBarForMenu = ({store, handleGetAllProduct, handleLogout}: TopBar
               </Link>
               <Link to="/wishlist" className={link}>
                 <IconButton className={icons}>
-                  <StyledBadge badgeContent={wishlistItemNumber}>
+                  <StyledBadge badgeContent={wishlistItemNumber} data-test='menu-wishlist-badge'>
                     <FavoriteBorderIcon />
                   </StyledBadge>
                 </IconButton>

@@ -1,12 +1,7 @@
 import { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import { makeStyles, CssBaseline, AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
 import cn from 'classnames';
 import { Link } from "react-router-dom";
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { StyledBadge } from '../../util/StyledBadge';
@@ -37,15 +32,12 @@ export const TopBar = ({userStore}: TopBarProp) => {
     const {appBarRoot, text,  siteName, header, link, margin, padding, loginDiv, welcome, span, logout, 
         login, icons, flexfiller, logo} = styles;
     const { appBar } = useStylesForTopBar();
-    const { setOpenNotification, setSnackbarMsg, cartItemNumber, setCartItemNumber, wishlistItemNumber, 
-        setNotificationState, setWishlistItemNumber } = useContext(AppContext);
+    const { setNotificationInfo, cartItemNumber, setCartItemNumber, wishlistItemNumber, setWishlistItemNumber } = useContext(AppContext);
     const handleLogout = () => {
         logoutAction(userStore)
         setCartItemNumber(0)
         setWishlistItemNumber(0)
-        setNotificationState('success')
-        setOpenNotification(true);
-        setSnackbarMsg('You have successfully logged out.')
+        setNotificationInfo('success', 'You have successfully logged out.')
       };
 
     return (
@@ -78,7 +70,7 @@ export const TopBar = ({userStore}: TopBarProp) => {
                         </div>
                         <Link to="/cart" className={link}>
                             <IconButton className={icons}>
-                                <StyledBadge badgeContent={cartItemNumber}>
+                                <StyledBadge badgeContent={cartItemNumber} data-test='topBar-cartButton'>
                                     <ShoppingCartIcon />
                                 </StyledBadge>
                             </IconButton>

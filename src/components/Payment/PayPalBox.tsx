@@ -45,11 +45,10 @@ export const PayPalBox = ({userId, guestId}: PayPalBoxProps) => {
                 totalAmount: cartTotalAmount, 
               })
                 .then((res: {totalAmount: number; currency: string}) => {
-                  console.log(userId, 'userid', guestId, 'guestid')
-                  postData('/api/store-payment',{userId: userId ? userId : guestId, orderId: data.orderID, 
+                  postData('/api/store-payment',{userId: userId ?? guestId, orderId: data.orderID, 
                     payerId: data.payerID, paymentId: data.paymentID, amount: res.totalAmount, currency: res.currency});
-                  postData('/api/admin/product/inventory', {userId: userId ? userId : guestId});
-                  postData('/api/cart/status', {userId: userId ? userId : guestId});
+                  postData('/api/admin/product/inventory', {userId: userId ?? guestId});
+                  postData('/api/cart/status', {userId: userId ?? guestId});
                   setCartItemNumber(0)
                         // 3. Show the buyer a confirmation message.
                   history.push({pathname: '/afterPayment', state:{orderID: data.orderID, 

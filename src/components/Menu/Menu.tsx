@@ -1,9 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import clsx from 'clsx';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { CssBaseline, Toolbar, IconButton } from '@material-ui/core';
 import { TopBarForMenu } from './TopBarForMenu'
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { MenuDrawer } from './MenuDrawer';
 import { observer } from 'mobx-react-lite';
@@ -31,22 +29,16 @@ export const Menu = ({store}: MenuProps) =>
 const MenuComponent = observer(({store}: MenuComponentProps) => {
     const {root, hide, menuButton, filterDiv, filterBar, btnAndDrawer, drawerOpen} = styles;
     const [open, setOpen] = useState(false);
-    const { setMenuCategory, setOpenNotification, setSnackbarMsg, setNotificationState, setCartItemNumber, 
-      setAllManufacturer, setWishlistItemNumber } = useContext(AppContext);
-
+    const { setMenuCategory, setNotificationInfo, setCartItemNumber, setAllManufacturer, setWishlistItemNumber } = useContext(AppContext);
     const handleDrawerOpen = () => { setOpen(true) };
-
     const handleDrawerClose = () => { setOpen(false) };
-
     const handleGetAllProduct = () => { setMenuCategory('') };
 
     const handleLogout = () => {
       logoutAction(store)
       setCartItemNumber(0)
       setWishlistItemNumber(0)
-      setNotificationState('success')
-      setOpenNotification(true);
-      setSnackbarMsg('You have successfully logged out.')
+      setNotificationInfo('success', 'You have successfully logged out.')
     };
 
     useEffect(()=>{

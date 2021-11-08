@@ -20,7 +20,7 @@ export const LoginPage = observer(() => {
       email: store.email,
       password: store.password,
     });
-    if (res.data) {
+    if (res?.data) {
       localStorage.setItem('accessToken',res.data.accessToken);
       getUserInfo();
       localStorage.removeItem('guestId')

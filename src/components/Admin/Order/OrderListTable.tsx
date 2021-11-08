@@ -23,10 +23,12 @@ export const OrderListTable = ({ item, handleUserInfoClickOpen, handleOrderInfoC
         <TableRow key={item._id}>
             <TableCell component='th' scope='row' align='inherit'>
                 { item.userData ? 
-                    /* item.userData.firstName item.userData.lastName */
+                    <>
+                    {`${item.userData.firstName} ${item.userData.lastName}`}
                     <IconButton className={button} onClick={() => handleUserInfoClickOpen(item.userData)}>
                         <InfoOutlinedIcon color="action" />
-                    </IconButton> : 
+                    </IconButton>
+                    </> : 
                     null
                 }
             </TableCell>

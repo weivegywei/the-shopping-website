@@ -20,7 +20,7 @@ export const OrderList = observer(() => {
     const [openStatusEdit, setOpenStatusEdit] = useState(false);
     const [openOrderInfo, setOpenOrderInfo] = useState(false);
     const [selectedItem, setSelectedItem] = useState<InfoItemProps[] | UserDataType | ListItemProps | InfoItemType | null>(null);
-    const { setOpenNotification, setSnackbarMsg, setNotificationState } = useContext(AppContext);
+    const { setNotificationInfo } = useContext(AppContext);
 
     const getAndSetOrderList = async() => {
         const res = await getData('/api/admin/order/list');
@@ -73,9 +73,7 @@ export const OrderList = observer(() => {
         editStatus();
         getAndSetOrderList();
         setOpenStatusEdit(false);
-        setNotificationState('success')
-        setOpenNotification(true);
-        setSnackbarMsg(`Order status updated to '${store.status}'.`)
+        setNotificationInfo('success', `Order status updated to '${store.status}'.`)
     };
 
     const handleClose = () => {

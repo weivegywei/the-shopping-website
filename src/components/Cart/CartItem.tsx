@@ -25,21 +25,18 @@ export type CartItemProductType = {
 type CartItemProps = {
   item: CartItemProductType;
   userStore?: UserStoreType;
-  setCartItemsAndNotificationAfterDeleteHandler: () => void;
-  setCartItemsAndNotificationAfterChangeHandler: () => void
+  afterDeleteHandler: () => void;
+  afterChangeHandler: () => void
 }
 
-export const CartItem = ({
-  item, userStore, setCartItemsAndNotificationAfterDeleteHandler, setCartItemsAndNotificationAfterChangeHandler
-}: CartItemProps) => {
+export const CartItem = ({ item, userStore, afterDeleteHandler, afterChangeHandler }: CartItemProps) => {
   const {wrapper,img, productInfo,textarea,itemInfoDiv,textColor, iconDiv, iconButton, icon, 
     iconDivider, panel,input,flexFiller,panelItem,subtotal} = styles;
   const { _id, quantity, imageUrl, name, specification, specificationValue, inventory, price } = item;
   const [itemQuantity, setItemQuantity] = useState<number>(quantity);
   const [openAlert, setOpenAlert] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CartItemProductType>();
-  const { cartItemNumber, setCartItemNumber, wishlistItemNumber, setWishlistItemNumber, setOpenNotification, 
-    setSnackbarMsg, setNotificationState } = useContext(AppContext);
+  const { cartItemNumber, setCartItemNumber, wishlistItemNumber, setWishlistItemNumber, setNotificationInfo } = useContext(AppContext);
 
   const handleClickOpenAlert = (item: CartItemProductType) => {
     setOpenAlert(true);
@@ -49,23 +46,17 @@ export const CartItem = ({
   const handleClickAddToWishlist = async(item: CartItemProductType) => {
     const { productId, specificationValue } = item
     try {
-      const res = await addToWishlist(userStore.id ? userStore.id : localStorage.guestId, productId, specificationValue)
+      const res = await addToWishlist(userStore.id ?? localStorage.guestId, productId, specificationValue)
       if (typeof(res.data) === 'string') {
-        setNotificationState('info')
-        setOpenNotification(true)
-        setSnackbarMsg('Item is already in the wishlist')
+        setNotificationInfo('info', 'Item is already in the wishlist')
       } else {
         setWishlistItemNumber(wishlistItemNumber + 1)
-        setNotificationState('success')
-        setOpenNotification(true)
-        setSnackbarMsg('Item added to wishlist')
+        setNotificationInfo('success', 'Item added to wishlist')
       }
     }
     catch (error) {
       console.log(error, 'error in adding to wishlist')
-      setNotificationState('error')
-      setOpenNotification(true)
-      setSnackbarMsg('There is an error, please try again.')
+      setNotificationInfo('error', 'There is an error, please try again.')
     }
     
   }
@@ -82,14 +73,16 @@ export const CartItem = ({
     setItemQuantity(Number(e.target.value));
     await handleChange(e);
     setCartItemNumber(cartItemNumber - quantity + Number(e.target.value));
-    setCartItemsAndNotificationAfterChangeHandler()
+    afterChangeHandler()
   };
 
   const handleConfirm = async (item: CartItemProductType) => {
-    await handleDelete(item);
-    setCartItemsAndNotificationAfterDeleteHandler();
-    setCartItemNumber(cartItemNumber - quantity);
     setOpenAlert(false);
+    const res = await handleDelete(item);
+    if (res) {
+    afterDeleteHandler();
+    setCartItemNumber(cartItemNumber - quantity);
+    }
   }
 
   return (  

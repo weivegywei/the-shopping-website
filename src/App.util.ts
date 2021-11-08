@@ -19,17 +19,6 @@ export  const getCartItemsNumber = async(userId: string) => {
   }
 }
 
-/* export const getGuestCartItemNumber = async(guestId: string) => {
-  if (guestId) {
-    try {
-      const res = await postData('/api/guestcart/number', {guestId});
-      return res.data
-    } catch (error) {
-      return 0
-    }
-  }
-} */
-
 export const getWishlistItemNumber = async(ownerId: string) => {
   if (ownerId) {
     try {
@@ -50,7 +39,6 @@ export const getUserInfo = async () => {
 
 export const getFilters = async() => {
   const res = await getData('/api/product/filter');
-  //filterQueryStore.changeValue(FilterQueryStoreKeys.allManufacturer, res.data.allManufacturer);
   filterQueryStore.changeValue(FilterQueryStoreKeys.minPrice, res.data.minPrice);
   filterQueryStore.changeValue(FilterQueryStoreKeys.maxPrice, res.data.maxPrice);
 };

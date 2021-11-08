@@ -5,7 +5,6 @@ import { Paper, Typography, Button, Divider } from '@material-ui/core';
 import { CartItem } from './CartItem';
 import { postData } from '../../api/postData';
 import { observer } from 'mobx-react';
-import { PayPalBox } from '../Payment/PayPalBox';
 import styles from './CartPage.module.scss';
 import { UserStoreType } from '../../store/userStore';
 import { CartItemProductType } from './CartItem';
@@ -23,47 +22,41 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
   const [ cartItems, setCartItems ] = useState<CartItemProductType[]>([]);
   const [ ready, setReady ] = useState<boolean>(false);
   const [ loading , setLoading ] = useState<boolean>(true);
-  const { setNotificationState, setOpenNotification, setSnackbarMsg, cartItemNumber, setCartTotalAmount } = useContext(AppContext);
+  const { setNotificationInfo, setCartTotalAmount } = useContext(AppContext);
   
-  const setCartItemsAndNotificationAfterDeleteHandler = () => {
-    setNotificationState('success')
-    setOpenNotification(true);
-    setSnackbarMsg('You have deleted this item from your cart.');
+  const afterDeleteHandler = () => {
+    setNotificationInfo('success', 'You have deleted this item from your cart.')
     setItemsHandler()
   }
 
-  const setCartItemsAndNotificationAfterChangeHandler = () => {
-    setNotificationState('success')
-    setOpenNotification(true);
-    setSnackbarMsg('Item quantity has been changed.');
+  const afterChangeHandler = () => {
+    setNotificationInfo('success', 'Item quantity has been changed.')
     setItemsHandler()
   }
-  //TODO: figure out the type of res in TS
+
   const setItemsHandler = async() => {
-    let res;
-    try {
-      if (userStore.id || localStorage.guestId) {
-        res = await postData('/api/cart/get', {userId: userStore.id ? userStore.id : localStorage.guestId});
+    setLoading(true)
+    console.log('called')
+    if (userStore.id || localStorage.guestId) {
+      const res = await postData('/api/cart/get', {userId: userStore.id ?? localStorage.guestId});
+      if (res.data.length) {
+        console.log(res.data)
+        setReady(true); 
+        setCartItems(res.data)
       } else {
-        res = {}
+        setReady(false)
+        setCartItems([])
       }
-    } catch (error) {
-      res = {}
-    }
-    if (res.data && res.data.length) {
-      setReady(true); 
-      setLoading(false)
-      setCartItems(res.data)
     } else {
-      setLoading(false)
       setReady(false)
       setCartItems([])
     }
+    setLoading(false)
   }
 
   useEffect(() => {
     setItemsHandler()
-  },[userStore.id, cartItemNumber, localStorage.guestId]);
+  },[]);
 
   const cartItemsAmount = cartItems.reduce((a,b) => b.quantity * b.price + a, 0);
   const cartOrderValue = Number(cartItemsAmount.toFixed(2));
@@ -73,22 +66,13 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
   const handleBackToHome = () => history.push('/');
   const handleCheckout = () => {
     if (totalAmount) {
-      if (userStore.id) {
-        console.log('user')
-        setCartTotalAmount(totalAmount)
-        history.push('./paymentmethod')
-      } else {
-        console.log('guest', localStorage.guestId)
-        setCartTotalAmount(totalAmount)
-        history.push('/guestcheckout')
-      }
+      setCartTotalAmount(totalAmount)
+      history.push(userStore.id ? '/paymentmethod' : '/guestcheckout')
     }
   }
   const buttonMsg = 'Go shopping'
   
-  return loading ?
-    null :
-  ready ? (
+  return loading ? null : ready ? (
     <>
       <TopBar userStore={userStore} />
       <div className={rootDiv}>
@@ -102,8 +86,8 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
                 <Paper elevation={0} className={itemcard}>
                     <CartItem 
                       item={item} userStore={userStore} 
-                      setCartItemsAndNotificationAfterDeleteHandler={setCartItemsAndNotificationAfterDeleteHandler}
-                      setCartItemsAndNotificationAfterChangeHandler={setCartItemsAndNotificationAfterChangeHandler}
+                      afterDeleteHandler={afterDeleteHandler}
+                      afterChangeHandler={afterChangeHandler}
                     />
                 </Paper>
                 {idx + 1 < cartItems.length && <Divider variant="middle" />}
@@ -153,4 +137,3 @@ export const CartPage = observer(({userStore}: CartPageProps) => {
     </>
   )
 });
-
