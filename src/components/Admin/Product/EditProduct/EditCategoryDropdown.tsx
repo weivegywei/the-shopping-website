@@ -1,15 +1,19 @@
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { BootstrapInput } from '../../../../util/BootstrapInput';
-import { ChangeEvent, useContext } from 'react';
-import { EditProductContext } from './EditProductContext';
+import { ChangeEvent } from 'react';
 import InputLabel from '@material-ui/core/InputLabel';
 import styles from './EditCategoryDropdown.module.scss';
+import { CategoryType } from '../../../../store/productStore'
 
-export const EditCategoryDropdown = () => {
+type EditCategoryDropdownProps = {
+  itemCategory: CategoryType;
+  setItemCategory: (a: CategoryType) => void
+}
+
+export const EditCategoryDropdown = ({itemCategory, setItemCategory}: EditCategoryDropdownProps) => {
   const { margin, label } = styles;
-  const { itemCategory, setItemCategory } = useContext(EditProductContext);
-  const changeValue = (e: ChangeEvent<HTMLSelectElement>, setNotificationState) => {setNotificationState(e.target.value)}
+  const changeValue = (e: ChangeEvent<HTMLSelectElement>) => {setItemCategory(e.target.value as CategoryType)}
 
   return (
     <div>
@@ -19,7 +23,7 @@ export const EditCategoryDropdown = () => {
         </InputLabel>
         <NativeSelect
           value={itemCategory}
-          onChange={(e) => changeValue(e, setItemCategory)}
+          onChange={changeValue}
           input={<BootstrapInput />}
         >
           <option value='skin care'>skin care</option>          

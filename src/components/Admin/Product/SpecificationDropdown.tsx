@@ -21,6 +21,7 @@ export const SpecificationDropdown = observer(({onChange, value}: SpecificationD
           value={value}
           onChange={onChange}
           input={<BootstrapInput />}
+          defaultValue={'type'}
         >
           <option value='' />
           <option value='type'>type</option>

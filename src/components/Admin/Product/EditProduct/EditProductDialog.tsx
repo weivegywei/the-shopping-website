@@ -6,7 +6,6 @@ import { CategoryType, SpecificationType } from '../../../../store/productStore'
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { EditProductContext, useEditProductContext } from './EditProductContext';
 import { EditSpecificationDropdown } from './EditSpecificationDropdown';
 import { EditAvailabilitySwitch } from './EditAvailabilitySwitch';
 import { EditCategoryDropdown } from './EditCategoryDropdown';
@@ -42,21 +41,23 @@ type EditProductDialogProps = {
     handleClose: () => void;
 }
 
-export const EditProductDialogWrapper = (props) => 
-    <EditProductContext.Provider value={useEditProductContext()}>
-      <EditProductDialog {...props} />
-    </EditProductContext.Provider>
-
 export const EditProductDialog = ({open, item, handleClose}: EditProductDialogProps) => {
     const {content, form, textField, flexField, inventoryField, priceField} = styles;
     const [editError, setEditError] = useState(false);
     const [editErrorMsg, setEditErrorMsg] = useState('');
+    const [productName, setProductName] = useState<string>('');
+    const [manufacturer, setManufacturer] = useState<string>('');
+    const [itemInventory, setItemInventory] = useState<number>(1);
+    const [itemPrice, setItemPrice] = useState<number>(1);
+    const [itemSpecificationDescr, setItemSpecificationDescr] = useState<string[]>([]);
+    const [itemPackageSize, setItemPackageSize] = useState<string>('1*1*1');
+    const [itemImageUrl, setItemImageUrl] = useState<string>('');
+    const [itemDescription, setItemDescription] = useState<string>('');
+    const [itemAvailability, setItemAvailability] = useState<boolean>(true);
+    const [itemSpecification, setItemSpecification] = useState<SpecificationType>(SpecificationType.none);
+    const [itemCategory, setItemCategory] = useState<CategoryType>(CategoryType.skinCare);
     const { setNotificationInfo } = useContext(AppContext);
-    const { productName, setProductName, manufacturer, setManufacturer, itemInventory, setItemInventory, itemPrice, 
-      setItemPrice, itemSpecificationDescr, setItemSpecificationDescr, itemPackageSize, setItemPackageSize, 
-      itemImageUrl, setItemImageUrl, itemDescription, setItemDescription, itemCategory, setItemCategory,
-      itemSpecification, setItemSpecification, itemAvailability, setItemAvailability
-    } = useContext(EditProductContext);
+
     const { _id, name, manufacturerInfo, price, imageUrl, inventory, description, packageSize, availability, 
       specification, specificationDescr, category } = item;
 
@@ -126,9 +127,9 @@ return (
               margin="dense" label='Specification description' value={itemSpecificationDescr} 
               onChange={(e) => changeValue(e, setItemSpecificationDescr)}/>
             <div className={flexField}>
-              <EditSpecificationDropdown />
-              <EditCategoryDropdown />
-              <EditAvailabilitySwitch />
+              <EditSpecificationDropdown itemSpecification={itemSpecification} setItemSpecification={setItemSpecification} />
+              <EditCategoryDropdown itemCategory={itemCategory} setItemCategory={setItemCategory} />
+              <EditAvailabilitySwitch itemAvailability={itemAvailability} setItemAvailability={setItemAvailability} />
             </div>
           </FormControl>
         </DialogContent>

@@ -1,10 +1,13 @@
-import { ChangeEvent, useContext } from 'react';
-import { EditProductContext } from './EditProductContext';
+import { ChangeEvent } from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { SwitchWithStyles } from '../../../../util/SwitchWithStyles';
 
-export const EditAvailabilitySwitch = () => {
-  const { itemAvailability, setItemAvailability } = useContext(EditProductContext);
+type EditAvailabilitySwitchProps = {
+  itemAvailability: boolean;
+  setItemAvailability: (a: boolean) => void
+}
+
+export const EditAvailabilitySwitch = ({itemAvailability, setItemAvailability}: EditAvailabilitySwitchProps) => {
   const changeValue = (e: ChangeEvent<HTMLInputElement>) => setItemAvailability(e.target.checked);
 
     return (

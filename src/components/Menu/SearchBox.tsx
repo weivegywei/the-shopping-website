@@ -38,7 +38,6 @@ export const SearchBar = observer(() => {
     console.log(item._id, 'id? in search box')
     history.push({pathname: `/product/${item._id}`})
     searchStore.changeValue(SearchStoreKey.query, '');
-    //history.go(0)
     setOpen(false);
   };
 

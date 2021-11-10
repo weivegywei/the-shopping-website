@@ -27,11 +27,12 @@ type TableHeadItems = {
 }
 
 const tableHeadItems = [
-    {entry: 'Product name'},    
-    {entry:'Manufacturer name', align: AlignType.align},
-    {entry:'Inventory', align: AlignType.align},
-    {entry:'Price', align: AlignType.align},
-    {entry:'Availability', align: AlignType.align},
+    {entry: 'Product name'},   
+    {entry: 'Category', align: AlignType.align},
+    {entry: 'Manufacturer name', align: AlignType.align},
+    {entry: 'Inventory', align: AlignType.align},
+    {entry: 'Price', align: AlignType.align},
+    {entry: 'Availability', align: AlignType.align},
     {entry: 'Specification', align: AlignType.align},
     {entry: 'Specification description', align: AlignType.align},
     {entry: 'Package size', align: AlignType.align},
@@ -98,6 +99,7 @@ export const ProductList = () => {
           {list.map((item: ProductListItem) => (
             <TableRow key={item.name}>
                 <TableCell scope='row'>{item.name}</TableCell>
+                <TableCell scope='default' align='right'>{item.category}</TableCell>
                 <TableCell scope='default' align='right'>{item.manufacturerInfo[0].name}</TableCell>
                 <TableCell scope='default' align='right'>{item.inventory}</TableCell>
                 <TableCell scope='default' align='right'>{item.price}</TableCell>

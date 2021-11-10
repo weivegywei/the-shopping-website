@@ -1,8 +1,6 @@
 import { makeStyles, FormControl, Select, MenuItem } from '@material-ui/core';
 import { BootstrapInputForSpecificationValueDropdown } from '../../util/BootstrapInput';
-//import { observer } from 'mobx-react-lite';
 import { ChangeEvent, useContext } from 'react';
-//import { CartItemStoreType, CartItemStoreKey } from '../../store/cartStore';
 import { AppContext } from '../../AppContext';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,9 +15,7 @@ type SpecificationValueDropdownProps = {
 
 export const SpecificationValueDropdown = 
   ({values}: SpecificationValueDropdownProps) => {
-  const {margin} = useStyles();
-  //const changeValue = (e: ChangeEvent<HTMLSelectElement>) => 
-   // cartItemStore.changeValue(CartItemStoreKey.specificationValue, e.target.value)
+  const { margin } = useStyles();
   const { itemSpecificationValue, setItemSpecificationValue } = useContext(AppContext)
   const specificationValueArr = values.split(',');
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => setItemSpecificationValue(e.target.value)
@@ -31,7 +27,7 @@ export const SpecificationValueDropdown =
           value={itemSpecificationValue}
           onChange={onChange}
           input={<BootstrapInputForSpecificationValueDropdown />}
-          defaultValue={specificationValueArr[1]}
+          defaultValue={specificationValueArr[0]}
         >
           {specificationValueArr.map((item) => <MenuItem value={item}>{item}</MenuItem>)}
         </Select>

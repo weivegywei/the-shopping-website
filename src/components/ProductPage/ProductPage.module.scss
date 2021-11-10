@@ -29,6 +29,10 @@
     text-align: left;
 }
 
+.logoImg {
+  height: 60px
+}
+
 .h1 {
     font-family:'Times New Roman', Times, serif;
     font-size: 28px;
@@ -39,8 +43,8 @@
 .h2 {
     font-size: 32px;
     font-weight: bold;
-    height: 35px;
-    margin: 25px 0 40px 0;
+    //height: 35px;
+    margin: 13px 0 25px 0;
 }
 
 .h3 {
@@ -118,6 +122,6 @@
   }
 }
 
-.description {
+.descriptionDiv {
   margin-top: 30px!important;
 }

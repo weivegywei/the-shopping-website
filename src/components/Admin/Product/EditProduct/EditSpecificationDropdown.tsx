@@ -1,15 +1,17 @@
-import FormControl from '@material-ui/core/FormControl';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import { FormControl, Select, MenuItem, InputLabel } from '@material-ui/core';
 import { BootstrapInput } from '../../../../util/BootstrapInput';
-import { ChangeEvent, useContext } from 'react';
-import { EditProductContext } from './EditProductContext';
-import InputLabel from '@material-ui/core/InputLabel';
+import { ChangeEvent } from 'react';
 import styles from './EditSpecificationDropdown.module.scss';
+import { SpecificationType } from '../../../../store/productStore'
 
-export const EditSpecificationDropdown = () => {
+type EditSpecificationDropdownProps = {
+  itemSpecification: SpecificationType;
+  setItemSpecification: (a: SpecificationType) => void
+}
+
+export const EditSpecificationDropdown = ({itemSpecification, setItemSpecification}: EditSpecificationDropdownProps) => {
   const { margin, label } = styles;
-  const { itemSpecification, setItemSpecification } = useContext(EditProductContext);
-  const changeValue = (e: ChangeEvent<HTMLSelectElement>, setNotificationState) => {setNotificationState(e.target.value)}
+  const onChange=(e: ChangeEvent<HTMLSelectElement>) => {setItemSpecification(e.target.value as SpecificationType)}
 
   return (
     <div>
@@ -17,19 +19,20 @@ export const EditSpecificationDropdown = () => {
         <InputLabel className={label}>
           Specification
         </InputLabel>
-        <NativeSelect
+        <Select
           value={itemSpecification}
-          onChange={(e) => changeValue(e, setItemSpecification)}
+          onChange={onChange}
           input={<BootstrapInput />}
+          defaultValue={'type'}
         >
-          <option value='' />
-          <option value='type'>type</option>
-          <option value='volume'>volume</option>
-          <option value='size'>size</option>
-          <option value='color'>color</option>
-          <option value='flavor'>flavor</option>
-          <option value='aroma'>aroma</option>
-        </NativeSelect>
+          <MenuItem value=''> </MenuItem>
+          <MenuItem value='type'>type</MenuItem>
+          <MenuItem value='volume'>volume</MenuItem>
+          <MenuItem value='size'>size</MenuItem>
+          <MenuItem value='color'>color</MenuItem>
+          <MenuItem value='flavor'>flavor</MenuItem>
+          <MenuItem value='aroma'>aroma</MenuItem>
+        </Select>
       </FormControl>
     </div>
   );

@@ -48,7 +48,7 @@ export const ProductCreate = observer(() => {
     if (res.status === 200) {
       setNotificationInfo('success', 'Product successfully created')
     } else if(res.error) {
-      const newFormFields = [...formFields]; //TODO: stop using 'defaultFormFields'
+      const newFormFields = [...formFields]; 
       const errorField = newFormFields.find((it) => it.key === res.error.field);
       if(errorField) {
         errorField.error = true;

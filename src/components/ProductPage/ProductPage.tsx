@@ -1,13 +1,13 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, ChangeEvent } from 'react';
 import { useParams } from 'react-router';
 import { TopBar } from '../Menu/TopBar'
 import Typography from '@material-ui/core/Typography';
 import { postData } from '../../api/postData';
 import { SpecificationValueDropdown } from './SpecificationValueDropdown';
 import styles from './ProductPage.module.scss';
-import { ChangeEvent } from 'react';
 import { AppContext } from '../../AppContext';
 import { UserStoreType } from '../../store/userStore';
+//import { SpecificationType } from '../../store/productStore'
 import { loremIpsum } from '../../const/constants';
 import { addToCart, addToWishlist } from '../../util/helper';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,21 +16,36 @@ type ProductPageProps = {
   userStore: UserStoreType 
 }
 
+type ProductDataType = {
+  itemName: string;
+  manufacturerLogoUrl: string;
+  inventory: number;
+  imageUrl: string;
+  price: number;
+  description: string;
+  //availability: boolean;
+  specificationDescription: string;
+}
+
 export const ProductPage = ({userStore}: ProductPageProps) => {
-  const {root, img, textDiv, text, h1, h2, h3, inputDiv, dropDownDiv, numDiv, input, addToCartButton, 
-    addToWishlistButton, description} = styles;
+  const {root, img, textDiv, text, logoImg, h1, h2, h3, inputDiv, dropDownDiv, numDiv, input, addToCartButton, 
+    addToWishlistButton, descriptionDiv} = styles;
   const { id: productId } = useParams<{id: string}>();
+  const [ productData, setProductData ] = useState<ProductDataType>({
+    itemName: '',
+    manufacturerLogoUrl: '',
+    inventory: 0,
+    imageUrl: '',
+    price: 0,
+    description: '',
+    //availability: true,
+    specificationDescription: ''
+  })
   const [ quantity, setQuantity ] = useState<number>(1);
-  const [ imgUrl, setImgUrl ] = useState<string>('');
-  const [ itemName, setItemName ] = useState<string>('');
-  const [ itemPrice, setItemPrice ] = useState<number>(0);
-  const [ specificationDescription, setSpecificationDescription ] = useState<string>('');
-  const [ inventory, setInventory ] = useState<number>(0);
-  const [ itemDescription, setItemDescription ] = useState<string>('');
-  const [ manufacturerName, setManufactureruName ] = useState<string>('');
   const [ ready, setReady ] = useState<boolean>(false);
   const { setNotificationInfo, cartItemNumber, setCartItemNumber, setWishlistItemNumber, wishlistItemNumber, 
-    itemSpecificationValue } = useContext(AppContext);
+    itemSpecificationValue, setItemSpecificationValue } = useContext(AppContext);
+  const { itemName, manufacturerLogoUrl, inventory, imageUrl, price, specificationDescription, description } = productData;
 
   const handleAddToCart = async() => {
     let resCart;
@@ -67,30 +82,28 @@ export const ProductPage = ({userStore}: ProductPageProps) => {
     const fetchAndSetItem = async() => {
       setReady(false);
       const res = await postData('/api/product/info', {productId})
-      const { imageUrl, inventory, name, price, specificationDescr, description } = res.data[0];
-      setManufactureruName(res.data[1].name);
-      setImgUrl(imageUrl);
-      setItemName(name);
-      setItemPrice(price);
-      setInventory(inventory);
-      setSpecificationDescription(specificationDescr[0]);
-      setItemDescription(description)
+      const { name, specificationDescr } = res.data[0];
+      setProductData({ ...res.data[0], itemName: name, specificationDescription: specificationDescr[0], 
+        manufacturerLogoUrl: res.data[1].logoUrl });
+      setItemSpecificationValue(specificationDescr[0].split(',')[0])
       setReady(true)
     }
     fetchAndSetItem()
   }, [productId]);
+  console.log(itemSpecificationValue, 'itemSpecificationValue')//TODO to be wrapped in useCallBack
 
   return ready ? (
     <>
       <TopBar userStore={userStore} />
       <div className={root}>
-        <img src={imgUrl} alt='' className={img} />
+        <img src={imageUrl} alt='' className={img} />
         <div className={textDiv}>
         <Typography variant='h4'>
           <div className={text}>
-            <div className={h1}>{manufacturerName}</div>
+            <img src={manufacturerLogoUrl} alt='' className={logoImg} />
+            {/* <div className={h1}>{manufacturerName}</div> */}
             <div className={h2}>{itemName}</div>
-            <div className={h3}>€ {itemPrice}</div>
+            <div className={h3}>€ {price}</div>
             <div className={inputDiv}>
               <div className={dropDownDiv}>
                 <SpecificationValueDropdown values={specificationDescription} />
@@ -106,8 +119,8 @@ export const ProductPage = ({userStore}: ProductPageProps) => {
             <button className={addToWishlistButton} 
               onClick={handleAddToWishlist}>Add to wishlist
             </button>
-            <Typography variant='body1' className={description}>
-              {itemDescription}<br /><br />{loremIpsum}<br /><br />{loremIpsum}
+            <Typography variant='body1' className={descriptionDiv}>
+              {description}<br /><br />{loremIpsum}<br /><br />{loremIpsum}
             </Typography>
           </div>
         </Typography>
